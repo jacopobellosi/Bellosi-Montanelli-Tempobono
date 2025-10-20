@@ -256,16 +256,17 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="iuhHSRL1I3orpKtbrCuB-88" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="iuhHSRL1I3orpKtbrCuB-87" target="iuhHSRL1I3orpKtbrCuB-26">
+        <mxCell id="iuhHSRL1I3orpKtbrCuB-88" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="iuhHSRL1I3orpKtbrCuB-87" target="iuhHSRL1I3orpKtbrCuB-26">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1" y="502" />
-              <mxPoint x="1" y="500" />
+              <mxPoint x="-17" y="499" />
+              <mxPoint x="11" y="499" />
+              <mxPoint x="11" y="500" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="iuhHSRL1I3orpKtbrCuB-87" value="&lt;b&gt;&amp;lt;&amp;lt;Enum&amp;gt;&amp;gt;&amp;nbsp;status&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="-189" y="488" width="142" height="27" as="geometry" />
+          <mxGeometry x="-159" y="481" width="142" height="27" as="geometry" />
         </mxCell>
         <mxCell id="iuhHSRL1I3orpKtbrCuB-92" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="iuhHSRL1I3orpKtbrCuB-91" target="iuhHSRL1I3orpKtbrCuB-38">
           <mxGeometry relative="1" as="geometry" />
