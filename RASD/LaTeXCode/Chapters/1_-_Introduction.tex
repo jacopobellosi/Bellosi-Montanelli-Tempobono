@@ -93,49 +93,50 @@ Best Bike Paths (BBP) is a mobile/web platform that helps Cyclists find safer, m
         \hline
         \textbf{ID} & \textbf{Description} & \textbf{Controller} & \textbf{Observer} \\
         \hline
-        SP\csp & The user enters textual data (e.g., credentials, path names, origin, destination). & World (User) & Machine \\
-        \hline
-        SP\csp & The user interacts with the interface by pressing buttons (e.g., Login, Save, Publish, Search). & World (User) & Machine \\
-        \hline
-        SP\csp & The user starts the automatic trip recording. & World (User) & Machine \\
-        \hline
-        SP\csp & The user stops the automatic trip recording. & World (User) & Machine \\
-        \hline
-        SP\csp & The user manually selects the status of a route (e.g., Optimal, Requires maintenance). & World (User) & Machine \\
-        \hline
-        SP\csp & The user confirms an automatically detected issue (e.g., pothole or obstacle). & World (User) & Machine \\
-        \hline
-        SP\csp & The user rejects or corrects an incorrect automatic detection. & World (User) & Machine \\
-        \hline
-        SP\csp & The user selects a specific route from the displayed results list. & World (User) & Machine \\
-        \hline
-        SP\csp & The system displays informational or error messages (e.g., Save completed, GPS error). & Machine & World (User) \\
-        \hline
-        SP\csp & The system shows the interactive map. & Machine & World (User) \\
-        \hline
-        SP\csp & The system displays the recorded route on the map. & Machine & World (User) \\
-        \hline
-        SP\csp & The system shows real-time statistics (speed, distance, duration) during the recording. & Machine & World (User) \\
-        \hline
-        SP\csp & The system displays a summary of trip statistics (average speed, elevation gain, total distance). & Machine & World (User) \\
-        \hline
-        SP\csp & The system presents a ranked list of routes based on the computed score. & Machine & World (User) \\
-        \hline
-        SP\csp & The system displays the aggregated (merged) status of a route. & Machine & World (User) \\
-        \hline
-        SP\csp & The system shows the weather data associated with the route (temperature, wind, conditions). & Machine & World (User) \\
-        \hline
-        SP\csp & The system displays a confirmation request for an automatic detection (popup / notification). & Machine & World (User) \\
-        \hline
-        SP\csp & The GPS sensor provides coordinates (latitude, longitude) to the system. & World (GPS Sensor) & Machine \\
-        \hline
-        SP\csp & The accelerometer sends acceleration vector measurements (x, y, z). & World (Accelerometer) & Machine \\
-        \hline
-        SP\csp & The gyroscope provides rotation data (x, y, z). & World (Gyroscope) & Machine \\
-        \hline
-        SP\csp & The external weather service sends JSON data related to temperature, wind, and weather conditions. & World (External weather service) & Machine \\
-        \hline
-        \caption{Shared Phenomena.}
+        SP\csp  & The User enters textual data (credentials, route names, origin, destination). & User & BBP \\
+\hline
+    SP\csp  & The User interacts with the interface by pressing buttons (e.g., Login, Save, Publish, Search). & User & BBP \\
+    \hline
+    SP\csp  & The User starts automatic trip recording. & User & BBP \\
+    \hline
+    SP\csp  & The User stops automatic trip recording. & User & BBP \\
+    \hline
+    SP\csp  & The User selects the status of a route in manual mode (e.g., Optimal, Requires maintenance). & User & BBP \\
+    \hline
+    SP\csp  & The User confirms an automatically detected issue (e.g., pothole or obstacle). & User & BBP \\
+    \hline
+    SP\csp  & The User rejects or corrects an incorrect automatic detection. & User & BBP \\
+    \hline
+    SP\csp  & The User selects a specific route from the displayed result list. & User & BBP \\
+    \hline
+    SP\csp  & BBP displays informational or error messages (e.g., Save completed, GPS error). & BBP & User \\
+    \hline
+    SP\csp  & BBP displays the interactive map. & BBP & User \\
+    \hline
+    SP\csp  & BBP renders the recorded route trace on the map. & BBP & User \\
+    \hline
+    SP\csp  & BBP shows real-time statistics (speed, distance, duration) during recording. & BBP & User \\
+    \hline
+    SP\csp  & BBP displays the trip summary statistics (average speed, elevation gain, total distance). & BBP & User \\
+    \hline
+    SP\csp  & BBP shows a ranked list of routes based on the computed score. & BBP & User\\
+    \hline
+    SP\csp  & BBP displays the aggregated (merged) status of a route. & BBP & User \\
+    \hline
+    SP\csp  & BBP shows weather data associated with the route (temperature, wind, conditions). & BBP & User \\
+    \hline
+    SP\csp  & BBP displays a confirmation request for an automatic detection (popup / notification). & BBP & User\\
+    \hline
+    SP\csp  & The GPS sensor provides coordinates (latitude, longitude) to BBP. & GPS Sensor & BBP \\
+    \hline
+    SP\csp  & The accelerometer sends acceleration vector measurements (x, y, z) to BBP. & Accelerometer & BBP \\
+    \hline
+    SP\csp  & The gyroscope provides rotation data (x, y, z) to BBP. & Gyroscope & BBP \\
+    \hline
+    SP\csp  & The external weather service sends JSON data on temperature, wind, and atmospheric conditions. & Weather API & BBP \\
+    \hline
+
+        \caption{Shared Phenomenas.}
         \label{tab:sharedph_tab}%
     \end{longtable}
 \end{footnotesize}
