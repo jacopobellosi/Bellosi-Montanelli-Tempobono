@@ -82,113 +82,65 @@ Best Bike Paths (BBP) is a mobile/web platform that helps Cyclists find safer, m
 \end{center}
 
 \newpage
-
 \subsection{Shared phenomena}
 \label{subsec:shared_phenomena}%
 \newcounter{sp}
 \setcounter{sp}{1}
 \newcommand{\csp} {\thesp\stepcounter{sp}}
 \begin{center}
+\begin{footnotesize}
     \begin{longtable}{ |l|p{0.5\linewidth}|l|l|}
         \hline
         \textbf{ID} & \textbf{Description} & \textbf{Controller} & \textbf{Observer} \\
         \hline
-        SP\csp      & The ED creates an account in the CKB system      & ED       & CKB  \\
+        SP\csp & The user enters textual data (e.g., credentials, path names, origin, destination). & World (User) & Machine \\
         \hline
-        SP\csp      & The ED logs in his account in the CKB system     & ED         & CKB           \\
+        SP\csp & The user interacts with the interface by pressing buttons (e.g., Login, Save, Publish, Search). & World (User) & Machine \\
         \hline
-        SP\csp      & The ED logs out of his account from the CKB system     & ED         & CKB           \\
+        SP\csp & The user starts the automatic trip recording. & World (User) & Machine \\
         \hline
-        SP\csp      & The ED creates a Tournament  & ED         & CKB           \\
+        SP\csp & The user stops the automatic trip recording. & World (User) & Machine \\
         \hline
-        SP\csp      & CKB adds the Tournament to the ED's Tournament list  & CKB         & ED           \\
+        SP\csp & The user manually selects the status of a route (e.g., Optimal, Requires maintenance). & World (User) & Machine \\
         \hline
-        SP\csp      & The ED checks his Tournament list  & ED         & CKB           \\
+        SP\csp & The user confirms an automatically detected issue (e.g., pothole or obstacle). & World (User) & Machine \\
         \hline
-        SP\csp      & The ED grants other EDs the permission to create Battles within a Tournament  & ED         & CKB\\
+        SP\csp & The user rejects or corrects an incorrect automatic detection. & World (User) & Machine \\
         \hline
-        SP\csp      & The ED creates a Battle in a specific Tournament  & ED         & CKB           \\
+        SP\csp & The user selects a specific route from the displayed results list. & World (User) & Machine \\
         \hline
-        SP\csp      & CBK adds the Battle to the ED's Battle list  & CKB         & ED           \\
+        SP\csp & The system displays informational or error messages (e.g., Save completed, GPS error). & Machine & World (User) \\
         \hline
-        SP\csp      & The ED checks his Battle list  & ED         & CKB           \\
+        SP\csp & The system shows the interactive map. & Machine & World (User) \\
         \hline
-        SP\csp      & The ED uploads the code kata in the Battle  & ED         & CKB           \\
+        SP\csp & The system displays the recorded route on the map. & Machine & World (User) \\
         \hline
-        SP\csp      & The ED sets the minimum and the maximum number of STs per group for the Battle  & ED & CKB \\
+        SP\csp & The system shows real-time statistics (speed, distance, duration) during the recording. & Machine & World (User) \\
         \hline
-        SP\csp      & The ED sets a registration deadline to the Battle  & ED         & CKB           \\
+        SP\csp & The system displays a summary of trip statistics (average speed, elevation gain, total distance). & Machine & World (User) \\
         \hline
-        SP\csp      & The ED sets a final submission deadline to the Battle  & ED         & CKB           \\
+        SP\csp & The system presents a ranked list of routes based on the computed score. & Machine & World (User) \\
         \hline
-        SP\csp      & The ED sets additional configurations for scoring in the Battle  & ED         & CKB           \\
+        SP\csp & The system displays the aggregated (merged) status of a route. & Machine & World (User) \\
         \hline
-        SP\csp      & The ED sets the Badges that STs could be awarded in the Battle  & ED         & CKB           \\
+        SP\csp & The system shows the weather data associated with the route (temperature, wind, conditions). & Machine & World (User) \\
         \hline
-        SP\csp      & The ED sets the parameters of the Badges that STs could be awarded in the Battle  & ED         & CKB           \\
+        SP\csp & The system displays a confirmation request for an automatic detection (popup / notification). & Machine & World (User) \\
         \hline
-        SP\csp      & The ST creates an account in the CKB system  & ST         & CKB           \\
+        SP\csp & The GPS sensor provides coordinates (latitude, longitude) to the system. & World (GPS Sensor) & Machine \\
         \hline
-        SP\csp      & The ST logs in his account in the CKB system  & ST         & CKB           \\
+        SP\csp & The accelerometer sends acceleration vector measurements (x, y, z). & World (Accelerometer) & Machine \\
         \hline
-        SP\csp      & The ST logs out from his account out of the CKB system     & ED         & CKB           \\
+        SP\csp & The gyroscope provides rotation data (x, y, z). & World (Gyroscope) & Machine \\
         \hline
-        SP\csp      & CKB notifies STs that a Tournament has been created  & CKB         & ST          \\
+        SP\csp & The external weather service sends JSON data related to temperature, wind, and weather conditions. & World (External weather service) & Machine \\
         \hline
-        SP\csp      & The ST subscribes to a specific Tournament before the registration deadline  & ST         & CKB    \\
-        \hline
-        SP\csp      & CKB notifies STs that a Battle has been created & CKB         & ST           \\
-        \hline
-        SP\csp      & The ST subscribes to a specific Battle before the registration deadline  & ST         & CKB    \\
-        \hline
-        SP\csp      & CKB adds the Tournament to the ST's Battle list  & CKB         & ST           \\
-        \hline
-        SP\csp      & The ST creates a STG for the Battle  & ST         & CKB           \\
-        \hline
-        SP\csp      & The ST invites other STs to join his STG for a Battle  & ST         & CKB           \\
-        \hline
-        SP\csp      & CKB sends a notification to the ST when he receives ain invitation to join a STG  & CKB         & ST           \\
-        \hline
-        SP\csp      & The ST accepts other ST's invitations to join their STG for a Battle  & ST         & CKB           \\
-        \hline
-        SP\csp      & CKB adds the STs to the STG  & CKB         & ST           \\
-        \hline
-        SP\csp      & CKB creates a GH repository containing the code kata and sends the link to all STs registered in the Battle  & CKB         & ST           \\
-        \hline
-        SP\csp      & The ST commits a new version of his code & ST         & CKB           \\
-        \hline
-        SP\csp      & CKB runs the tests on the source code & CKB      & ST           \\
-        \hline
-        SP\csp      & CKB updates the score of the STG on the Battle's Leaderboard  & CKB         & ST           \\
-        \hline
-        SP\csp      & CKB updates the score of the ST on the Tournament's Leaderboard  & CKB         & ST           \\
-        \hline
-        SP\csp      & STs can view the current ranks evolving during the Battle  & ST        & CKB      \\
-        \hline
-        SP\csp      & EDs can view the current ranks evolving during the Battle  & ED      & CKB      \\
-        \hline
-        SP\csp      & During the consolidation stage, EDs can manually modify the scores of the STG & ED         & CKB           \\
-        \hline
-        SP\csp      & CKB notifies all STs when the final Battle ranks are available  & CKB         & ST           \\
-        \hline
-        SP\csp      & The ED closes the Tournament  & ED         & CKB           \\
-        \hline
-        SP\csp      & CKB notifies all the STs involved in the Tournament when the final ranks of the Tournament are available  & CKB         & ST           \\
-        \hline
-        SP\csp      & STs can view the current ranks evolving during the Tournament  & ST        & CKB      \\
-        \hline
-        SP\csp      & EDs can view the current ranks evolving during the Tournament  & ED        & CKB      \\
-        \hline
-        SP\csp      & CKB assigns the Badges to the STs  & CKB         & ST           \\
-        \hline
-        SP\csp      & The ST can visualize the profile of other ST or ED  & ST        & CKB           \\
-        \hline
-        SP\csp      & The ED can visualize the profile of other ST or ED  & ED        & CKB           \\
-        \hline
-        \caption{Shared Phenomenas.}
+        \caption{Shared Phenomena.}
         \label{tab:sharedph_tab}%
     \end{longtable}
+\end{footnotesize}
 \end{center}
+
 
 
 \section{Definition, Acronyms, Abbreviations}
@@ -233,10 +185,7 @@ Best Bike Paths (BBP) is a mobile/web platform that helps Cyclists find safer, m
 \section{Revision history}
 \label{sec:revision_history}%
 \begin{itemize}
-    \item \textbf{Version 1.0} - 20/12/2023
-    \item In section 3.2.3 added the Create a new Badge and Modify an Existing Badge use cases and the related sequence diagrams (also the Create Torunament is been modified for this scope).
-    \item In section 3.2.3 added in Create a Battle the creation of github repository.
-    \item In section 3.2.3 some little changes into the Login, Evaluate a code, Join Tournament and Join Battle sequence diagrams and Use case.
+    \item \textbf{Version 1.0} - 
 \end{itemize}
 
 
@@ -251,10 +200,11 @@ Best Bike Paths (BBP) is a mobile/web platform that helps Cyclists find safer, m
 
 \section{Document Structure}
 \label{sec:document_structure}%
-The document is divided into six sections, each with its unique focus, as outlined below.
-\paragraph{Introduction:} In the first section, we lay out the project's objectives, purposes, and offer a concise examination of global and shared phenomena. This section also includes a compilation of abbreviations and definitions that are essential for comprehending the problem.
-\paragraph{Overall Description:} The second section provides a comprehensive overview of the problem. It delves into further details about the domain and various scenarios involved, in addition to discussing product and User characteristics, assumptions, dependencies and constraints.
-\paragraph{Specific Requirements:} The third section is dedicated to an in-depth analysis of the specific requirements. It offers detailed insights into external interface requirements, functional requirements, and performance requirements.
-\paragraph{Formal Analysis Using Alloy:} The fourth section employs Alloy to conduct a formal analysis. This chapter's primary purpose is to validate the accuracy of the model described in the preceding sections. It focuses on presenting the results of the conducted checks and meaningful assertions.
-\paragraph{Effort Spent:} Section five outlines the individual efforts contributed by each group member to compose this document.
-\paragraph{References:} The final section serves as a bibliography, listing the references and additional resources used in the creation of this document.
+The document is organized into six main sections, each focusing on a specific aspect, as summarized below.
+\paragraph{Introduction:} The first section outlines the project’s goals and purpose, and provides a brief overview of the global and shared phenomena. It also includes key abbreviations and definitions necessary to understand the problem.
+\paragraph{Overall Description:} The second section offers a general overview of the problem, explaining the domain, main scenarios, product and user characteristics, as well as the related assumptions, dependencies, and constraints.
+\paragraph{Specific Requirements:} The third section presents a detailed analysis of the system requirements, covering external interfaces, functional aspects, and performance expectations.
+\paragraph{Formal Analysis Using Alloy:} The fourth section uses Alloy to perform a formal validation of the model introduced earlier. It reports the results of the executed checks and the verified assertions.
+\paragraph{Effort Spent:} The fifth section details the contribution of each group member to the development of this document.
+\paragraph{References:} The last section lists all bibliographic sources and materials used during the document’s preparation.
+
