@@ -93,98 +93,49 @@ Best Bike Paths (BBP) is a mobile/web platform that helps Cyclists find safer, m
         \hline
         \textbf{ID} & \textbf{Description} & \textbf{Controller} & \textbf{Observer} \\
         \hline
-        SP\csp      & The ED creates an account in the CKB system      & ED       & CKB  \\
-        \hline
-        SP\csp      & The ED logs in his account in the CKB system     & ED         & CKB           \\
-        \hline
-        SP\csp      & The ED logs out of his account from the CKB system     & ED         & CKB           \\
-        \hline
-        SP\csp      & The ED creates a Tournament  & ED         & CKB           \\
-        \hline
-        SP\csp      & CKB adds the Tournament to the ED's Tournament list  & CKB         & ED           \\
-        \hline
-        SP\csp      & The ED checks his Tournament list  & ED         & CKB           \\
-        \hline
-        SP\csp      & The ED grants other EDs the permission to create Battles within a Tournament  & ED         & CKB\\
-        \hline
-        SP\csp      & The ED creates a Battle in a specific Tournament  & ED         & CKB           \\
-        \hline
-        SP\csp      & CBK adds the Battle to the ED's Battle list  & CKB         & ED           \\
-        \hline
-        SP\csp      & The ED checks his Battle list  & ED         & CKB           \\
-        \hline
-        SP\csp      & The ED uploads the code kata in the Battle  & ED         & CKB           \\
-        \hline
-        SP\csp      & The ED sets the minimum and the maximum number of STs per group for the Battle  & ED & CKB \\
-        \hline
-        SP\csp      & The ED sets a registration deadline to the Battle  & ED         & CKB           \\
-        \hline
-        SP\csp      & The ED sets a final submission deadline to the Battle  & ED         & CKB           \\
-        \hline
-        SP\csp      & The ED sets additional configurations for scoring in the Battle  & ED         & CKB           \\
-        \hline
-        SP\csp      & The ED sets the Badges that STs could be awarded in the Battle  & ED         & CKB           \\
-        \hline
-        SP\csp      & The ED sets the parameters of the Badges that STs could be awarded in the Battle  & ED         & CKB           \\
-        \hline
-        SP\csp      & The ST creates an account in the CKB system  & ST         & CKB           \\
-        \hline
-        SP\csp      & The ST logs in his account in the CKB system  & ST         & CKB           \\
-        \hline
-        SP\csp      & The ST logs out from his account out of the CKB system     & ED         & CKB           \\
-        \hline
-        SP\csp      & CKB notifies STs that a Tournament has been created  & CKB         & ST          \\
-        \hline
-        SP\csp      & The ST subscribes to a specific Tournament before the registration deadline  & ST         & CKB    \\
-        \hline
-        SP\csp      & CKB notifies STs that a Battle has been created & CKB         & ST           \\
-        \hline
-        SP\csp      & The ST subscribes to a specific Battle before the registration deadline  & ST         & CKB    \\
-        \hline
-        SP\csp      & CKB adds the Tournament to the ST's Battle list  & CKB         & ST           \\
-        \hline
-        SP\csp      & The ST creates a STG for the Battle  & ST         & CKB           \\
-        \hline
-        SP\csp      & The ST invites other STs to join his STG for a Battle  & ST         & CKB           \\
-        \hline
-        SP\csp      & CKB sends a notification to the ST when he receives ain invitation to join a STG  & CKB         & ST           \\
-        \hline
-        SP\csp      & The ST accepts other ST's invitations to join their STG for a Battle  & ST         & CKB           \\
-        \hline
-        SP\csp      & CKB adds the STs to the STG  & CKB         & ST           \\
-        \hline
-        SP\csp      & CKB creates a GH repository containing the code kata and sends the link to all STs registered in the Battle  & CKB         & ST           \\
-        \hline
-        SP\csp      & The ST commits a new version of his code & ST         & CKB           \\
-        \hline
-        SP\csp      & CKB runs the tests on the source code & CKB      & ST           \\
-        \hline
-        SP\csp      & CKB updates the score of the STG on the Battle's Leaderboard  & CKB         & ST           \\
-        \hline
-        SP\csp      & CKB updates the score of the ST on the Tournament's Leaderboard  & CKB         & ST           \\
-        \hline
-        SP\csp      & STs can view the current ranks evolving during the Battle  & ST        & CKB      \\
-        \hline
-        SP\csp      & EDs can view the current ranks evolving during the Battle  & ED      & CKB      \\
-        \hline
-        SP\csp      & During the consolidation stage, EDs can manually modify the scores of the STG & ED         & CKB           \\
-        \hline
-        SP\csp      & CKB notifies all STs when the final Battle ranks are available  & CKB         & ST           \\
-        \hline
-        SP\csp      & The ED closes the Tournament  & ED         & CKB           \\
-        \hline
-        SP\csp      & CKB notifies all the STs involved in the Tournament when the final ranks of the Tournament are available  & CKB         & ST           \\
-        \hline
-        SP\csp      & STs can view the current ranks evolving during the Tournament  & ST        & CKB      \\
-        \hline
-        SP\csp      & EDs can view the current ranks evolving during the Tournament  & ED        & CKB      \\
-        \hline
-        SP\csp      & CKB assigns the Badges to the STs  & CKB         & ST           \\
-        \hline
-        SP\csp      & The ST can visualize the profile of other ST or ED  & ST        & CKB           \\
-        \hline
-        SP\csp      & The ED can visualize the profile of other ST or ED  & ED        & CKB           \\
-        \hline
+        SP\csp  & The User enters textual data (credentials, route names, origin, destination). & User & BBP \\
+\hline
+    SP\csp  & The User interacts with the interface by pressing buttons (e.g., Login, Save, Publish, Search). & User & BBP \\
+    \hline
+    SP\csp  & The User starts automatic trip recording. & User & BBP \\
+    \hline
+    SP\csp  & The User stops automatic trip recording. & User & BBP \\
+    \hline
+    SP\csp  & The User selects the status of a route in manual mode (e.g., Optimal, Requires maintenance). & User & BBP \\
+    \hline
+    SP\csp  & The User confirms an automatically detected issue (e.g., pothole or obstacle). & User & BBP \\
+    \hline
+    SP\csp  & The User rejects or corrects an incorrect automatic detection. & User & BBP \\
+    \hline
+    SP\csp  & The User selects a specific route from the displayed result list. & User & BBP \\
+    \hline
+    SP\csp  & BBP displays informational or error messages (e.g., Save completed, GPS error). & BBP & User \\
+    \hline
+    SP\csp  & BBP displays the interactive map. & BBP & User \\
+    \hline
+    SP\csp  & BBP renders the recorded route trace on the map. & BBP & User \\
+    \hline
+    SP\csp  & BBP shows real-time statistics (speed, distance, duration) during recording. & BBP & User \\
+    \hline
+    SP\csp  & BBP displays the trip summary statistics (average speed, elevation gain, total distance). & BBP & User \\
+    \hline
+    SP\csp  & BBP shows a ranked list of routes based on the computed score. & BBP & User\\
+    \hline
+    SP\csp  & BBP displays the aggregated (merged) status of a route. & BBP & User \\
+    \hline
+    SP\csp  & BBP shows weather data associated with the route (temperature, wind, conditions). & BBP & User \\
+    \hline
+    SP\csp  & BBP displays a confirmation request for an automatic detection (popup / notification). & BBP & User\\
+    \hline
+    SP\csp  & The GPS sensor provides coordinates (latitude, longitude) to BBP. & GPS Sensor & BBP \\
+    \hline
+    SP\csp  & The accelerometer sends acceleration vector measurements (x, y, z) to BBP. & Accelerometer & BBP \\
+    \hline
+    SP\csp  & The gyroscope provides rotation data (x, y, z) to BBP. & Gyroscope & BBP \\
+    \hline
+    SP\csp  & The external weather service sends JSON data on temperature, wind, and atmospheric conditions. & Weather API & BBP \\
+    \hline
+
         \caption{Shared Phenomenas.}
         \label{tab:sharedph_tab}%
     \end{longtable}
@@ -233,10 +184,8 @@ Best Bike Paths (BBP) is a mobile/web platform that helps Cyclists find safer, m
 \section{Revision history}
 \label{sec:revision_history}%
 \begin{itemize}
-    \item \textbf{Version 1.0} - 20/12/2023
-    \item In section 3.2.3 added the Create a new Badge and Modify an Existing Badge use cases and the related sequence diagrams (also the Create Torunament is been modified for this scope).
-    \item In section 3.2.3 added in Create a Battle the creation of github repository.
-    \item In section 3.2.3 some little changes into the Login, Evaluate a code, Join Tournament and Join Battle sequence diagrams and Use case.
+    \item \textbf{Version 1.0} - dd/mm/yyyy
+    \item if any changes occour add here
 \end{itemize}
 
 
