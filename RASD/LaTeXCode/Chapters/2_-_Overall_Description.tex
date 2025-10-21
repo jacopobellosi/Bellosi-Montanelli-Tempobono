@@ -212,16 +212,15 @@ Overall, the diagram establishes a clear architecture separating \textbf{user ma
 
 \subsection{State diagrams}
 \label{subsec:state_diagrams}%
-In this section are presented the State Diagrams of the BBP system representing all the possibile operation that a User can perform.
+In this section, the State Diagrams of the BBP system are presented representing all the possible operation that a User can perform.
 \paragraph{Signup.}
-When a User wishes to register on CKB, they are required to input their credentials, including their name, surname, nickname, eMail and password in a registration form. If the provided credentials are deemed valid (ensuring that the eMail or nickname is not already in use, and the password meets the criteria of being at least 8 characters long, containing at least one capital letter, a number, and a special character), CKB will send an eMail to the User. Upon the User confirming the registration through the provided eMail link, the new account is successfully created. If the credentials are not correct CKB shows an error message to the User and redirects him to the signup form page.
+When registering for BBP, a user fills out a form with their name, surname, nickname, email, and password. BBP then verifies that the email and nickname aren’t already taken and that the password is at least eight characters long and includes an uppercase letter, a digit, and a special symbol. If the checks pass, BBP sends a confirmation email; the account is created once the user follows the verification link. If any check fails, BBP shows an error message and returns the user to the sign-up page.
 
-Furthermore, if the User selects the option "Register as a new Educator" during the registration process, CKB will enhance the account with additional permissions. These permissions may include the possibility to create Tournaments or Battles.
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/signup.png}
-        \caption{Signup state diagram.}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/Registration.drawio.png}
+        \caption{Registration state diagram.}
         \label{fig:signup_sd}%
     \end{center}
 \end{figure}
