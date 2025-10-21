@@ -24,6 +24,7 @@
 \hline
 \end{longtable}
 
+
 \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
 \hline
 \textbf{Scenario ID} & \textbf{1.2 – Login (Success)} \\
@@ -37,6 +38,8 @@
 \textbf{Postconditions} & Carlo is authenticated and redirected to the main map screen. \\
 \hline
 \end{longtable}
+
+\newpage
 
 \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
 \hline
@@ -53,8 +56,9 @@
 \end{longtable}
 
 
-
+% ======================
 % 2. ROUTE CONSULTATION
+% ======================
 
 \subsubsection{Route Consultation Scenarios}
 
@@ -115,7 +119,9 @@
 \end{longtable}
 
 
-% 3. ROUTE CREATION
+% ======================
+% 2. ROUTE CREATION
+% ======================
 
 \subsubsection{Route Creation Scenarios}
 
@@ -226,11 +232,11 @@ When registering for BBP, a user fills out a form with their name, surname, nick
 \end{figure}
 
 \paragraph{Login.}
-When a registered User attempts to log in to their CKB account, they must enter their credentials (eMail and password) into a login form. If the provided credentials are accurate —matching those of a registered User in the CKB database— CKB displays the User's homepage, showcasing Tournaments and ongoing Battles in which the User is participating. On the other hand, if the entered credentials are invalid, CKB presents an error message to the User and redirects them back to the login form page.
+When a registered User attempts to log in to their BBP account, they must enter their credentials (nickname and password) into a login form. If the provided credentials are accurate —matching those of a registered User in the BBP database— BBP authenticates the User and redirects him to the Map Screen, showcasing the possibility to discover new path. however, if the entered credentials are invalid, BBP presents an error message to the User and redirects them back to the login form page.
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/login.png}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/Login.drawio.png}
         \caption{Login state diagram.}
         \label{fig:login_sd}%
     \end{center}
@@ -238,10 +244,10 @@ When a registered User attempts to log in to their CKB account, they must enter 
 
 \newpage
 
-\paragraph{Create a Tournament.}
-When an ED intends to create a new Tournament on CKB, he is required to input various parameters in the create Tournament form. These parameters include the Tournament name, the registration deadline for the STs and the rules to acquire the Badges. In addition to these parameters, the ED can invite other EDs to join this Tournament, through a notification sent by CKB, to help him create new Battles. If any of these parameters are deemed unacceptable by the system, CKB displays an error message to the ED and redirects him back to the create Tournament form page.
+\paragraph{Search and Display.}
+When an anonymous user intends to look up a route on BBP, he is required to provide an origin and a destination in the search form. If an Internet connection is available, BBP processes the submitted query, computes route scores, and prepares an ordered list of publishable results. If at least one result is available, BBP displays the ordered list; after the User selects a route (e.g., “Route A”), the system shows the route on the map together with its details (distance, elevation) and the weather forecast.
 
-Conversely, if all parameters meet the system's criteria, CKB proceeds to create the Tournament. The newly created Tournament is then added to the ED's Tournaments list, and a notification is sent to all STs to inform them of the availability of a new Tournament.
+In contrast, if no publishable route matches the criteria—for example, when the query concerns remote or unsupported locations—BBP informs Marco with the message “No BBP route found. Be the first to create one!” and no results are shown.
 
 \begin{figure}[H]
     \begin{center}
