@@ -9,125 +9,146 @@
 % 1. AUTHENTICATION AND ACCESS
 % ======================
 \subsubsection{Authentication and Access Scenarios}
+\newcounter{aac}
+\setcounter{aac}{1}
+\newcommand{\caac}{\theaac\stepcounter{aac}}
 
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{1.1 – Registration (Success)} \\
-\hline
-\textbf{Actor} & Anna (new user) \\
-\hline
-\textbf{Preconditions} & Internet connection available (\hyperref[da:12]{DA12}). \\
-\hline
-\textbf{Description} & Anna opens the BBP app and taps “Register.” She enters her email and password. Upon confirmation, the system creates the account, authenticates her, and redirects her to the main map screen as a registered user. \\
-\hline
-\textbf{Postconditions} & The user account is created, and Anna is logged in. \\
-\hline
-\end{longtable}
+\begin{center}
+    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+        \hline
+        \textbf{Scenario ID} & \textbf{1.\caac – Registration (Success)} \\
+        \hline
+        \textbf{Actor} & Anna (new user) \\
+        \hline
+        \textbf{Preconditions} & Internet connection available (\hyperref[da:12]{DA12}). \\
+        \hline
+        \textbf{Description} & Anna opens the BBP app and taps “Register.” She enters her email and password. Upon confirmation, the system creates the account, authenticates her, and redirects her to the main map screen as a registered user. \\
+        \hline
+        \textbf{Postconditions} & The user account is created, and Anna is logged in. \\
+        \hline
+        \end{longtable}
+\end{center}
 
-
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{1.2 – Login (Success)} \\
-\hline
-\textbf{Actor} & Carlo (registered user) \\
-\hline
-\textbf{Preconditions} & Valid credentials and Internet connection (\hyperref[da:12]{DA12}). \\
-\hline
-\textbf{Description} & Carlo opens the app, selects “Login,” enters his credentials (“CarloMTB,” password), and presses “Sign In.” The BBP system verifies them and grants access, showing the main map screen. \\
-\hline
-\textbf{Postconditions} & Carlo is authenticated and redirected to the main map screen. \\
-\hline
-\end{longtable}
+\begin{center}
+    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+        \hline
+        \textbf{Scenario ID} & \textbf{1.\caac – Login (Success)} \\
+        \hline
+        \textbf{Actor} & Carlo (registered user) \\
+        \hline
+        \textbf{Preconditions} & Valid credentials and Internet connection (\hyperref[da:12]{DA12}). \\
+        \hline
+        \textbf{Description} & Carlo opens the app, selects “Login,” enters his credentials (“CarloMTB,” password), and presses “Sign In.” The BBP system verifies them and grants access, showing the main map screen. \\
+        \hline
+        \textbf{Postconditions} & Carlo is authenticated and redirected to the main map screen. \\
+        \hline
+    \end{longtable}
+\end{center}
 
 \newpage
 
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{1.3 – Login (Exception – Wrong Password)} \\
-\hline
-\textbf{Actor} & Carlo (registered user) \\
-\hline
-\textbf{Preconditions} & Incorrect password entered. \\
-\hline
-\textbf{Description} & Carlo tries to log in but mistypes his password. The BBP system verifies the credentials and, upon failure, shows an error message: “Invalid username or password,” keeping him on the login page. \\
-\hline
-\textbf{Postconditions} & Login fails; no session is created. \\
-\hline
-\end{longtable}
-
+\begin{center}
+    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+        \hline
+        \textbf{Scenario ID} & \textbf{1.\caac – Login (Exception – Wrong Password)} \\
+        \hline
+        \textbf{Actor} & Carlo (registered user) \\
+        \hline
+        \textbf{Preconditions} & Incorrect password entered. \\
+        \hline
+        \textbf{Description} & Carlo tries to log in but mistypes his password. The BBP system verifies the credentials and, upon failure, shows an error message: “Invalid username or password,” keeping him on the login page. \\
+        \hline
+        \textbf{Postconditions} & Login fails; no session is created. \\
+        \hline
+    \end{longtable}
+\end{center}
 
 % ======================
 % 2. ROUTE CONSULTATION
 % ======================
 
 \subsubsection{Route Consultation Scenarios}
+\newcounter{rcs}
+\setcounter{rcs}{1}
+\newcommand{\crcs}{\thercs\stepcounter{rcs}}
 
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{2.1 – Search and Display (Success)} \\
-\hline
-\textbf{Actor} & Marco (anonymous user) \\
-\hline
-\textbf{Preconditions} & Internet connection available (\hyperref[da:12]{DA12}). \\
-\hline
-\textbf{Description} & Marco uses the search bar to set “Stazione Garibaldi” as the origin and “Parco di Monza” as the destination. The BBP system processes the query, computes route scores, and shows an ordered list. Marco selects “Route A,” and the app displays the route, details (distance, elevation), and weather forecast (\hyperref[da:11]{DA11}). \\
-\hline
-\textbf{Postconditions} & Routes are displayed; user views the selected route and related data. \\
-\hline
-\end{longtable}
+\begin{center}  
+    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+        \hline
+        \textbf{Scenario ID} & \textbf{2.\crcs – Search and Display (Success)} \\
+        \hline
+        \textbf{Actor} & Marco (anonymous user) \\
+        \hline
+        \textbf{Preconditions} & Internet connection available (\hyperref[da:12]{DA12}). \\
+        \hline
+        \textbf{Description} & Marco uses the search bar to set “Stazione Garibaldi” as the origin and “Parco di Monza” as the destination. The BBP system processes the query, computes route scores, and shows an ordered list. Marco selects “Route A,” and the app displays the route, details (distance, elevation), and weather forecast (\hyperref[da:11]{DA11}). \\
+        \hline
+        \textbf{Postconditions} & Routes are displayed; user views the selected route and related data. \\
+        \hline
+    \end{longtable}
+\end{center}
 
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{2.2 – System Logic (Scoring \& Merging) – Key Scenario} \\
-\hline
-\textbf{Actor} & BBP System \\
-\hline
-\textbf{Preconditions} & User search triggered (Scenario 2.1). Data from past route reports available (\hyperref[da:8]{DA8})(\hyperref[da:9]{DA9}). \\
-\hline
-\textbf{Description} & “Route B” has three status updates: two “Requires Maintenance” and one “Optimal.” The system’s merging algorithm aggregates the data based on freshness (\hyperref[da:8]{DA8} and majority (\hyperref[da:9]{DA9}), assigning “Requires Maintenance.” The scoring algorithm uses this to compute a final score of 6.5. \\
-\hline
-\textbf{Postconditions} & Aggregated route status and updated score are displayed to the user. \\
-\hline
-\end{longtable}
+\begin{center} 
+    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+        \hline
+        \textbf{Scenario ID} & \textbf{2.\crcs – System Logic (Scoring \& Merging) – Key Scenario} \\
+        \hline
+        \textbf{Actor} & BBP System \\
+        \hline
+        \textbf{Preconditions} & User search triggered (Scenario 2.1). Data from past route reports available (\hyperref[da:8]{DA8})(\hyperref[da:9]{DA9}). \\
+        \hline
+        \textbf{Description} & “Route B” has three status updates: two “Requires Maintenance” and one “Optimal.” The system’s merging algorithm aggregates the data based on freshness (\hyperref[da:8]{DA8} and majority (\hyperref[da:9]{DA9}), assigning “Requires Maintenance.” The scoring algorithm uses this to compute a final score of 6.5. \\
+        \hline
+        \textbf{Postconditions} & Aggregated route status and updated score are displayed to the user. \\
+        \hline
+    \end{longtable}
+\end{center}
 
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{2.3 – Search (Exception – No Route Found)} \\
-\hline
-\textbf{Actor} & Marco (anonymous user) \\
-\hline
-\textbf{Preconditions} & Query between remote or unsupported locations. \\
-\hline
-\textbf{Description} & Marco searches for a route, but no publishable results match the criteria. The BBP system displays: “No BBP route found. Be the first to create one!” \\
-\hline
-\textbf{Postconditions} & No results displayed; user invited to create a route. \\
-\hline
-\end{longtable}
+\begin{center} 
+    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+        \hline
+        \textbf{Scenario ID} & \textbf{2.\crcs – Search (Exception – No Route Found)} \\
+        \hline
+        \textbf{Actor} & Marco (anonymous user) \\
+        \hline
+        \textbf{Preconditions} & Query between remote or unsupported locations. \\
+        \hline
+        \textbf{Description} & Marco searches for a route, but no publishable results match the criteria. The BBP system displays: “No BBP route found. Be the first to create one!” \\
+        \hline
+        \textbf{Postconditions} & No results displayed; user invited to create a route. \\
+        \hline
+    \end{longtable}
+\end{center}
 
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{2.4 – Navigation} \\
-\hline
-\textbf{Actor} & Marco (anonymous user) \\
-\hline
-\textbf{Preconditions} & A route has been selected. Accurate GPS assumed (\hyperref[da:2]{DA2}). \\
-\hline
-\textbf{Description} & Marco presses “Follow Route.” The app loads the route and shows his real-time position using GPS. The system guides him along the route without recording a new one. At the end, the system offers to register Marco so he can save his ride or view only trip data. \\
-\hline
-\textbf{Postconditions} & Trip completed; user may register or view data summary. \\
-\hline
-\end{longtable}
+\begin{center} 
+    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+        \hline
+        \textbf{Scenario ID} & \textbf{2.\crcs – Navigation} \\
+        \hline
+        \textbf{Actor} & Marco (anonymous user) \\
+        \hline
+        \textbf{Preconditions} & A route has been selected. Accurate GPS assumed (\hyperref[da:2]{DA2}). \\
+        \hline
+        \textbf{Description} & Marco presses “Follow Route.” The app loads the route and shows his real-time position using GPS. The system guides him along the route without recording a new one. At the end, the system offers to register Marco so he can save his ride or view only trip data. \\
+        \hline
+        \textbf{Postconditions} & Trip completed; user may register or view data summary. \\
+        \hline
+    \end{longtable}
+\end{center}
 
 
 % ======================
-% 2. ROUTE CREATION
+% 3. ROUTE CREATION
 % ======================
 
 \subsubsection{Route Creation Scenarios}
+\newcounter{rc}
+\setcounter{rc}{1}
+\newcommand{\crc}{\therc\stepcounter{rc}}
 
 \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
 \hline
-\textbf{Scenario ID} & \textbf{3.1 – Manual Route Creation (Success)} \\
+\textbf{Scenario ID} & \textbf{3.\crc – Manual Route Creation (Success)} \\
 \hline
 \textbf{Actor} & Anna (registered user) \\
 \hline
@@ -141,7 +162,7 @@
 
 \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
 \hline
-\textbf{Scenario ID} & \textbf{3.2 – Automatic Recording (Success \& Pothole Detection) – Key Scenario} \\
+\textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (Success \& Pothole Detection) – Key Scenario} \\
 \hline
 \textbf{Actor} & Carlo (registered user) \\
 \hline
@@ -155,7 +176,7 @@
 
 \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
 \hline
-\textbf{Scenario ID} & \textbf{3.3 – Automatic Recording (False Detection \& User Correction)} \\
+\textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (False Detection \& User Correction)} \\
 \hline
 \textbf{Actor} & Carlo (registered user) \\
 \hline
