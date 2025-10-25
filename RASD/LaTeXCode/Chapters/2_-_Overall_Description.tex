@@ -330,17 +330,13 @@ From the User's profile, User opens the \emph{Manual Route Editor}. Once the edi
 \end{figure}
 
 \paragraph{Automatic Route Creation.}
-The possibility to create a group within a Battle is granted to STs once they have joined a Battle, and the registration deadline has expired. At this point, they are redirected to the create group form, where they write de STG name and can invite other STs to join their STG. The process involves the ST entering a nickname, and upon verification by CKB that the ST with that nickname has also joined the same Battle, a notification is sent to the invited ST, enabling them to join the STG.
-
-Upon receiving a notification, a ST has the option to respond, and upon acceptance, the ST is added to the STG, becoming a participant in the Battle. This invitation process is replicated for each ST that the group creator wishes to invite. Once the group is formed, the ST who initiated the STG can confirm the group, but only if the minimum and maximum number of group members are adhered to. Once confirmed, the STG is ready to actively participate in the Battle.
-
-However, if an invited ST is not part of the Battle, a ST accepts the invitation after the deadline, or the group creation deadline has expired, CKB displays an error message to the respective ST, informing them of the issue and guiding them accordingly. This ensures that the group creation and participation adhere to the specified deadlines and criteria.
+When the User presses \emph{Start Recording}, BBP initializes the session, updates the HUD, and activates sensors. In parallel, GPS data are retrieved to build the path. While the session is active, each shock above the detection threshold is logged as a \emph{pending detection} and the ride continues. When the User presses \emph{End}, the system elaborates the path (e.g., distance and elevation) and checks whether a review is required (\texttt{pendingDetections > 0}). If a review is needed, the User confirms or rejects every candidate; only confirmed detections are retained. BBP then computes the trip summary \& weather information, stores the trip (with confirmed detections), and finally displays the summary screen.
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/create group.png}
-        \caption{Create a Group state diagram.}
-        \label{fig:create_group_sd}%
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/AutomaticRecording.drawio.png}
+        \caption{Automatic Recording state diagram.}
+        \label{fig:Automatic_Recording_sd}%
     \end{center}
 \end{figure}
 
@@ -350,30 +346,30 @@ However, if an invited ST is not part of the Battle, a ST accepts the invitation
 
 Here are listed a summary of the main functions of the BBP system:\\\\
 
-\textbf{ Signup:} The User submits his name, surname, nickname, eMail address and a new password. A confirmation mail is required to complete the process.\\\\
-\textbf{ Login:}The User sign in after typing his eMail and password in the login form. \\\\  
-\textbf{ Create a Tournament:} The ED creates a new Tournament and the system sends a notification to all the STs.\\\\
-\textbf{ Join a Tournament:} A ST can join a Tournament by clicking on the “Join Tournament” button on the Tournament’s page.\\\\
-\textbf{ Create a Battle:} An ED can create multiple Battles within a Tournament to test the STs. When a new Battle is created CKB sends a notification to all the STs that have joined the Tournament.\\\\
-\textbf{ Join a Battle:} A ST can join a Battle by clicking on the “Join Battle” button on the Battle’s page.\\\\
-\textbf{ Create a Group:} After joining a Battle the ST may create a new group and invite other STs or accept an invitation to join another STG. It is a choice of the ST to play alone or to create a group with STs, whether this is made possible by the minimum number of STs per STG decided by the ED.\\\\
-\textbf{ Evaluate Code:} During the Consolidation phase, an ED can manually download and evaluate the code of a STG within a Battle.\\\\
-\textbf{ Create a Badge:} An ED can create Badges to be awarded to worthy STs and define their rules.\\\\
-\textbf{ Search for a Profile:} Users can write a nickname or a keyword in the search bar to retrieve another User’s profile.\\\\
-\textbf{ Open a Profile:} Users can click on a nickname in a Leaderboard to open another User’s profile.\\\\
-\textbf{ Search for a Tournament:} Users can write a Tournament's name or a keyword in the search bar to retrieve the information about a Tournament.\\\\
-\textbf{ Logout:} A User session will be closed if the User clicks on "Logout" button. Next time the User opens CKB he will need to log in again.
-
+\textbf{Signup:} The User enters email and password to create a new BBP account; a confirmation email completes activation and the User is redirected to the map as a registered user.\\
+\textbf{Login:} The User types credentials (nickname/email and password); if valid, BBP starts the session and shows the main map; otherwise, an error is shown and the User remains on the login page.\\
+\textbf{Logout:} The User ends the current session; subsequent access requires logging in again.\\
+\textbf{Search Route:} The User specifies origin and destination; BBP computes scores and returns an ordered list of publishable routes.\\
+\textbf{View Route Details:} After selecting a route, BBP displays the polyline, distance, elevation, and the weather forecast associated with the route.\\
+\textbf{Follow Route (Navigation):} The User taps “Follow Route”; BBP provides turn-by-turn guidance using GPS without recording a new trip. At the end, BBP offers registration so the User can save the ride or view a summary only.\\
+\textbf{Start Automatic Recording:} A registered User starts a session; BBP tracks the path and live stats while acquiring motion-sensor data (accelerometer/gyroscope).\\
+\textbf{Automatic Detection Review:} At the end of recording, BBP asks the User to confirm or reject sensor-detected anomalies (e.g., potholes); only confirmed detections are retained.\\
+\textbf{End \& Save Trip:} BBP computes trip statistics and attaches a weather snapshot; the trip (and any confirmed detections) is saved to the User’s archive.\\
+\textbf{Manual Route Creation:} The User opens the editor, draws the path, optionally adds maintenance pins, sets name and visibility, and presses “Save.”\\
+\textbf{Publish/Privacy Choice:} When saving a manually created route, the User can make it Public (visible to everyone) or keep it Private in their library.\\
+\textbf{Route Scoring \& Merging:} For searched paths, BBP aggregates community reports by majority and freshness to derive the current status and compute the route score shown in results.\\
+\textbf{My Trips \& Summaries:} Registered Users can view stored trips with summaries (distance, duration, elevation, average speed) and associated weather info.\\
+\textbf{Notifications \& Messages:} BBP displays confirmations, success, or error messages during key actions (e.g., save completed, invalid credentials, no route found).\\
 
 \section{User characteristic}
 \label{sec:User_characteristic}%
 
-There are two types of registered Users in BBP: Students (STs) and Educators (EDs). Here are briefly explained their main characteristics:
+There are two categories of BBP users: Anonymous Users and Registered Users. Their main characteristics:
 \begin{itemize}
-    \item ST: Students join CodeKataBattle in order to prove and improve their skills in coding. They need to have a device with an internet connection and an account in order to have access to CKB, in which they can join Tournaments and Battles to compete with other STs.  
-    \item ED: Educators join CodeKataBattle, where they can create Tournaments in which STs can compete in different Battles and evaluate the STs’ works.
+    \item \textbf{Anonymous User (Guest).} Can use BBP without an account to search for routes between an origin and a destination and visualize them on the map, ranked by score. May follow an existing route (navigation / view-only trip summary), but cannot save rides or publish information. A network connection and location access are required during use.  
+    \item \textbf{Registered User.} Creates an account to record and store personal trips, view trip statistics (e.g., total distance, average speed), and—when available—have trips enriched with weather data retrieved from an external service. Can contribute publishable information about bike paths in two ways: (i) manual mode by entering route information, and (ii) automated mode by letting BBP acquire GPS plus motion-sensor data (accelerometer/gyroscope) while riding; automated detections are confirmed/corrected by the user before publication. Registered users can also choose whether contributed information is public (publishable) or kept private.
 \end{itemize}
-Both the EDs and the STs need to register an account in order to access CKB. During the registration process their both asked to provide an eMail account.
+Both user types benefit from the system’s path scoring and visualization; only registered users can save trips and contribute new information (manual or automated).
 
 \section{Assumptions, dependencies and constraints}
 \label{sec:assumptions_dependencies_constraints}%
