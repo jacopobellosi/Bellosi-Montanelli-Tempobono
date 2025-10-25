@@ -1,7 +1,6 @@
 \section{Product perspesctive}
 \label{sec:product_perspesctive}%
 
-
 \subsection{Scenarios}
 \label{subsec:scenarios}%
 
@@ -14,7 +13,7 @@
 \newcommand{\caac}{\theaac\stepcounter{aac}}
 
 \begin{center}
-    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
         \textbf{Scenario ID} & \textbf{1.\caac – Registration (Success)} \\
         \hline
@@ -30,7 +29,7 @@
 \end{center}
 
 \begin{center}
-    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
         \textbf{Scenario ID} & \textbf{1.\caac – Login (Success)} \\
         \hline
@@ -48,7 +47,7 @@
 \newpage
 
 \begin{center}
-    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
         \textbf{Scenario ID} & \textbf{1.\caac – Login (Exception – Wrong Password)} \\
         \hline
@@ -73,7 +72,7 @@
 \newcommand{\crcs}{\thercs\stepcounter{rcs}}
 
 \begin{center}  
-    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
         \textbf{Scenario ID} & \textbf{2.\crcs – Search and Display (Success)} \\
         \hline
@@ -89,7 +88,7 @@
 \end{center}
 
 \begin{center} 
-    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
         \textbf{Scenario ID} & \textbf{2.\crcs – System Logic (Scoring \& Merging) – Key Scenario} \\
         \hline
@@ -105,7 +104,7 @@
 \end{center}
 
 \begin{center} 
-    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
         \textbf{Scenario ID} & \textbf{2.\crcs – Search (Exception – No Route Found)} \\
         \hline
@@ -121,7 +120,7 @@
 \end{center}
 
 \begin{center} 
-    \begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
         \textbf{Scenario ID} & \textbf{2.\crcs – Navigation} \\
         \hline
@@ -146,61 +145,69 @@
 \setcounter{rc}{1}
 \newcommand{\crc}{\therc\stepcounter{rc}}
 
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{3.\crc – Manual Route Creation (Success)} \\
-\hline
-\textbf{Actor} & Anna (registered user) \\
-\hline
-\textbf{Preconditions} & User logged in; understands options (\hyperref[da:10]{DA10}). \\
-\hline
-\textbf{Description} & From her profile, Anna selects “Create Manual Route.” She draws the route on the map, names it “Tuesday Ride,” places maintenance pins, activates “Make Public,” and presses “Save” (\hyperref[da:2]{DA2}). The route becomes available to others. \\
-\hline
-\textbf{Postconditions} & The new route is created and visible to all users. \\
-\hline
-\end{longtable}
+\begin{center} 
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
+       \hline
+        \textbf{Scenario ID} & \textbf{3.\crc – Manual Route Creation (Success)} \\
+        \hline
+        \textbf{Actor} & Anna (registered user) \\
+        \hline
+        \textbf{Preconditions} & User logged in; understands options (\hyperref[da:10]{DA10}). \\
+        \hline
+        \textbf{Description} & From her profile, Anna selects “Create Manual Route.” She draws the route on the map, names it “Tuesday Ride,” places maintenance pins, activates “Make Public,” and presses “Save” (\hyperref[da:2]{DA2}). The route becomes available to others. \\
+      \hline
+     \textbf{Postconditions} & The new route is created and visible to all users. \\
+       \hline
+    \end{longtable}
+\end{center}
 
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (Success \& Pothole Detection) – Key Scenario} \\
-\hline
-\textbf{Actor} & Carlo (registered user) \\
-\hline
-\textbf{Preconditions} & Accurate GPS data (\hyperref[da:2]{DA2}), reliable threshold (\hyperref[da:4]{DA4}), device fixed to bike (\hyperref[da:5]{DA5}). \\
-\hline
-\textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. While riding, a strong shock occurs due to a pothole. Sensors send data spikes to BBP. Upon completion, BBP asks for confirmation; Carlo validates correct detections and saves the trip. The app displays weather data (\hyperref[da:11]{DA11}) and summary before saving (\hyperref[da:12]{DA12}). \\
-\hline
-\textbf{Postconditions} & Trip data and confirmed detections are stored in Carlo’s archive. \\
-\hline
-\end{longtable}
+\begin{center}
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
+        \hline
+        \textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (Success \& Pothole Detection) – Key Scenario} \\
+        \hline
+        \textbf{Actor} & Carlo (registered user) \\
+        \hline
+        \textbf{Preconditions} & Accurate GPS data (\hyperref[da:2]{DA2}), reliable threshold (\hyperref[da:4]{DA4}), device fixed to bike (\hyperref[da:5]{DA5}). \\
+        \hline
+        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. While riding, a strong shock occurs due to a pothole. Sensors send data spikes to BBP. Upon completion, BBP asks for confirmation; Carlo validates correct detections and saves the trip. The app displays weather data (\hyperref[da:11]{DA11}) and summary before saving (\hyperref[da:12]{DA12}). \\
+        \hline
+        \textbf{Postconditions} & Trip data and confirmed detections are stored in Carlo’s archive. \\
+        \hline
+    \end{longtable}
+\end{center}
 
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (False Detection \& User Correction)} \\
-\hline
-\textbf{Actor} & Carlo (registered user) \\
-\hline
-\textbf{Preconditions} & Same as Scenario 3.2; false detection occurs. \\
-\hline
-\textbf{Description} & Carlo’s recording continues, but the detected spike results from jumping off a curb. When asked to confirm detections, Carlo (acting in good faith, (\hyperref[da:7]{DA7})) presses “No, ignore” for incorrect ones. The BBP system cancels invalid detections, and Carlo completes the trip as in Scenario 3.2. \\
-\hline
-\textbf{Postconditions} & False detections are removed; valid trip data saved. \\
-\hline
-\end{longtable}
+\begin{center}
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
+       \hline
+        \textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (False Detection \& User Correction)} \\
+        \hline
+        \textbf{Actor} & Carlo (registered user) \\
+        \hline
+        \textbf{Preconditions} & Same as Scenario 3.2; false detection occurs. \\
+        \hline
+        \textbf{Description} & Carlo’s recording continues, but the detected spike results from jumping off a curb. When asked to confirm detections, Carlo (acting in good faith, (\hyperref[da:7]{DA7})) presses “No, ignore” for incorrect ones. The BBP system cancels invalid detections, and Carlo completes the trip as in Scenario 3.2. \\
+        \hline
+        \textbf{Postconditions} & False detections are removed; valid trip data saved. \\
+        \hline
+    \end{longtable}
+\end{center}
 
-\begin{longtable}{|p{0.17\linewidth}|p{0.77\linewidth}|}
-\hline
-\textbf{Scenario ID} & \textbf{3.4 – Automatic Recording (No Detections)} \\
-\hline
-\textbf{Actor} & Carlo (registered user) \\
-\hline
-\textbf{Preconditions} & Flat and obstacle-free route; no sensor spikes (\hyperref[da:4]{DA4}). \\
-\hline
-\textbf{Description} & Carlo rides on a smooth route. No anomalies are detected. When pressing “End and Save,” BBP skips the “Review” step and directly shows the summary screen. \\
-\hline
-\textbf{Postconditions} & Trip saved successfully without detected issues. \\
-\hline
-\end{longtable}
+\begin{center}
+    \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
+        \hline
+        \textbf{Scenario ID} & \textbf{3.4 – Automatic Recording (No Detections)} \\
+        \hline
+        \textbf{Actor} & Carlo (registered user) \\
+        \hline
+        \textbf{Preconditions} & Flat and obstacle-free route; no sensor spikes (\hyperref[da:4]{DA4}). \\
+        \hline
+        \textbf{Description} & Carlo rides on a smooth route. No anomalies are detected. When pressing “End and Save,” BBP skips the “Review” step and directly shows the summary screen. \\
+        \hline
+        \textbf{Postconditions} & Trip saved successfully without detected issues. \\
+        \hline
+    \end{longtable}
+\end{center}
 
 \newpage
 
@@ -252,6 +259,8 @@ When registering for BBP, a user fills out a form with their name, surname, nick
     \end{center}
 \end{figure}
 
+\newpage
+
 \paragraph{Login.}
 When a registered User attempts to log in to their BBP account, they must enter their credentials (nickname and password) into a login form. If the provided credentials are accurate —matching those of a registered User in the BBP database— BBP authenticates the User and redirects him to the Map Screen, showcasing the possibility to discover new path. however, if the entered credentials are invalid, BBP presents an error message to the User and redirects them back to the login form page.
 
@@ -263,8 +272,6 @@ When a registered User attempts to log in to their BBP account, they must enter 
     \end{center}
 \end{figure}
 
-\newpage
-
 \paragraph{Search and Display.}
 When an anonymous user intends to look up a route on BBP, he is required to provide an origin and a destination in the search form. If an Internet connection is available, BBP processes the submitted query, computes route scores, and prepares an ordered list of publishable results. If at least one result is available, BBP displays the ordered list; after the User selects a route (e.g., “Route A”), the system shows the route on the map together with its details (distance, elevation) and the weather forecast.
 
@@ -273,10 +280,12 @@ In contrast, if no publishable route matches the criteria—for example, when th
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/SearchAndDisplay.drawio.png}
-        \caption{Create a Tournament state diagram.}
-        \label{fig:create_Tournament_sd}%
+        \caption{Search and Display state diagram.}
+        \label{fig:Search_And_Display_sd}%
     \end{center}
 \end{figure}
+
+\newpage
 
 \paragraph{Create a Battle.}
 Once a Tournament is created, an ED has the option to create a new Battle within it. To do so, the ED is required to input various parameters in the create Battle form. These parameters encompass the Battle name, code kata, registration deadline, submission deadline, minimum and maximum members per STG, and any additional rules for evaluation. In the event that any of these parameters are considered unacceptable by the system, CKB displays an error message to the ED and redirects them back to the create Tournament form page.
