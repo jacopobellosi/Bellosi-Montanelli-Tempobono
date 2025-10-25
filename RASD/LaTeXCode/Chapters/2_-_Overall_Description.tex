@@ -161,6 +161,8 @@
     \end{longtable}
 \end{center}
 
+\newpage
+
 \begin{center}
     \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
@@ -287,7 +289,7 @@ In contrast, if no publishable route matches the criteria—for example, when th
 
 \newpage
 
-\paragraph{Scoring & Merging.}
+\paragraph{Scoring \& Merging.}
 When a route search is triggered (Scenario 2.1), the BBP System gathers the past route reports for the selected route (DA8/DA9) and verifies that the data are available and readable. The system then applies the merging logic: a majority rule over the collected statuses (DA9). If a majority tie occurs, the system resolves it using the freshness criterion, giving precedence to the most recent and reliable reports (DA8). If the data are missing, corrupted, or a tie remains unresolvable, BBP notifies the user (e.g., “No data available” or “Conflict in reports”) and aborts the update.
 
 Conversely, when a merged status is successfully determined, the scoring algorithm computes the route’s numeric score (e.g., 6.5) based on the merged outcome and recency weighting. The aggregated status and computed score are then presented to the user and logged for traceability. Any failure during fetching, merging, scoring, or presentation results in an error message and termination of the operation without altering previously displayed results.
@@ -316,20 +318,18 @@ Conversely, if the User is already registered, the trip is automatically saved, 
     \end{center}
 \end{figure}
 
-\paragraph{Join a Battle.}
-Once a ST has registered for a Tournament, and a new Battle is created within it, the ST has the option to join a specific Battle. CKB performs a check to verify if the registration deadline for the chosen Battle has not expired. If the ST is within the allowed timeframe, CKB adds the ST to the list of participants for that Battle and directs them to the create group page where they can further engage in the competition.
-
-However, if the registration deadline has already expired, CKB displays an error message to the ST, notifying them of the expiration, and redirects them to the Tournament dashboard with the respective Battle. This ensures that participants are aware of the registration timeline and can take timely actions to join the Battles of their choice.
+\paragraph{Manual Route Creation.}
+From the User's profile, User opens the \emph{Manual Route Editor}. Once the editor is ready, he iteratively builds the path by adding/undoing segments until the path is marked complete. At completion, the system processes the geometry (e.g., distance and altitude) and then prompts for optional maintenance pins; The User may add any number of pins before proceeding. Next, he attaches metadata—entering the route name and selecting the visibility (Public/Private)—and presses \emph{Save}. The system validates the submission (path present and consistent metadata). If validation fails, the flow terminates without saving and feedback is shown. If validation succeeds, the system checks the visibility setting: when \emph{Public} is allowed and selected, the route is published and indexed for all users; otherwise, the route is saved privately in the User’s library. The process then ends.
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/join Battle.png}
-        \caption{Join a Battle state diagram.}
-        \label{fig:join_Battle_sd}%
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/ManualRouteCreation.drawio.png}
+        \caption{Manual Route Creation state diagram.}
+        \label{fig:Manual_Route_Creation_sd}%
     \end{center}
 \end{figure}
 
-\paragraph{Create a Group.}
+\paragraph{Automatic Route Creation.}
 The possibility to create a group within a Battle is granted to STs once they have joined a Battle, and the registration deadline has expired. At this point, they are redirected to the create group form, where they write de STG name and can invite other STs to join their STG. The process involves the ST entering a nickname, and upon verification by CKB that the ST with that nickname has also joined the same Battle, a notification is sent to the invited ST, enabling them to join the STG.
 
 Upon receiving a notification, a ST has the option to respond, and upon acceptance, the ST is added to the STG, becoming a participant in the Battle. This invitation process is replicated for each ST that the group creator wishes to invite. Once the group is formed, the ST who initiated the STG can confirm the group, but only if the minimum and maximum number of group members are adhered to. Once confirmed, the STG is ready to actively participate in the Battle.
@@ -344,68 +344,12 @@ However, if an invited ST is not part of the Battle, a ST accepts the invitation
     \end{center}
 \end{figure}
 
-\paragraph{Evaluate the code.}
-During the consolidation stage, once all commits have been completed and no further changes are possible, an ED has the option to manually inspect a STG code. The ED can download the code from the Battle dashboard for thorough examination. After reviewing the code, the ED can then modify the score assigned to the STG, which was previously assessed by external tools automatically during each commit.
-
-To facilitate this, CKB provides a form that allows the ED to input the adjusted score. However, before updating the score, CKB checks whether the new score adheres to predefined boundaries, such as being non-negative or not exceeding 100. If the new score meets these criteria, CKB successfully updates the score for the STG.
-
-In the event that the new score falls outside the specified boundaries, CKB displays an error message to the ED and redirects them to the evaluate code form.
-
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/evaluate code.png}
-        \caption{Evaluate the code state diagram.}
-        \label{fig:evaluate_code_sd}%
-    \end{center}
-\end{figure}
-
-\paragraph{Open a profile.}
-If a User wishes to view another User's profile, including Badges and other relevant information, they can do so by clicking on the User's nickname in various dashboards, such as the Tournament dashboard or the group composition. Upon clicking the nickname, CKB displays the profile of the selected User to provide the desired information. This feature allows Users to easily access and view the profiles of others within the platform.
-
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/open a profile.png}
-        \caption{Open a profile state diagram.}
-        \label{fig:open_profile_sd}%
-    \end{center}
-\end{figure}
-
-\paragraph{Search for a profile.}
-In addition to opening a User profile by clicking the nickname in a dashboard, Users also have the option to use the search bar. By entering a nickname or a keyword in the search bar, CKB will display a list of Users whose nickname contain the entered keyword. Users can then click on a specific User from the search results to open and view their profile, providing a convenient and flexible way to access User information within the platform.
-
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/search for a profile.png}
-        \caption{Search for a profile state diagram.}
-        \label{fig:search_profile_sd}%
-    \end{center}
-\end{figure}
-
-\paragraph{Search for a Tournament.}
-Users can utilize the search bar to look for Tournaments by entering a name or a keyword. When a search query is entered, CKB will present a list of Tournaments whose names contain the specified keyword. Users can then click on a particular Tournament from the search results, and CKB will redirect them to the Tournament dashboard for detailed information and engagement with the selected Tournament. 
-
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/search for a Tournament.png}
-        \caption{Search for a Tournament state diagram.}
-        \label{fig:search_Tournament_sd}%
-    \end{center}
-\end{figure}
-
-\paragraph{Logout.}
-Users can log out from their account at any time by clicking the "Logout" button. Upon clicking the button, CKB terminates the User's session, ensuring that they are securely logged out. Following this action, the User is then redirected to the login page, providing them with the opportunity to rejoin the CKB system if they wish to do so. 
-
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/logout.png}
-        \caption{Logout state diagram.}
-        \label{fig:logout_sd}%
-    \end{center}
-\end{figure}
 
 \section{Product functions}
 \label{sec:product_functions}%
-Here are listed a summary of the main functions of the CKB system:\\\\
+
+Here are listed a summary of the main functions of the BBP system:\\\\
+
 \textbf{ Signup:} The User submits his name, surname, nickname, eMail address and a new password. A confirmation mail is required to complete the process.\\\\
 \textbf{ Login:}The User sign in after typing his eMail and password in the login form. \\\\  
 \textbf{ Create a Tournament:} The ED creates a new Tournament and the system sends a notification to all the STs.\\\\
@@ -423,7 +367,8 @@ Here are listed a summary of the main functions of the CKB system:\\\\
 
 \section{User characteristic}
 \label{sec:User_characteristic}%
-There are two types of registered Users in CKB: Students (STs) and Educators (EDs). Here are briefly explained their main characteristics:
+
+There are two types of registered Users in BBP: Students (STs) and Educators (EDs). Here are briefly explained their main characteristics:
 \begin{itemize}
     \item ST: Students join CodeKataBattle in order to prove and improve their skills in coding. They need to have a device with an internet connection and an account in order to have access to CKB, in which they can join Tournaments and Battles to compete with other STs.  
     \item ED: Educators join CodeKataBattle, where they can create Tournaments in which STs can compete in different Battles and evaluate the STs’ works.
