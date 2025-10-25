@@ -300,14 +300,19 @@ Conversely, when a merged status is successfully determined, the scoring algorit
     \end{center}
 \end{figure}
 
-\paragraph{Join a Tournament.}
-When a new Tournament is created, a ST receives a notification or discovers it on the homepage. At this point, the ST can choose to join the Tournament. If the ST is not yet registered for that specific Tournament, CKB not only adds the Tournament to the ST's Tournament list but also includes the ST in the participant list of the newly created Tournament. This ensures that the ST is officially registered as a participant, allowing him to engage in the Battles.
+\paragraph{Navigation.}
+After a route has been selected, the User taps \emph{Follow Route}. The BBP system loads the chosen route and begins step-by-step guidance using his current position (GPS assumed to be always available). While guiding, the system continuously checks adherence to the planned path;
+%TODO bagai qua in caso non lo assumiamo come vero rimettimao
+%if a deviation is detected, it recenters the view and proposes a reroute, then resumes guidance on the corrected path.
+When the User reaches the destination, BBP displays an end-of-trip screen offering registration. If the Anonymous User chooses to register, BBP saves the trip to their account and then displays the trip summary; otherwise, BBP simply presents a view-only summary without storing the ride.
+
+Conversely, if the User is already registered, the trip is automatically saved, and the Authenticated User can choose to view the summary or exit the navigation.
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/join Tournament.png}
-        \caption{Join a Tournament state diagram.}
-        \label{fig:join_Tournament_sd}%
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/Navigation.drawio.png}
+        \caption{Navigation state diagram.}
+        \label{fig:Navigation_sd}%
     \end{center}
 \end{figure}
 
