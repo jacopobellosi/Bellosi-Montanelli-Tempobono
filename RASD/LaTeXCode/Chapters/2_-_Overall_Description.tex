@@ -287,16 +287,16 @@ In contrast, if no publishable route matches the criteria—for example, when th
 
 \newpage
 
-\paragraph{Create a Battle.}
-Once a Tournament is created, an ED has the option to create a new Battle within it. To do so, the ED is required to input various parameters in the create Battle form. These parameters encompass the Battle name, code kata, registration deadline, submission deadline, minimum and maximum members per STG, and any additional rules for evaluation. In the event that any of these parameters are considered unacceptable by the system, CKB displays an error message to the ED and redirects them back to the create Tournament form page.
+\paragraph{Scoring & Merging.}
+When a route search is triggered (Scenario 2.1), the BBP System gathers the past route reports for the selected route (DA8/DA9) and verifies that the data are available and readable. The system then applies the merging logic: a majority rule over the collected statuses (DA9). If a majority tie occurs, the system resolves it using the freshness criterion, giving precedence to the most recent and reliable reports (DA8). If the data are missing, corrupted, or a tie remains unresolvable, BBP notifies the user (e.g., “No data available” or “Conflict in reports”) and aborts the update.
 
-Conversely, if all parameters meet the system's criteria, CKB proceeds to create the Battle. The newly created Battle is then added to the ED's list of Battles, and a notification is sent to all STs registered to the Tournament where the Battle resides, informing them that a new Battle is now available.
+Conversely, when a merged status is successfully determined, the scoring algorithm computes the route’s numeric score (e.g., 6.5) based on the merged outcome and recency weighting. The aggregated status and computed score are then presented to the user and logged for traceability. Any failure during fetching, merging, scoring, or presentation results in an error message and termination of the operation without altering previously displayed results.
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{StateDiagrams/create Battle.png}
-        \caption{Create a Battle state diagram.}
-        \label{fig:create_Battle_sd}%
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/Scoring&MergingLogic.drawio.png}
+        \caption{Scoring \& Merging logic state diagram.}
+        \label{fig:Scoring_Merging_sd}%
     \end{center}
 \end{figure}
 
