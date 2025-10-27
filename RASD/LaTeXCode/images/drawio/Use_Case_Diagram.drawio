@@ -62,7 +62,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="fWe5nbggfraEP0L-u5DX" name="user">
-    <mxGraphModel dx="629" dy="802" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="524" dy="735" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -104,25 +104,16 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="5a95Q-9efatI0d6q1yee-2" value="Search path" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="FWuO_IcwtOgFDhBP8G6n-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="5a95Q-9efatI0d6q1yee-2" target="5a95Q-9efatI0d6q1yee-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5a95Q-9efatI0d6q1yee-2" value="Search paths" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="240" y="80" width="110" height="70" as="geometry" />
-        </mxCell>
-        <mxCell id="5a95Q-9efatI0d6q1yee-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="5a95Q-9efatI0d6q1yee-7" target="5a95Q-9efatI0d6q1yee-2">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="295" y="190" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="5a95Q-9efatI0d6q1yee-14" value="&amp;lt;&amp;lt;extends&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="5a95Q-9efatI0d6q1yee-13">
-          <mxGeometry x="-0.1053" relative="1" as="geometry">
-            <mxPoint as="offset" />
-          </mxGeometry>
         </mxCell>
         <mxCell id="5a95Q-9efatI0d6q1yee-7" value="View path details" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="330" y="160" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="5a95Q-9efatI0d6q1yee-9" value="Follow path (navigation)&lt;div&gt;- Cannot save the stats&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="5a95Q-9efatI0d6q1yee-9" value="Follow path" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="310" y="270" width="110" height="70" as="geometry" />
         </mxCell>
         <mxCell id="5a95Q-9efatI0d6q1yee-15" value="BBP" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
