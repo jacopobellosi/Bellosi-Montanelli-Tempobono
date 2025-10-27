@@ -250,7 +250,7 @@ Overall, the diagram establishes a clear architecture separating \textbf{user ma
 \label{subsec:state_diagrams}%
 In this section, the State Diagrams of the BBP system are presented representing all the possible operation that a User can perform.
 \paragraph{Signup.}
-When registering for BBP, a user fills out a form with their name, surname, nickname, email, and password. BBP then verifies that the email and nickname aren’t already taken and that the password is at least eight characters long and includes an uppercase letter, a digit, and a special symbol. If the checks pass, BBP sends a confirmation email; the account is created once the user follows the verification link. If any check fails, BBP shows an error message and returns the user to the sign-up page.
+When a user opts to register for BBP, they are initially presented with the registration option on the interface. Upon tapping the registration button, the system displays the dedicated registration screen. The user then enters the required credentials, such as username, email, and password. Subsequently, BBP performs a check to validate the provided information. If the credentials are deemed valid, the registration is successful, and the user is navigated to the main map screen. However, if the validation fails (due to invalid format or existing username/email), the flow loops back, presumably returning the user to the registration screen to correct their input and try again.
 
 
 \begin{figure}[H]
