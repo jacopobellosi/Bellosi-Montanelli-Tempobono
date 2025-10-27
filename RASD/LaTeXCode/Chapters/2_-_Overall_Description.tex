@@ -264,7 +264,7 @@ When a user opts to register for BBP, they are initially presented with the regi
 \newpage
 
 \paragraph{Login.}
-When a registered User attempts to log in to their BBP account, they must enter their credentials (nickname and password) into a login form. If the provided credentials are accurate —matching those of a registered User in the BBP database— BBP authenticates the User and redirects him to the Map Screen, showcasing the possibility to discover new path. however, if the entered credentials are invalid, BBP presents an error message to the User and redirects them back to the login form page.
+The process begins when the system presents the user with the option to log in, typically via a "Login" button ("Show login button"). If the user chooses to proceed by tapping the button ("User taps button"), the system displays the credentials screen ("Show credentials screen"). Here, the user enters their username and password, after which the system initiates a check of these credentials ("User inputs username and password / checking credentials"). A decision point follows: if the credentials are determined to be valid ("Valid credentials"), the user is successfully authenticated and directed to the main map screen ("Map screen"), concluding the login process. However, if the credentials are found to be incorrect ("Incorrect credentials"), the system displays an error message ("Show error message"). From the error message, the flow loops back to allow the user to re-enter their credentials on the credentials screen, providing another attempt to log in.
 
 \begin{figure}[H]
     \begin{center}
@@ -275,9 +275,9 @@ When a registered User attempts to log in to their BBP account, they must enter 
 \end{figure}
 
 \paragraph{Search and Display.}
-When an anonymous user intends to look up a route on BBP, he is required to provide an origin and a destination in the search form. If an Internet connection is available, BBP processes the submitted query, computes route scores, and prepares an ordered list of publishable results. If at least one result is available, BBP displays the ordered list; after the User selects a route (e.g., “Route A”), the system shows the route on the map together with its details (distance, elevation) and the weather forecast.
+This diagram illustrates the user journey for finding bike paths in BBP. The process begins when the user accesses the search page and inputs their desired start and destination points. The system then enters a processing phase where it identifies relevant routes and computes their scores, incorporating community-provided status updates through a merging algorithm .
 
-In contrast, if no publishable route matches the criteria—for example, when the query concerns remote or unsupported locations—BBP informs Marco with the message “No BBP route found. Be the first to create one!” and no results are shown.
+Following this, a check determines if any routes were found. If no results are available, a message like "Be The First!" is displayed, and the process ends. If results are found, the system presents a list of routes ordered by score . At this point, the user can either select a specific route to view its details or abort the search, returning to the initial search page. If a route is selected, the system displays comprehensive information including the map, calculated statistics, and the aggregated path status , after which this workflow concludes.
 
 \begin{figure}[H]
     \begin{center}
@@ -287,12 +287,13 @@ In contrast, if no publishable route matches the criteria—for example, when th
     \end{center}
 \end{figure}
 
-\newpage
 
 \paragraph{Scoring \& Merging.}
-When a route search is triggered (Scenario 2.1), the BBP System gathers the past route reports for the selected route (DA8/DA9) and verifies that the data are available and readable. The system then applies the merging logic: a majority rule over the collected statuses (DA9). If a majority tie occurs, the system resolves it using the freshness criterion, giving precedence to the most recent and reliable reports (DA8). If the data are missing, corrupted, or a tie remains unresolvable, BBP notifies the user (e.g., “No data available” or “Conflict in reports”) and aborts the update.
+It starts when the search triggers the fetching of all past users reports related to the path.
 
-Conversely, when a merged status is successfully determined, the scoring algorithm computes the route’s numeric score (e.g., 6.5) based on the merged outcome and recency weighting. The aggregated status and computed score are then presented to the user and logged for traceability. Any failure during fetching, merging, scoring, or presentation results in an error message and termination of the operation without altering previously displayed results.
+First, it checks if any reports exist. If there's no data, the process stops for that path. If reports are found, the system merges them, aggregating user feedback (primarily status reports) to determine a representative condition. A check follows to see if the merging resulted in conflicts (e.g., no clear majority status). If a conflict exists, the freshness rule is applied, prioritizing the most recent reports to decide the final status .
+
+Once a definitive, merged status is established (either directly or after resolving conflicts), the system computes the path's score . This final score, along with the merged status, is then outputted ("Score computed, Result page") for use in the search results, completing the evaluation workflow.
 
 \begin{figure}[H]
     \begin{center}
@@ -303,12 +304,11 @@ Conversely, when a merged status is successfully determined, the scoring algorit
 \end{figure}
 
 \paragraph{Navigation.}
-After a route has been selected, the User taps \emph{Follow Route}. The BBP system loads the chosen route and begins step-by-step guidance using his current position (GPS assumed to be always available). While guiding, the system continuously checks adherence to the planned path;
-%TODO bagai qua in caso non lo assumiamo come vero rimettimao
-%if a deviation is detected, it recenters the view and proposes a reroute, then resumes guidance on the corrected path.
-When the User reaches the destination, BBP displays an end-of-trip screen offering registration. If the Anonymous User chooses to register, BBP saves the trip to their account and then displays the trip summary; otherwise, BBP simply presents a view-only summary without storing the ride.
+After a route has been selected from the search results, the User taps "Follow Route". The BBP system then loads the chosen route onto the map and begins acquiring GPS data to provide step-by-step guidance based on the user's current position (GPS assumed to be available per DA2). The system displays the navigation page, continuously updating the user's location along the path.
 
-Conversely, if the User is already registered, the trip is automatically saved, and the Authenticated User can choose to view the summary or exit the navigation.
+When the User reaches the destination, BBP analyzes the travel data and checks the user's status. If the user is Anonymous, the system displays an end-of-trip screen offering registration. If the Anonymous User chooses to register ("User accepted"), BBP guides them through the registration process; upon successful registration, the trip is saved to their new account, and the system then displays the trip summary. If the Anonymous User refuses registration ("User refused"), BBP simply presents a view-only summary without permanently storing the ride details, and the process ends.
+
+Conversely, if the User navigating is already Registered, upon arrival at the destination, the trip is automatically saved to their account . The system then presents an option to view the summary ("Show button for trip summary"). The Authenticated User can choose to view the detailed summary ("Button pressed" leading to "Display trip summary") or simply exit the navigation screen ("Close"), concluding the process.
 
 \begin{figure}[H]
     \begin{center}
@@ -319,7 +319,11 @@ Conversely, if the User is already registered, the trip is automatically saved, 
 \end{figure}
 
 \paragraph{Manual Route Creation.}
-From the User's profile, User opens the \emph{Manual Route Editor}. Once the editor is ready, he iteratively builds the path by adding/undoing segments until the path is marked complete. At completion, the system processes the geometry (e.g., distance and altitude) and then prompts for optional maintenance pins; The User may add any number of pins before proceeding. Next, he attaches metadata—entering the route name and selecting the visibility (Public/Private)—and presses \emph{Save}. The system validates the submission (path present and consistent metadata). If validation fails, the flow terminates without saving and feedback is shown. If validation succeeds, the system checks the visibility setting: when \emph{Public} is allowed and selected, the route is published and indexed for all users; otherwise, the route is saved privately in the User’s library. The process then ends.
+From their profile or a dedicated menu, the User selects the option to create a new route manually, initiating the process ("Manual Route Selected"). BBP then presents the Manual Route Editor page, typically displaying a map interface ready for input. The User iteratively builds the path by interacting with the editor's tools, adding or undoing segments point by point ("User add/undo segment"). This loop continues until the User indicates the path geometry is complete ("Path Completed? - Yes").
+
+Upon completion, the system may perform an initial calculation of basic geometric properties like distance ("/ calculate stats"). The system then prompts the User, asking if they wish to add specific maintenance or status pins along the route ("Add Maintenance Pins?"). If the User chooses yes ("Yes"), they utilize the provided tool ("Adding maintenance pin tool") to place these markers ("User add pin"). Once finished adding pins, or if they chose not to add any ("No"), the User proceeds to attach metadata. This involves entering essential details like the route Name and setting its visibility (Public or Private).
+
+Finally, the User initiates the save action, triggering a system validation check ("saved checking validity"). If the submitted path and metadata are deemed invalid ("Invalid")—for example, if a name is missing—the process terminates, likely displaying an error to the User. If the data is valid ("Valid / publish route"), the system saves the route. If marked as public, it's indexed and made available to the community; otherwise, it's saved privately to the User's account. The manual creation process then successfully concludes.
 
 \begin{figure}[H]
     \begin{center}
@@ -330,7 +334,13 @@ From the User's profile, User opens the \emph{Manual Route Editor}. Once the edi
 \end{figure}
 
 \paragraph{Automatic Route Creation.}
-When the User presses \emph{Start Recording}, BBP initializes the session, updates the HUD, and activates sensors. In parallel, GPS data are retrieved to build the path. While the session is active, each shock above the detection threshold is logged as a \emph{pending detection} and the ride continues. When the User presses \emph{End}, the system elaborates the path (e.g., distance and elevation) and checks whether a review is required (\texttt{pendingDetections > 0}). If a review is needed, the User confirms or rejects every candidate; only confirmed detections are retained. BBP then computes the trip summary \& weather information, stores the trip (with confirmed detections), and finally displays the summary screen.
+When the User presses "Start Recording", BBP initializes the session, updates the display (HUD), and activates the necessary device sensors. Two key processes then run concurrently: the system continuously listens to GPS data to construct the path's geometry, and simultaneously monitors other sensors (accelerometer/gyroscope) to detect potential obstacles like potholes . Any sensor reading that surpasses a predefined threshold is internally logged as a pending detection, allowing the user to continue riding without immediate interruption.
+
+Once the User presses "End", both data streams stop. The system first elaborates the recorded path, calculating metrics such as total distance and elevation change. It then performs a crucial check: is a review required? This is determined by verifying if any pending detections were logged during the trip (PendingDetections > 0).
+
+If a review is necessary ("Yes"), BBP presents an interface showing the locations of the potential detections on the recorded path ("Show where are the detection"). The user is prompted to confirm or reject each detection individually . Only those explicitly confirmed by the user are retained for reporting purposes.
+
+After the review step is completed (or if no review was needed initially), the system calculates the final trip summary, incorporating the derived statistics, and fetches the relevant weather information for the time and place of the ride . The complete Trip object, including the path, statistics, weather data, and any confirmed obstacle detections, is then persisted (stored). Finally, BBP displays the summary screen to the user. From this screen, the user has the option to publish the path ("Yes / publish track"), making it visible to the community, or simply keep it private/discard the recording ("No / discard and go homepage"), concluding the automatic recording workflow
 
 \begin{figure}[H]
     \begin{center}
@@ -346,16 +356,16 @@ When the User presses \emph{Start Recording}, BBP initializes the session, updat
 
 Here are listed a summary of the main functions of the BBP system:\\\\
 
-\textbf{Signup:} The User enters email and password to create a new BBP account; a confirmation email completes activation and the User is redirected to the map as a registered user.\\
+\textbf{Signup:} The User enters email and password to create a new BBP account; If checks fail (e.g., email already exists), BBP shows an error message, otherwise the user is redirected to the map as a registered user.\\
 \textbf{Login:} The User types credentials (nickname/email and password); if valid, BBP starts the session and shows the main map; otherwise, an error is shown and the User remains on the login page.\\
 \textbf{Logout:} The User ends the current session; subsequent access requires logging in again.\\
 \textbf{Search Route:} The User specifies origin and destination; BBP computes scores and returns an ordered list of publishable routes.\\
-\textbf{View Route Details:} After selecting a route, BBP displays the polyline, distance, elevation, and the weather forecast associated with the route.\\
+\textbf{View Route Details:} After selecting a route, BBP displays the polyline, distance, elevation, the merged current status, reported obstacles, and the weather forecast associated with the route .\\
 \textbf{Follow Route (Navigation):} The User taps “Follow Route”; BBP provides turn-by-turn guidance using GPS without recording a new trip. At the end, BBP offers registration so the User can save the ride or view a summary only.\\
 \textbf{Start Automatic Recording:} A registered User starts a session; BBP tracks the path and live stats while acquiring motion-sensor data (accelerometer/gyroscope).\\
 \textbf{Automatic Detection Review:} At the end of recording, BBP asks the User to confirm or reject sensor-detected anomalies (e.g., potholes); only confirmed detections are retained.\\
 \textbf{End \& Save Trip:} BBP computes trip statistics and attaches a weather snapshot; the trip (and any confirmed detections) is saved to the User’s archive.\\
-\textbf{Manual Route Creation:} The User opens the editor, draws the path, optionally adds maintenance pins, sets name and visibility, and presses “Save.”\\
+\textbf{Manual Route Creation:} The User opens the editor, draws the path, optionally adds maintenance pins, sets type and visibility, and presses “Save.”\\
 \textbf{Publish/Privacy Choice:} When saving a manually created route, the User can make it Public (visible to everyone) or keep it Private in their library.\\
 \textbf{Route Scoring \& Merging:} For searched paths, BBP aggregates community reports by majority and freshness to derive the current status and compute the route score shown in results.\\
 \textbf{My Trips \& Summaries:} Registered Users can view stored trips with summaries (distance, duration, elevation, average speed) and associated weather info.\\
