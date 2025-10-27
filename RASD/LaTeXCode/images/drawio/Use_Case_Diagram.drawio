@@ -7,10 +7,10 @@
         <mxCell id="G8y2tMuThmIZAlzSITz7-5" value="BBP" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
           <mxGeometry x="290" y="-120" width="270" height="350" as="geometry" />
         </mxCell>
-        <mxCell id="G8y2tMuThmIZAlzSITz7-4" value="Login" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="G8y2tMuThmIZAlzSITz7-5">
+        <mxCell id="G8y2tMuThmIZAlzSITz7-4" value="Log In" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="G8y2tMuThmIZAlzSITz7-5">
           <mxGeometry x="60" y="190" width="100" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="160WC2s_JKpl1wWsWbbB-4" value="Logout" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="G8y2tMuThmIZAlzSITz7-5">
+        <mxCell id="160WC2s_JKpl1wWsWbbB-4" value="Log Out" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="G8y2tMuThmIZAlzSITz7-5">
           <mxGeometry x="150" y="250" width="110" height="60" as="geometry" />
         </mxCell>
         <mxCell id="g54NwI7oRKMi1V0wF8MH-6" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
@@ -55,7 +55,7 @@
             <mxPoint x="200" y="10" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="G8y2tMuThmIZAlzSITz7-2" value="Registers" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="G8y2tMuThmIZAlzSITz7-2" value="Registers account" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="340" y="-60" width="90" height="60" as="geometry" />
         </mxCell>
       </root>
@@ -132,7 +132,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="lxO2bw1TOGMaGSPOEJHX" name="Registred_user">
-    <mxGraphModel dx="1325" dy="992" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1273" dy="959" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -250,6 +250,9 @@
         </mxCell>
         <mxCell id="U9jGvA6Bzn9IRIaO6bH2-6" value="set path visibility" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="230" y="179" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="U9jGvA6Bzn9IRIaO6bH2-8" value="BBP" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="-5" y="-120" width="365" height="500" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
