@@ -4,10 +4,10 @@ This section details the interfaces between the Best Bike Paths (BBP) system and
 
 \subsection{User interfaces}
 \label{subsec:User_interfaces}%
-The primary user interface for the BBP system will be a native mobile application designed for smartphones (iOS and Android platforms). The interface must prioritize clarity, usability, and robustness, particularly for outdoor use under varying light conditions. It will adopt a map-centric design, prominently displaying geographical data and route information. Key interaction elements will include a clear search bar for origin/destination input, interactive map elements for manual route creation and viewing details, easily accessible buttons for critical functions like starting/stopping automatic recording, and a dedicated Heads-Up Display (HUD) during active recording sessions showing real-time statistics (speed, distance, time) with high legibility. The interface will also incorporate clear feedback mechanisms,and prompts for user input, such as the review and confirmation of automatically detected sensor events presented at the conclusion of a trip . Navigation between different sections (e.g., Map, Search Results, My Trips, User Profile) must be intuitive and consistent throughout the application.
+The primary user interface for the BBP system will be a native mobile application designed for smartphones (iOS and Android platforms). The interface must prioritize clarity, usability, and robustness, particularly for outdoor use under varying light conditions. It will adopt a map-centric design, prominently displaying geographical data and route information. Key interaction elements will include a clear search bar for origin/destination input, interactive map elements for manual route creation and viewing details, easily accessible buttons for critical functions like starting/stopping automatic recording, and a dedicated Heads-Up Display (HUD) during active recording sessions showing real-time statistics (speed, distance, time) with high legibility. The interface will also incorporate clear feedback mechanisms and prompts for user input, such as the review and confirmation of automatically detected sensor events presented at the conclusion of a trip . Navigation between different sections (e.g., Map, Search Results, My Trips, User Profile) must be intuitive and consistent throughout the application.
 \subsection{Hardware interfaces}
 \label{subsec:hardware_interfaces}%
-The BBP system requires direct interaction with specific hardware components integral to the user's mobile device. Foremost is the Global Positioning System (GPS) receiver, from which the application must continuously acquire accurate location data (latitude, longitude, timestamp) to track the user's position during navigation and automatic trip recording . Secondly, the system must interface with the device's inertial measurement unit (IMU) sensors, specifically the accelerometer and gyroscope. Access to the raw data streams from these sensors is mandatory for the implementation of the automatic obstacle detection feature, enabling the system to identify significant motion events potentially corresponding to real-world path anomalies like potholes. Furthermore, the application relies on standard smartphone hardware, including the touchscreen display for all user input and output, and potentially the device's vibration motor for non-visual notifications (e.g., indicating a potential obstacle has been logged). The system assumes these hardware components are functional and accessible via the device's operating system APIs.
+The BBP system requires direct interaction with specific hardware components integral to the user's mobile device. Foremost is the Global Positioning System (GPS) receiver, from which the application must continuously acquire accurate location data (latitude, longitude, timestamp) to track the user's position during navigation and automatic trip recording. Secondly, BBP must interface with the device's inertial measurement unit (IMU) sensors, specifically the accelerometer and gyroscope. Access to the raw data streams from these sensors is mandatory for the implementation of the automatic obstacle detection feature, enabling BBP to identify significant motion events that may correspond to real-world path anomalies, such as potholes. Furthermore, the application relies on standard smartphone hardware, including the touchscreen display for all user input and output, and potentially the device's vibration motor for non-visual notifications (e.g., indicating a potential obstacle has been logged). BBP assumes these hardware components are functional and accessible via the device's operating system APIs.
 
 \subsection{Software interfaces}
 \label{subsec:software_interfaces}%
@@ -16,7 +16,7 @@ BBP will interact with several other software entities. A critical interface exi
 \subsection{Communication interfaces}
 \label{subsec:communication_interfaces}%
 
-The BBP system inherently requires network connectivity for many of its core functions. An active internet connection, typically via cellular data (e.g., 4G, 5G) or Wi-Fi, is necessary for user authentication (signup/login), searching for public paths, retrieving path details (including merged status and reports) , fetching real-time weather data from the external service , and saving or publishing user-generated trips and reports. Communication with the BBP backend server (which manages user accounts, paths, reports, etc.) will occur over standard secure web protocols(HTTPS), to ensure data integrity and confidentiality during transit. The system must gracefully handle temporary losses of connectivity where possible, although core online features will be unavailable without an active connection (as per DA12).
+The BBP system inherently requires network connectivity for many of its core functions. An active internet connection, typically via cellular data (e.g., 4G, 5G) or Wi-Fi, is necessary for user authentication (signup/login), searching for public paths, retrieving path details (including merged status and reports) , fetching real-time weather data from the external service , and saving or publishing user-generated trips and reports. Communication with the BBP backend server (which manages user accounts, paths, reports, etc.) will occur over standard secure web protocols(HTTPS), to ensure data integrity and confidentiality during transit. BBP must gracefully handle temporary losses of connectivity where possible, although core online features will be unavailable without an active connection (as per DA12).
 \section{Functional requirements}
 \label{sec:functional_requirements}%
 
@@ -62,9 +62,11 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
 \stepcounter{reqcounter} \thereqcounter & BBP shall verify that the username and email provided during registration are not already in use. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow registered users to log in using their username/email and password. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow RCY to log in using their username/email and password. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall provide feedback to the user in case of failed login attempts (e.g., incorrect credentials). \\
+\hline
+\stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to view the personal page with private information. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall allow a logged-in user to log out. \\
 \hline
@@ -76,7 +78,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall calculate a merged status for each searched path based on its associated \texttt{Status\_report} instances, applying freshness and majority rules. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall calculate a score for each searched path based on its reports and conditions. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall calculate a score for each searched path based on its reports/conditions and metrics. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall display search results as a list of paths ordered by the calculated score. \\
 \hline
@@ -90,6 +92,8 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & During navigation mode, BBP shall display the user's current GPS location on the path route. \\
 \hline
+ \stepcounter{reqcounter} \thereqcounter & Upon completion of navigation by a user, BBP shall show the summary of the trip (example: avg. speed, distance,...). \\
+\hline
  \stepcounter{reqcounter} \thereqcounter & Upon completion of navigation by an anonymous user, BBP shall offer the option to register. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & If an anonymous user refuses registration after navigation, BBP shall discard the navigation session data. \\
@@ -98,7 +102,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
 
 % --- Trip Recording & Management ---
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow a registered user to start an automatic trip recording session. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to start an automatic trip recording session. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & During automatic recording, BBP shall record the user's GPS coordinates sequence. \\
 \hline
@@ -108,7 +112,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall internally log a \texttt{sensor\_event} when sensor data exceeds a predefined threshold. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow a registered user to stop the automatic trip recording. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to stop the automatic trip recording. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & Upon stopping recording, if \texttt{sensor\_event}s were logged, BBP shall present them to the user for review. \\
 \hline
@@ -122,24 +126,25 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall allow the user to save the completed \texttt{Trip} (path, stats, weather, confirmed reports) to their private archive. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow a registered user to view their list of saved trips. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to view their list of saved trips. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow a registered user to view the details of a saved trip. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to view the details of a saved trip. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow a registered user to delete a saved trip. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to delete a saved trip. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow a registered user, after they have saved the trip, to make it public the path \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY, after they have saved the trip, to make it public the path \\
 \hline
 
 % --- Manual Creation & Reporting ---
- \stepcounter{reqcounter} \thereqcounter & BBP shall provide an editor for registered users to manually create a path geometry on a map. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall provide an editor for RCY to manually create a path geometry on a map. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow registered users to submit \texttt{Status\_report}s manually for paths or trips. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow RCY to submit \texttt{Status\_report}s manually for paths. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow registered users to submit \texttt{Obstacle\_report}s manually for paths or trips. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow RCY to submit \texttt{Obstacle\_report}s manually for paths. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow a registered user to specify the visibility (Public/Private) when saving a trip or manually created path. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to specify the visibility (Public/Private) when saving a trip or manually created path. \\
 \hline
+
 
 % --- General ---
  \stepcounter{reqcounter} \thereqcounter & BBP shall display feedback messages (confirmations, errors) to the user. \\
@@ -152,7 +157,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{UseCasesUU.png}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/useCaseDiagrams/Use_Case_1.drawio.png}
         \caption{Use Cases Diagram for  Users.} 
         \label{fig:}%
     \end{center}
@@ -162,8 +167,8 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{UseCasesED.png}
-        \caption{Use Cases Diagram for .}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/useCaseDiagrams/Use_Case_2.drawio.png}
+        \caption{Use Cases Diagram for bot ACY and RCY (general user).}
         \label{fig:}%
     \end{center}
 \end{figure}
@@ -172,8 +177,8 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{UseCasesST.png}
-        \caption{Use Cases Diagram for .}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/useCaseDiagrams/Use_Case_3.drawio.png}
+        \caption{Use Cases Diagram for RCY}
         \label{fig:}%
     \end{center}
 \end{figure}
@@ -215,8 +220,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 \caption{Traceability Matrix for Goals and Requirements}
 \label{tab:traceability}
-\end{longtable}
-\end{center}
+
 
 
 \section{Performance requirements}
