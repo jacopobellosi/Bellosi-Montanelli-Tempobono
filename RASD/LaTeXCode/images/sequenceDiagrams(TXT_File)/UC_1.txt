@@ -4,39 +4,29 @@ actor "Anonymous User" as User
 participant "BBP Application" as App
 participant "BBP Server" as Server
 
-User->>App: tapsRegisterButton()
-App->>User: showRegistrationScreen()
+User->>App: taps Register Button
+activate App
+App-->>User: showRegistrationScreen()
+deactivate App
 
 User->>App: submitsData(username, email, password)
+activate App
+activate 
 App->>Server: registerUser(username, email, password)
 activate Server
 
-    Server->>Server: validateInput(username, email, password)
-    activate Server
-    Server-->>Server: inputOK
-    deactivate Server
-
-    Server->>Server: findUserByEmailOrUsername(email, username)
-    activate Server
-    Server-->>Server: [userExists: false]
-    deactivate Server
-
-    alt Credentials Invalid (e.g., Email taken, R2)
+    note right of Server: Server performs validation and checks uniqueness.
+    
+    alt Credentials Invalid (e.g., Email taken)
         Server-->>App: 400_BadRequest("Email or username already in use")
         App->>User: showError("Email or username already in use")
+        
     else Credentials Valid
-        Server->>Server: hashedPassword = hash(password)
-        
-        Server->>Server: createUser(username, email, hashedPassword)
-        activate Server
-        Server-->>Server: [newUser: User]
-        deactivate Server
-
-        Server->>Server: sessionToken = createSession(newUser.id)
-        
+        note right of Server: Creates new user account and generates session token.
         Server-->>App: 201_Created(sessionToken)
-        App->>App: storeSession(sessionToken)
+        
+        note left of App: App securely stores the session token.
         App->>User: showMainMapScreen()
+        deactivate App
     end
 deactivate Server
-```
