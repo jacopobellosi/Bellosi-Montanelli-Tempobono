@@ -184,10 +184,119 @@ This section lists the specific functional requirements that the Best Bike Paths
 \end{figure}
 
 \newpage
-\subsection{Use cases}
-\label{subsec: use_cases}%
+\subsubsection{Use cases and sequence diagrams}
+\label{subsec: use_cases_and_sequence_diagrams}%
+ In this section, they are explained and represented the main identi ed use cases.
+ There is a table with entry conditions, event ow, exit conditions and exception for each
+ of them, and a sequence diagram that shows the messages exchanged between the entities
+ and the called functions
+
+\newcounter{uc}
+\setcounter{uc}{1}
+\newcommand{\cuc}{\theuc\stepcounter{uc}}
 
 
+\subsubsection*{[UC\cuc]. Register Account}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Anonymous User \\
+        \hline
+        \textbf{Entry conditions} & The user is anonymous and is on a screen with a "Register" option. \\
+        \hline
+        \textbf{Event Flow}       & 1 - BBP shows the main screen with a "Register" button. \\
+                                  & 2 - The User taps the "Register" button. \\
+                                  & 3 - BBP shows the registration form. \\
+                                  & 4 - The User inserts their username, email, and password in the form. \\
+                                  & 5 - The User taps the "Submit" button. \\
+                                  & 6 - BBP checks all credentials (e.g., uniqueness, password matching). \\
+                                  & 7 - BBP creates the new Registered User account in the system. \\
+                                  & 8 - BBP automatically logs in the user and redirects to the main map screen. \\
+        \hline
+        \textbf{Exit condition}   & The user is authenticated as a Registered User and is on the main map screen. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item The email address is already linked to an account. An error message is shown, and the user remains on the registration form.
+                                    \item The username is already taken. An error message is shown, and the user remains on the registration form.
+                                    \item Invalid password (e.g., does not meet complexity requirements). An error message is shown, and the user remains on the registration form.
+                                  \end{itemize}\\
+        \hline
+        \caption{Register Account use case.}
+        \label{tab:uc_register_account}
+    \end{longtable}
+\end{center}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{SequenceDiagrams/Signup as ED.png}
+        \caption{UC1}
+        \label{fig:signup_as_ED_seqd}%
+    \end{center}
+\end{figure}
+
+\subsubsection*{[UC\cuc]. Log In}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Anonymous User \\
+        \hline
+        \textbf{Entry conditions} & The user is anonymous and is on a screen with a "Log In" option. \\
+        \hline
+        \textbf{Event Flow}       & 1 - BBP shows the login form. \\
+                                  & 2 - The User inserts their username (or email) and password. \\
+                                  & 3 - The User taps the "Log In" button. \\
+                                  & 4 - BBP checks the credentials against the database. \\
+                                  & 5 - BBP authenticates the user and creates an access session. \\
+        \hline
+        \textbf{Exit condition}   & The user is authenticated as a Registered User and is redirected to the main map screen. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item The provided credentials (username/password) are incorrect. An error message is shown, and the user remains on the login page.
+                                  \end{itemize}\\
+        \hline
+        \caption{Log In use case.}
+        \label{tab:uc_login}
+    \end{longtable}
+\end{center}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{}
+        \caption{UC2}
+        \label{fig:signup_as_ED_seqd}%
+    \end{center}
+\end{figure}
+
+\subsubsection*{UC3. Log Out}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Registered User \\
+        \hline
+        \textbf{Entry conditions} & The user is currently authenticated (logged in) in the BBP system. \\
+        \hline
+        \textbf{Event Flow}       & 1 - The User navigates to their profile or settings menu. \\
+                                  & 2 - The User taps the "Log Out" button. \\
+                                  & 3 - BBP invalidates and terminates the user's session. \\
+                                  & 4 - BBP redirects the user to the main map screen (now as an Anonymous User). \\
+        \hline
+        \textbf{Exit condition}   & The user's session is terminated, and they are now an Anonymous User. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item None.
+                                  \end{itemize}\\
+        \hline
+        \caption{Log Out use case.}
+        \label{tab:uc_logout}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{}
+        \caption{UC1.}
+        \label{fig:signup_as_ED_seqd}%
+    \end{center}
+\end{figure}
 
 \begin{figure}[H]
     \begin{center}
