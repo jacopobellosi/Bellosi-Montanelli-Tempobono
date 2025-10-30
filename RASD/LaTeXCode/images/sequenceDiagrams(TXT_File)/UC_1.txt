@@ -1,0 +1,49 @@
+Va bene, ho capito. Togliamo il `Database` per rendere il diagramma più semplice e focalizzato sull'interazione App-Server.
+
+La logica del database (come `findUser` o `createUser`) viene ora mostrata come un'operazione interna del `Server` (un loop su se stesso).
+
+Ecco il codice per `sequencediagram.org`:
+
+```
+title UC1: Register Account - Sequence Diagram
+
+actor "Anonymous User" as User
+participant "BBP Application" as App
+participant "BBP Server" as Server
+
+User->>App: tapsRegisterButton()
+App->>User: showRegistrationScreen()
+
+User->>App: submitsData(username, email, password)
+App->>Server: registerUser(username, email, password)
+activate Server
+
+    Server->>Server: validateInput(username, email, password)
+    activate Server
+    Server-->>Server: inputOK
+    deactivate Server
+
+    Server->>Server: findUserByEmailOrUsername(email, username)
+    activate Server
+    Server-->>Server: [userExists: false]
+    deactivate Server
+
+    alt Credentials Invalid (e.g., Email taken, R2)
+        Server-->>App: 400_BadRequest("Email or username already in use")
+        App->>User: showError("Email or username already in use")
+    else Credentials Valid
+        Server->>Server: hashedPassword = hash(password)
+        
+        Server->>Server: createUser(username, email, hashedPassword)
+        activate Server
+        Server-->>Server: [newUser: User]
+        deactivate Server
+
+        Server->>Server: sessionToken = createSession(newUser.id)
+        
+        Server-->>App: 201_Created(sessionToken)
+        App->>App: storeSession(sessionToken)
+        App->>User: showMainMapScreen()
+    end
+deactivate Server
+```
