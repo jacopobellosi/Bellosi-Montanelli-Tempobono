@@ -1,4 +1,3 @@
-
 title UC1: Register Account - Sequence Diagram
 
 actor "Anonymous User" as User
