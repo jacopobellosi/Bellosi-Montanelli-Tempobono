@@ -293,9 +293,81 @@ This section lists the specific functional requirements that the Best Bike Paths
 \end{center}
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{UC}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_3.png}
         \caption{UC1.}
-        \label{fig:signup_as_ED_seqd}%
+        \label{fig:UC3: Log Out - Sequence Diagram}%
+    \end{center}
+\end{figure}
+%Use Cases Diagram for RCY
+\subsubsection*{UC4. Search Paths}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & User (Anonymous or Registered), External Weather Service \\
+        \hline
+        \textbf{Entry conditions} & The user is on the main screen of the application. \\
+        \hline
+        \textbf{Event Flow}       & 1 - The User enters an origin and a destination in the search bar. \\
+                                  & 2 - The User taps the "Search" button. \\
+                                  & 3 - BBP sends the query to the Server. \\
+                                  & 4 - The Server identifies all relevant public \texttt{Path}s. \\
+                                  & 5 - For each path, the Server retrieves all associated \texttt{Status\_report} and \texttt{Obstacle\_report} instances. \\
+                                  & 6 - The Server applies the merging logic (freshness, majority) to calculate the `derivedStatus` for each path . \\
+                                  & 7 - The Server applies the scoring logic to calculate the `derivedScore` for each path . \\
+                                  & 8 - The Server queries the \texttt{External Weather Service} for forecast data for the relevant locations . \\
+                                  & 9 - The Server returns the list of paths, ordered by score, including their status and weather info. \\
+                                  & 10 - BBP displays the ordered list of routes to the User. \\
+        \hline
+        \textbf{Exit condition}   & The user is presented with a list of matching paths ordered by score, or a "No results" message. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item No paths are found matching the query. The system displays a "No results found" message.
+                                    \item The \texttt{External Weather Service} is unavailable. Paths are shown without weather data, and a "Weather unavailable" message is displayed.
+                                  \end{itemize}\\
+        \hline
+        \caption{Search Paths use case.}
+        \label{tab:uc_search_paths}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_4.png}
+        \caption{UC1.}
+        \label{fig:UC4- Search Paths}%
+    \end{center}
+\end{figure}
+\subsubsection*{UC5. View Path Details}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & User (Anonymous or Registered), External Weather Service \\
+        \hline
+        \textbf{Entry conditions} & The user is viewing a list of search results (\texttt{pathList}) from UC4. \\
+        \hline
+        \textbf{Event Flow}       & 1 - The User taps on a specific path from the results list. \\
+                                  & 2 - BBP Application sends the selected \texttt{pathID} to the Server. \\
+                                  & 3 - The Server retrieves the full details for the path, including its complete list of \texttt{GPS\_points}, all associated \texttt{Status\_report}s, and all \texttt{Obstacle\_report}s. \\
+                                  & 4 - The Server applies the merging logic (R8) using the reports to calculate the definitive \texttt{derivedStatus}. \\
+                                  & 5 - The Server queries the \texttt{External Weather Service} for an updated forecast (R13) . \\
+                                  & 6 - The Server returns all path details (geometry, stats, merged status, obstacles, weather) to the Application. \\
+                                  & 7 - BBP Application displays the \texttt{Path Details} screen to the User. \\
+        \hline
+        \textbf{Exit condition}   & The user is viewing the detailed information for the selected path. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item The selected \texttt{pathID} is invalid or no longer available. The system shows an error message.
+                                    \item The \texttt{External Weather Service} is unavailable. Path details are shown without weather data.
+                                  \end{itemize}\\
+        \hline
+        \caption{View Path Details use case.}
+        \label{tab:uc_view_path_details}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_4.png}
+        \caption{UC1.}
+        \label{fig:UC4- Search Paths}%
     \end{center}
 \end{figure}
 
