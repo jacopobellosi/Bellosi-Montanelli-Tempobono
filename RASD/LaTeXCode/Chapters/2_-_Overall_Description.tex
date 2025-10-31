@@ -108,7 +108,7 @@
         \hline
         \textbf{Scenario ID} & \textbf{2.\crcs – Search (Exception – No Route Found)} \\
         \hline
-        \textbf{Actor} & Marco (anonymous user) \\
+        \textbf{Actor} & Marco (user) \\
         \hline
         \textbf{Preconditions} & Query between remote or unsupported locations. \\
         \hline
@@ -124,11 +124,11 @@
         \hline
         \textbf{Scenario ID} & \textbf{2.\crcs – Navigation} \\
         \hline
-        \textbf{Actor} & Marco (anonymous user) \\
+        \textbf{Actor} & Marco (user) \\
         \hline
         \textbf{Preconditions} & A route has been selected. Accurate GPS assumed (\hyperref[da:2]{DA2}). \\
         \hline
-        \textbf{Description} & Marco presses “Follow Route.” The app loads the route and shows his real-time position using GPS. The system guides him along the route without recording a new one. At the end, the system offers to register Marco so he can save his ride or view only trip data. \\
+        \textbf{Description} & Marco presses “Follow Route”, The app loads the route on an External navigation app. This app guides him along the route. Ultimately, Marcom returns to BBP, offering him the data of the trip and offers to register Marco so he can save his ride information. \\
         \hline
         \textbf{Postconditions} & Trip completed; user may register or view data summary. \\
         \hline
@@ -304,9 +304,9 @@ Once a definitive, merged status is established (either directly or after resolv
 \end{figure}
 
 \paragraph{Navigation.}
-After a route has been selected from the search results, the User taps "Follow Route". The BBP system then loads the chosen route onto the map and begins acquiring GPS data to provide step-by-step guidance based on the user's current position (GPS assumed to be available per DA2). The system displays the navigation page, continuously updating the user's location along the path.
+After a route has been selected from the search results, the User taps "Follow Route". The BBP system then loads the chosen route onto the External navigation service and begins acquiring GPS data to provide stats data based on the user's current position (GPS assumed to be available per DA2).
 
-When the User reaches the destination, BBP analyzes the travel data and checks the user's status. If the user is Anonymous, the system displays an end-of-trip screen offering registration. If the Anonymous User chooses to register ("User accepted"), BBP guides them through the registration process; upon successful registration, the trip is saved to their new account, and the system then displays the trip summary. If the Anonymous User refuses registration ("User refused"), BBP simply presents a view-only summary without permanently storing the ride details, and the process ends.
+When the User reaches the destination, the user go back on BBP that analyzes the travel data and checks the user's status. If the user is Anonymous, the system displays an end-of-trip screen offering registration. If the Anonymous User chooses to register ("User accepted"), BBP guides them through the registration process; upon successful registration, the trip is saved to their new account, and the system then displays the trip summary. If the Anonymous User refuses registration ("User refused"), BBP simply presents a view-only summary without permanently storing the ride details, and the process ends.
 
 Conversely, if the User navigating is already Registered, upon arrival at the destination, the trip is automatically saved to their account . The system then presents an option to view the summary ("Show button for trip summary"). The Authenticated User can choose to view the detailed summary ("Button pressed" leading to "Display trip summary") or simply exit the navigation screen ("Close"), concluding the process.
 
@@ -361,7 +361,7 @@ Here are listed a summary of the main functions of the BBP system:\\\\
 \textbf{Logout:} The User ends the current session; subsequent access requires logging in again.\\
 \textbf{Search Route:} The User specifies origin and destination; BBP computes scores and returns an ordered list of publishable routes.\\
 \textbf{View Route Details:} After selecting a route, BBP displays the polyline, distance, elevation, the merged current status, reported obstacles, and the weather forecast associated with the route .\\
-\textbf{Follow Route (Navigation):} The User taps “Follow Route”; BBP provides turn-by-turn guidance using GPS without recording a new trip. At the end, BBP offers registration so the User can save the ride or view a summary only.\\
+\textbf{Follow Route (Navigation):} The User taps “Follow Route”; BBP redirect to an External navigation service and use GPS to acquire travel data. At the end, BBP show the summary of the trip and offer registration to save the data.\\
 \textbf{Start Automatic Recording:} A registered User starts a session; BBP tracks the path (GPS) and live stats while acquiring motion-sensor data (accelerometer/gyroscope).\\
 \textbf{Automatic Detection Review:} At the end of recording, BBP asks the User to confirm or reject sensor-detected anomalies (e.g., potholes); only confirmed detections are retained.\\
 \textbf{End \& Save Trip:} BBP computes trip statistics and attaches a weather snapshot; the trip (and any confirmed detections) is saved to the User’s archive.\\
