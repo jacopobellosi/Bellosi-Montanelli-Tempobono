@@ -90,8 +90,6 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall allow any user to initiate a navigation mode ("Follow Route") for a selected path. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & During navigation mode, BBP shall display the user's current GPS location on the path route. \\
-\hline
  \stepcounter{reqcounter} \thereqcounter & Upon completion of navigation by a user, BBP shall show the summary of the trip (example: avg. speed, distance,...). \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & Upon completion of navigation by an anonymous user, BBP shall offer the option to register. \\
@@ -349,7 +347,7 @@ This section lists the specific functional requirements that the Best Bike Paths
                                   & 3 - The Server retrieves the full details for the path, including its complete list of \texttt{GPS\_points}, all associated \texttt{Status\_report}s, and all \texttt{Obstacle\_report}s. \\
                                   & 4 - The Server applies the merging logic (R8) using the reports to calculate the definitive \texttt{derivedStatus}. \\
                                   & 5 - The Server queries the \texttt{External Weather Service} for an updated forecast (R13) . \\
-                                  & 6 - The Server returns all path details (geometry, stats, merged status, obstacles, weather) to the Application. \\
+                                  & 6 - The Server returns all path details (geometry, inclination, merged status, obstacles, weather) to the Application. \\
                                   & 7 - BBP Application displays the \texttt{Path Details} screen to the User. \\
         \hline
         \textbf{Exit condition}   & The user is viewing the detailed information for the selected path. \\
@@ -365,11 +363,85 @@ This section lists the specific functional requirements that the Best Bike Paths
 \end{center}
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_4.png}
-        \caption{UC1.}
-        \label{fig:UC4- Search Paths}%
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_5.png}
+        \caption{UC5 View Path Details}
+        \label{fig:UC5: View Path Details}%
     \end{center}
 \end{figure}
+\subsubsection*{UC6. Follow Path (Navigation)}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & User (Anonymous or Registered), Device Sensors (GPS) \\
+        \hline
+        \textbf{Entry conditions} & The user is viewing the \texttt{Path Details} screen (from UC5). \\
+        \hline
+        \textbf{Event Flow}       & 1 - The User taps the "Follow Route" button. \\
+                                  & 2 - BBP Application loads the path geometry (from the existing \texttt{Path}) onto the navigation screen. \\
+                                  & 3 - BBP Application requests continuous location updates from the \texttt{Device Sensors} (GPS) [R15]. \\
+                                  & 4 - The application displays the user's current location on the path route and calculates session statistics (time, distance, speed) . \\
+                                  & 5 - \textbf{Note:} The app does not record the full geometry (it's already known) (R22, R23). \\
+                                  & 6 - The User arrives at the destination (or manually taps "Stop Navigation"). \\
+                                  & 7 - BBP Application stops the location updates and finalizes the session statistics. \\
+                                  & 8 - BBP Application displays a "Summary" screen showing the session statistics (time, distance, avg speed). \\
+                                  & 9 - \textbf{If User is Anonymous:} The Summary screen includes a "Register to Save" button (R16). \\
+                                  & 10 - The Anonymous User taps "Register to Save", completes registration (UC1), selects a visibility (Public/Private), and the activity (stats-only) is saved (R18). \\
+                                  & 11 - \textbf{If User is Registered:} The Summary screen includes a "Save Activity" button. \\
+                                  & 12 - The Registered User taps "Save Activity", selects a visibility (Public/Private) , and the activity (stats-only) is saved to their archive. \\
+                                  & 13 - If the user (Anonymous or Registered) exits the summary screen without saving/registering, the session data is discarded (R17). \\
+        \hline
+        \textbf{Exit condition}   & The user has completed navigation. The session activity (stats-only) is either saved with a visibility setting or discarded. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item The user cancels navigation mid-way. The flow stops, stats are discarded, and the user is returned to the \texttt{Path Details} screen.
+                                  \end{itemize}\\
+        \hline
+        \caption{Follow Path (Navigation) use case.}
+        \label{tab:uc_follow_path}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_6.png}
+        \caption{UC6: Follow Path (Navigation)}
+        \label{fig:UC6: Follow Path}%
+    \end{center}
+\end{figure}
+%Registred user activity
+\subsubsection*{UC7. Record Trip (Automatic)}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Registered User, Device Sensors (GPS, Accelerometer, Gyroscope), External Weather Service \\
+        \hline
+        \textbf{Entry conditions} & The user is registered, logged in, and on the main map screen. \\
+        \hline
+        \textbf{Event Flow}       & 1 - The User taps the "Start Recording" button. \\
+                                  & 2 - BBP Application requests permissions for GPS and Motion Sensors, if not already granted. \\
+                                  & 3 - BBP Application activates \texttt{Device Sensors} (GPS, Accelerometer, Gyroscope) [R22]. \\
+                                  & 4 - The app displays the recording HUD, showing real-time statistics (speed, distance, time) [R21]. \\
+                                  & 5 - \textbf{In parallel:} The app records the user's \texttt{GPS\_points} sequence (R20) and monitors sensor data. \\
+                                  [cite_start]& 6 - \textbf{If} sensor data exceeds the predefined threshold, the app internally logs a new \texttt{sensor\_event} (R23) [cite: 94-95]. \\
+                                  & 7 - The User taps the "Stop Recording" button (R24). \\
+                                  & 8 - BBP Application stops all sensors and finalizes the path geometry. \\
+                                  [cite_start]& 9 - BBP Application queries the \texttt{External Weather Service} and retrieves the weather conditions for the trip (R29) [cite: 86-87]. \\
+                                  [cite_start]& 10 - BBP Application calculates the final \texttt{Statistics} (avg speed, total distance, etc.) (R28) [cite: 85-88]. \\
+                                  & 11 - The system checks if any \texttt{sensor\_event}s were logged (R25). \\
+                                  & 12 - \textbf{If} events were logged, the flow is extended by \textbf{`Review Detections`} (UC11). \\
+                                  & 13 - \textbf{If} no events were logged (or after review is complete), the system displays the "Save Trip" screen, showing the summary, stats, and weather. \\
+                                  & 14 - The User triggers \textbf{`Save Trip/Path`} (UC9). \\
+        \hline
+        \textbf{Exit condition}   & The user has completed the recording. The system proceeds to the review or save flow. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item The user discards the trip instead of saving. The recorded data (\texttt{GPS\_points}, \texttt{sensor\_event}s) is discarded.
+                                    \item GPS signal is lost (violates DA2). The system should notify the user that tracking is paused (Not explicitly handled per DA2, but good to note).
+                                  \end{itemize}\\
+        \hline
+        \caption{Record Trip (Automatic) use case.}
+        \label{tab:uc_record_trip}
+    \end{longtable}
+\end{center}
 
 \begin{figure}[H]
     \begin{center}
