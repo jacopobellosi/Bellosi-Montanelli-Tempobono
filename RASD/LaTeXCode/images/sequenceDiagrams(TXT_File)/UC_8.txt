@@ -1,0 +1,28 @@
+actor "Registered User" as User
+participant "BBP Application" as App
+
+note over App: UC7 (`Record Trip`) finished and triggered this review.
+App->>User: showReviewScreen(pendingEvents)
+activate App
+
+loop for each event
+    User->>App: selectsDetection(eventID)
+    App->>User: showDetectionDetails(eventID)
+    
+    alt User confirms
+        User->>App: tapsConfirm(eventID)
+        App->>App: markEventAsConfirmed(eventID)
+        activate App
+        deactivate App
+    else User ignores
+        User->>App: tapsIgnore(eventID)
+        App->>App: markEventAsIgnored(eventID)
+        activate App
+        deactivate App
+    end
+end
+
+User->>App: tapsFinishReview()
+note over App: Proceeds to: Save Trip/Path
+App->>User: showSaveScreen(summary, stats, weather, confirmedEvents)
+deactivate App
