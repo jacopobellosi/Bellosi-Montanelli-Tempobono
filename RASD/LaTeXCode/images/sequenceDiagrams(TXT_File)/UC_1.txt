@@ -1,5 +1,3 @@
-title UC1: Register Account - Sequence Diagram
-
 actor "Anonymous User" as User
 participant "BBP Application" as App
 participant "BBP Server" as Server
@@ -24,9 +22,8 @@ activate Server
     else Credentials Valid
         note right of Server: Creates new user account and generates session token.
         Server-->>App: 201_Created(sessionToken)
-        
+        deactivate Server
         note left of App: App securely stores the session token.
         App->>User: showMainMapScreen()
         deactivate App
     end
-deactivate Server
