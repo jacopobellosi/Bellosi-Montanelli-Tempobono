@@ -128,10 +128,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to view the details of a saved trip. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to delete a saved trip. \\
-\hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY, after they have saved the trip, to make it public the path \\
-\hline
+
 
 % --- Manual Creation & Reporting ---
  \stepcounter{reqcounter} \thereqcounter & BBP shall provide an editor for RCY to manually create a path geometry on a map. \\
@@ -140,9 +137,8 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall allow RCY to submit \texttt{Obstacle\_report}s manually for paths. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to specify the visibility (Public/Private) when saving a trip or manually created path. \\
+\stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY, during the save process (UC9, UC12), to specify: (1) The visibility of the \texttt{Path} (Public/Private for search), and (2) The visibility of the \texttt{Trip} (Public/Private for statistics aggregation). \\ % R37 (ex-R39)
 \hline
-
 
 % --- General ---
  \stepcounter{reqcounter} \thereqcounter & BBP shall display feedback messages (confirmations, errors) to the user. \\
@@ -570,7 +566,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \end{center}
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_11.png}
+        \includegraphics[width=0.7\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_11.png}
         \caption{UC11. Create path manually}
         \label{fig:UC11. Create path manually}%
     \end{center}
@@ -714,30 +710,6 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 
 
-
-
-
-
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=.6\linewidth]{SequenceDiagrams/Evaluate a code v2.png}
-        \caption{}
-        \label{}%
-    \end{center}
-\end{figure}
-
-\newpage
-
-
-
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=.6\linewidth]{SequenceDiagrams/}
-        \caption{}
-        \label{}%
-    \end{center}
-\end{figure}
-
 \newpage
 
 
@@ -784,16 +756,64 @@ This section lists the specific functional requirements that the Best Bike Paths
         \begin{itemize}
             \item [R7] The system allows users to search for public cycling paths.
             \item [R9] The system calculates and displays the aggregated status of paths.
+            \item [R10] BBP shall calculate a score for each searched path based on its reports/conditions and metrics.
+            \item [R11] BBP shall display search results as a list of paths ordered by the calculated score.
+            \item [R12] BBP shall allow any user to select a path from the search results to view its details.
+            \item [R13] BBP shall display the details of a selected path, including its geometry (map), distance, elevation, calculated merged status, and reported obstacles.
+            \item [R14] BBP shall retrieve and display current weather forecast information for the selected path’s location.
+            \item [R15] BBP shall allow any user to initiate a navigation mode ("Follow Route") for a selected path.
+            \item [R16] Upon completion of navigation by a user, BBP shall show the summary of the trip (example: avg. speed, distance,...).
+            \item [R19] If an anonymous user accepts registration after navigation, BBP shall allow them to complete registration and then save the navigated session as a Trip.
+            \item [R20] BBP shall allow an RCY to start an automatic trip recording session.
+            \item [R21] During automatic recording, BBP shall record the user’s GPS coordinates sequence.
+            \item [R22] During automatic recording, BBP shall display real-time statistics (speed, distance, time).
         \end{itemize} 
-        & 
+        &
         \begin{itemize}
-            \item [D3] Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations).
-            \item [D4] A data threshold exists to reliably distinguish significant movements (potholes) from normal biking vibrations.
-        \end{itemize} 
+            \item [DA1] Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors.
+            \item [DA2] The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken.
+            \item [DA3] Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations).
+            \item [DA4] A data threshold exists to reliably distinguish significant movements (potholes) from normal biking vibrations.
+            \item [DA5] The mobile device remains physically attached (e.g., in a pocket or on a mount) to the user or bike during recording.
+            \item [DA6] The device has sufficient resources (battery, CPU) to sustain an active recording session (GPS + sensors).
+            \item [DA7] Users act in good faith when providing manual data or confirming automatic detections.
+            \item [DA8] “Fresh” (recent) information is considered more relevant than older data when describing a path’s status.
+            \item [DA9] Users provide correct and rational evaluations during path assessments.
+            \item [DA11] The external weather service API is available, stable, and provides accurate data.
+            \item [DA12] The user, while cycling, will not change the track or get lost.
+            \item [DA13] The device has an active internet connection when searching, saving, or publishing a path.
+            \item [DA14] Paths refer to either dedicated bike tracks or roads with low traffic and cycling-compatible speeds (as per the problem statement).
+        \end{itemize}
         \\ \hline
     \end{tabularx}
 \end{table}
 
+\newpage
+\begin{table}[h!]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|}
+        \hline
+        \begin{itemize}
+            \item [R23] During automatic recording, the system shall monitor accelerometer and gyroscope data.
+            \item [R24] BBP shall internally log a sensor\_event when sensor data exceeds a predefined threshold.
+            \item [R25] BBP shall allow an RCY to stop the automatic trip recording.
+            \item [R26] Upon stopping recording, if sensor\_events were logged, BBP shall present them to the user for review.
+            \item [R27] BBP shall allow the user to confirm or ignore each sensor\_event during review.
+            \item [R28] BBP shall create an Obstacle\_report associated with the trip only for confirmed sensor\_events.
+            \item [R29] After recording (and review), BBP shall calculate final trip statistics.
+            \item [R30] After recording, BBP shall retrieve and associate weather information with the trip.
+            \item [R31] BBP shall allow the user to save the completed Trip (path, stats, weather, confirmed reports) to their private archive.
+        \end{itemize}
+        &
+        \begin{itemize}
+            \item [DA15] Users grant permissions for location and motion sensors; otherwise, only manual mode and browsing are available.
+            \item [DA16] Users will start the recording at the beginning of the trail and end it at the finish line.
+            \item [DA17] Users will not commit errors while drawing or following the path.
+        \end{itemize}
+    \\ \hline
+    \end{tabularx}
+\end{table}
+        
 \newpage
 \textbf{[G3] Facilitate the discovery and navigation of suitable cycling routes}
 \begin{table}[h!]
@@ -852,49 +872,120 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 
 
-\section{Performance requirements}
+\section{Performance requirements}%faccio io qui ( Bellosi)
 \label{sec:performance_requirements}%
-\paragraph{Number of concurrent Users:} 
-\paragraph{Data storage:} 
-\paragraph{Time response:} 
+This section specifies the non-functional requirements related to system response time,
+concurrent user load, data storage capacity, and data acquisition timing constraints.
+
+% Use the 'enumerate' environment for automatic numbering (PR-1, PR-2, etc.)
+% 'enumitem' package is recommended (include \usepackage{enumitem} in your preamble)
+% 'label=\textbf{PR-\arabic*.}' sets the format
+% 'leftmargin=*' aligns the list properly
+% 'itemsep=2pt' adds a small space between items
+\begin{enumerate}[label=\textbf{PR-\arabic*.}, leftmargin=*, itemsep=2pt]
+
+    \item \textbf{(Time response: Login):} The system shall authenticate a \texttt{RCY} (Registered Cyclist) (R3) and display the main map screen within \textbf{2.0 seconds} of the login submission.
+    
+    \item \textbf{(Time response: Search):} The system shall process a \texttt{Search paths} request (R7), including retrieving reports (R8), executing merging logic (R9), calculating scores (R10), fetching weather data (R14), and displaying the ordered results list (R11) within \textbf{5.0 seconds}.
+    
+    \item \textbf{(Time response: View Details):} The system shall display the full \texttt{View path details} screen (R13), including geometry, merged status, obstacles, and weather (R14), within \textbf{3.0 seconds} of the user's selection (R12).
+    
+    \item \textbf{(Time response: Start Recording):} The \texttt{Record trip (automatic)} session (R20) must initialize and begin active monitoring of sensors (R21, R23) within \textbf{1.5 seconds} of the user tapping "Start".
+    
+    \item \textbf{(Time response: Sensor Frequency):} During an automatic recording session (R20):
+    \begin{itemize}[leftmargin=*, noitemsep, nolistsep]
+        \item The GPS (R21) must be sampled at a minimum frequency of \textbf{1 Hz} (one sample per second) to ensure accurate geometry.
+        \item The Accelerometer and Gyroscope (R23) must be sampled at a minimum frequency of \textbf{10 Hz} (ten samples per second) to reliably capture data for pothole detection (R24).
+    \end{itemize}
+    
+    \item \textbf{(Time response: Save):} The system shall complete the server-side save operation for a \texttt{Trip} (R31) or \texttt{Path} (R37) and return a confirmation message (R38) within \textbf{4.0 seconds} of the user tapping "Save".
+    
+    \item \textbf{(Number of concurrent users: General):} The BBP backend shall support a minimum of \textbf{1,000 concurrent users} (ACY and RCY) performing searches (R7) or navigation (R15) without degrading the response times defined in PR-2 and PR-3.
+    
+    \item \textbf{(Number of concurrent users: Recording):} The system shall support at least \textbf{50 concurrent \texttt{Record trip (automatic)}} sessions (R20) being initiated per minute.
+    
+    \item \textbf{(Data storage: Scalability):} The system architecture must be scalable to support the storage and processing (R8, R9) of an average of \textbf{10,000 new \texttt{Trip}s} and \textbf{50,000 new \texttt{Report}s} per day.
+    
+    \item \textbf{(Data storage: Retention):} All user-generated \texttt{Trip} data (R31), \texttt{Path} data (R34), and \texttt{Report} data (R35, R36) shall be retained indefinitely.
+
+\end{enumerate}
+
 
 
 \newpage
 \section{Design constraints}
 \label{sec:design_constraints}%
-
+This section outlines specific constraints that restrict the design and implementation choices for the BBP system.
 
 \subsection{Standard compliance}
 \label{subsec:standard compliance}%%
-
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{Web Communication:} All communication between the BBP mobile application and the BBP backend server must use secure, standard protocols, specifically \textbf{HTTPS}.
+    \item \textbf{Data Interchange:} Data interchange with all external services, particularly the \texttt{External Weather Service}, must adhere to standard data formats, primarily \textbf{JSON}.
+    \item \textbf{Data Privacy:} As the system collects and stores sensitive user data, including personal information (R1, R2) and precise location history (R21, R31), the design must comply with relevant data protection regulations, such as the \textbf{GDPR}.
+\end{itemize}
 
 \subsection{Hardware limitations}
 \label{subsec:hardware_limitations}%
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{Device Type:} The system is constrained to run on consumer smartphones (e.g., iOS and Android) .
+    \item \textbf{Required Sensors:} All core functionalities for automatic recording (R20, R23) are strictly dependent on the availability and user-granted permission for specific hardware sensors: \textbf{GPS}, \textbf{Accelerometer}, and \textbf{Gyroscope}. Devices lacking these sensors will be limited to manual mode (R34) and search/navigation (R7, R15).
+    \item \textbf{Connectivity:} The system is not designed for full offline operation. An active internet connection (Wi-Fi or cellular data) is a constraint for most core functions, including login (R3), search (R7), and saving/publishing (R31, R37).
+\end{itemize}
 
-
+\subsubsection{Any other constraint}
+\label{subsec:Any other constraint}%
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{Platform Type:} The user interface must be implemented as a \textbf{native mobile application} to ensure reliable access to background processes and hardware sensors (GPS, IMU) . A web-based application is not sufficient to meet the core functional requirements (R20, R23).
+    \item \textbf{External API Dependency:} The system is constrained by its dependency on third-party services. The \texttt{External Weather Service} (R14, R30)  and any underlying map provider (e.g., Google Maps, OpenStreetMap) are external dependencies. The design must be resilient to their potential downtime or API changes.
+    \item \textbf{Architecture:} The requirement for server-side aggregation (R8, R9) and scoring (R10) constrains the system to a \textbf{Client-Server architecture}. A purely peer-to-peer or standalone application is not feasible.
+\end{itemize}
 
 \section{Software system attributes}
 \label{sec:software_system_attributes}%
+This section defines the key quality attributes (non-functional requirements) that the BBP system must exhibit.
 
 \subsection{Reliability}
 \label{subsec:reliability}%
-.
+The system must demonstrate high reliability during its core operations.
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{Recording Stability:} The \texttt{Record trip (automatic)} session (R20) must be robust. The application must be able to handle continuous background data streams from GPS (R21) and IMU sensors (R23) for extended periods (e.g., up to 3 hours) without crashing or corrupting data.
+    \item \textbf{Data Integrity (Sensors):} The system must reliably process sensor data (R23) to ensure that \texttt{sensor\_event} logs (R24) are correctly generated based on the defined thresholds (DA4) and are not lost, even if the application is temporarily suspended.
+    \item \textbf{Data Integrity (Save):} The system must ensure that a "Save" operation (R31, R37) is atomic. A failure during saving (e.g., network loss) must not result in partially saved or corrupted \texttt{Trip} or \texttt{Path} data.
+\end{itemize}
 
 \subsection{Availability}
 \label{subsec:availability}%
-
+The server-side components of the BBP system must be highly available.
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{Core Service Uptime:} All backend services responsible for user authentication (R3), path searching (R7), and data aggregation (R8, R9, R10) shall maintain an availability of \textbf{99.5\%} (Tier 3 equivalent).
+    \item \textbf{Graceful Degradation:} In the event of an \texttt{External Weather Service} (R14, R30) outage, the system shall remain available, displaying path and trip details without weather data and notifying the user of the temporary unavailability.
+\end{itemize}
 
 \subsection{Security}
 \label{subsec:security}%
-
-
+The system must protect the integrity and confidentiality of user data.
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{Data in Transit:} All communication between the BBP Application and the BBP Server must be encrypted using \textbf{HTTPS}.
+    \item \textbf{Authentication:} User passwords must be stored on the server using a strong, salted, one-way hashing algorithm.
+    \item \textbf{Authorization:} The system must enforce strict data access controls. A \texttt{RegisteredUser} must only be able to view their own private \texttt{Trip} data (R32, R33). Data associated with other users must not be accessible.
+    \item \textbf{Data Privacy (Location):} User GPS data (R21), both in transit and at rest, must be treated as sensitive personal information and protected against unauthorized access.
+\end{itemize}
 
 \subsection{Maintainability}
 \label{subsec:maintainability}%
-
+The system must be designed to be easily modified and maintained.
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{Modularity (Scoring):} The logic for \texttt{Path} scoring (R10) and \texttt{Report} merging (R9) must be implemented in a distinct, loosely-coupled module on the server. This allows the aggregation algorithm to be tuned or replaced without impacting core trip recording or user management functionalities.
+    \item \textbf{Modularity (Detection):} The algorithm for processing raw sensor data (R23) into \texttt{sensor\_event}s (R24) must be isolated within the client application, allowing the detection thresholds (DA4) to be updated or calibrated without requiring a full application rewrite.
+\end{itemize}
 
 \subsection{Portability}
 \label{subsec:portability}%
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{Client Platform:} The BBP mobile application shall be designed to be portable across the two primary mobile operating systems: \textbf{iOS} and \textbf{Android}.
+    \item \textbf{OS Dependencies:} The design must account for differences in OS-level APIs (e.g., for accessing sensor data (R23) and managing background processes (R20)), ensuring functionally equivalent behavior on both platforms.
+\end{itemize}
 
 
 
