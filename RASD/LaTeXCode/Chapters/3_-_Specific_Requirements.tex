@@ -402,7 +402,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \end{center}
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_6.png}
+        \includegraphics[width=0.65\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_6.png}
         \caption{UC6: Follow Path (Navigation)}
         \label{fig:UC6: Follow Path}%
     \end{center}
@@ -417,31 +417,103 @@ This section lists the specific functional requirements that the Best Bike Paths
         \textbf{Entry conditions} & The user is registered, logged in, and on the main map screen. \\
         \hline
         \textbf{Event Flow}       & 1 - The User taps the "Start Recording" button. \\
-                                  & 2 - BBP Application requests permissions for GPS and Motion Sensors, if not already granted. \\
-                                  & 3 - BBP Application activates \texttt{Device Sensors} (GPS, Accelerometer, Gyroscope) [R22]. \\
-                                  & 4 - The app displays the recording HUD, showing real-time statistics (speed, distance, time) [R21]. \\
+                                  & 2 - BBP Application requests permissions for GPS and Motion Sensors. \\
+                                  & 3 - BBP Application activates \texttt{Device Sensors} [R22]. \\
+                                  & 4 - The app displays the recording HUD, showing real-time statistics [R21]. \\
                                   & 5 - \textbf{In parallel:} The app records the user's \texttt{GPS\_points} sequence (R20) and monitors sensor data. \\
-                                  [cite_start]& 6 - \textbf{If} sensor data exceeds the predefined threshold, the app internally logs a new \texttt{sensor\_event} (R23) [cite: 94-95]. \\
+                                  [cite_start]& 6 - \textbf{If} sensor data exceeds the threshold, the app internally logs a new \texttt{sensor\_event} (R23) [cite: 94-95]. \\
                                   & 7 - The User taps the "Stop Recording" button (R24). \\
                                   & 8 - BBP Application stops all sensors and finalizes the path geometry. \\
-                                  [cite_start]& 9 - BBP Application queries the \texttt{External Weather Service} and retrieves the weather conditions for the trip (R29) [cite: 86-87]. \\
-                                  [cite_start]& 10 - BBP Application calculates the final \texttt{Statistics} (avg speed, total distance, etc.) (R28) [cite: 85-88]. \\
+                                  [cite_start]& 9 - BBP Application queries the \texttt{External Weather Service} and retrieves the weather conditions (R29) [cite: 86-87]. \\
+                                  [cite_start]& 10 - BBP Application calculates the final \texttt{Statistics} (R28) [cite: 85-88]. \\
                                   & 11 - The system checks if any \texttt{sensor\_event}s were logged (R25). \\
-                                  & 12 - \textbf{If} events were logged, the flow is extended by \textbf{`Review Detections`} (UC11). \\
-                                  & 13 - \textbf{If} no events were logged (or after review is complete), the system displays the "Save Trip" screen, showing the summary, stats, and weather. \\
-                                  & 14 - The User triggers \textbf{`Save Trip/Path`} (UC9). \\
+                                  & 12 - \textbf{If} events were logged, the flow is extended by \textbf{`Review Detections`} (UC8). \\
+                                  & 13 - \textbf{If} no events were logged (or after review), the system displays the "Save Trip" summary screen, triggering \textbf{`Save Trip`} (UC9). \\
         \hline
         \textbf{Exit condition}   & The user has completed the recording. The system proceeds to the review or save flow. \\
         \hline
         \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The user discards the trip instead of saving. The recorded data (\texttt{GPS\_points}, \texttt{sensor\_event}s) is discarded.
-                                    \item GPS signal is lost (violates DA2). The system should notify the user that tracking is paused (Not explicitly handled per DA2, but good to note).
+                                    \item The user discards the trip instead of saving. The recorded data is discarded.
                                   \end{itemize}\\
         \hline
         \caption{Record Trip (Automatic) use case.}
         \label{tab:uc_record_trip}
     \end{longtable}
 \end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_7.png}
+        \caption{UC7: Record Trip }
+        \label{fig:UC7: Record Trip }%
+    \end{center}
+\end{figure}
+\subsubsection*{UC8. Review Detections}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Registered User \\
+        \hline
+        \textbf{Entry conditions} & The user has just completed \texttt{Record Trip (Automatic)} (UC7) . \\
+                                  & The system has logged one or more \texttt{sensor\_event}s (R25). \\
+        \hline
+        \textbf{Event Flow}       & 1 - The BBP Application displays the \texttt{Review Detections} screen. \\
+                                  & 2 - The app shows the recorded path on a map, with pins marking the location of each logged \texttt{sensor\_event}. \\
+                                  & 3 - The user reviews each detection (e.g., by tapping the pin). \\
+                                  & 4 - For each event, the User chooses "Confirm" or "Ignore" (R26). \\
+                                  & 5 - \textbf{If} "Confirm" is pressed, the system flags the \texttt{sensor\_event} as confirmed, ready to become an \texttt{Obstacle\_report} (R27). \\
+                                  & 6 - \textbf{If} "Ignore" is pressed, the system flags the \texttt{sensor\_event} as rejected. \\
+                                  & 7 - The User taps "Finish Review". \\
+        \hline
+        \textbf{Exit condition}   & All pending \texttt{sensor\_event}s have been processed (confirmed or ignored). The system proceeds to the "Save Trip" screen. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item The user exits the review screen prematurely. The system may treat all pending detections as "Ignored".
+                                  \end{itemize}\\
+        \hline
+        \caption{Review Detections use case.}
+        \label{tab:uc_review_detections}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_8.png}
+        \caption{UC8: Review Detections}
+        \label{fig:UC8: Review Detections}%
+    \end{center}
+\end{figure}
+\subsubsection*{UC9. Save Trip}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Registered User \\
+        \hline
+        \textbf{Entry conditions} & The user has completed a \texttt{Record Trip (Automatic)} (UC7) and is on the summary screen. \\
+        \hline
+        \textbf{Event Flow}       & 1 - BBP Application displays the trip summary (stats, weather, confirmed detections). \\
+                                  & 2 - The User enters a name for the \texttt{Trip}. \\
+                                  & 4 - The User taps the "Save" button or the "Discard" button. \\
+                                  & 5 - If "Save" was pressed, BBP Application sends all \texttt{Trip} data (geometry, stats, weather, reports, name, visibility) to the Server . \\
+                                  & 6 - The Server saves the \texttt{Trip} to the user's private archive (R30). \\
+                                  & 7 - The Server confirms the save. \\
+                                  & 8 - BBP Application displays a "Save successful" message. \\
+        \hline
+        \textbf{Exit condition}    \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item Invalid data (e.g., missing name). The system shows an error and remains on the save screen.
+                                  \end{itemize}\\
+        \hline
+        \caption{Save Trip use case.}
+        \label{tab:uc_save_trip}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_9.png}
+        \caption{UC9: Save Trip/Path}
+        \label{fig:UC9: Save Trip/Path}%
+    \end{center}
+\end{figure}
 
 \begin{figure}[H]
     \begin{center}
