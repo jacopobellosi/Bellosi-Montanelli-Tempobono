@@ -78,6 +78,18 @@ fact ModelInvariants {
     all r: Obstacle_report {
         r.triggeredBy in r.triggeredBy.trip.detections
     }
+
+    all t: Trip {
+        t.tripVisibility = Public implies t.path.pathVisibility = Public
+    }
+    
+    all p: Path {
+        p.pathVisibility = Private implies {
+            all t: p.performances {
+                t.owner = p.creator
+            }
+        }
+    }
 }
 
 pred FindPublicPathWithActivity {
@@ -95,13 +107,11 @@ pred FindPublicPathWithActivity {
     }
 }
 run FindPublicPathWithActivity for 3 Path, 3 Trip, 3 Registered_user, 5 GPS_point, 3 Statistic, 3 Weather_info, 3 Report, 3 sensor_event
-
 assert PublicTripsOnPublicPaths {
     all t: Trip {
         t.tripVisibility = Public implies t.path.pathVisibility = Public
     }
 }
-check PublicTripsOnPublicPaths for 5
 
 assert PrivatePathPrivacy {
     all p: Path {
@@ -112,4 +122,5 @@ assert PrivatePathPrivacy {
         }
     }
 }
+check PublicTripsOnPublicPaths for 5
 check PrivatePathPrivacy for 5
