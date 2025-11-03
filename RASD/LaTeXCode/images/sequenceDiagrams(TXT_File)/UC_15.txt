@@ -1,0 +1,22 @@
+actor "Registered User" as User
+participant "BBP Application" as App
+participant "BBP Server" as Server
+
+note over User, App: User is viewing Path Details (UC5)
+
+User->>App: selectsReportType("Obstacle")
+activate App
+App-->>User: showObstacleForm()
+deactivate App
+User->>App: submitsObstacleReport(pathID, type, location)
+activate App
+
+App->>Server: submitReport(pathID, obstacleReportData)
+activate Server
+    note right of Server: Saves new Obstacle_report.
+    note right of Server: Triggers Path score recalculation.
+    Server-->>App: 200_OK(reportSaved)
+deactivate Server
+
+App->>User: showMessage("Obstacle report submitted!")
+deactivate App

@@ -1,0 +1,23 @@
+actor "Registered User" as User
+participant "BBP Application" as App
+participant "BBP Server" as Server
+
+User->>App: tapsViewMyTrips()
+activate App
+App->>Server: getMyTripsList()
+activate Server
+    note right of Server: Retrieves summary for all user's private trips
+    Server-->>App: 200_OK(tripsList)
+deactivate Server
+
+App-->>User: showMyTripsList(tripsList)
+
+loop User views details
+    User->>App: selectsTrip(tripID)
+    App->>Server: getTripDetails(tripID)
+    activate Server
+        note right of Server: Retrieves full trip (GPS, stats, weather, reports)
+        Server-->>App: 200_OK(fullTripData)
+    deactivate Server
+    App-->>User: showTripDetails(fullTripData)
+end
