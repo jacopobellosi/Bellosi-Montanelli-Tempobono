@@ -540,7 +540,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \end{center}
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_10.png}
+        \includegraphics[width=0.57\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_10.png}
         \caption{UC10: set visibility}
         \label{fig:UC10: set visibility}%
     \end{center}
@@ -610,6 +610,113 @@ This section lists the specific functional requirements that the Best Bike Paths
         \label{fig:UC12: Save path}%
     \end{center}
 \end{figure}
+\subsubsection*{UC13. View "My trips"}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Registered User \\
+        \hline
+        \textbf{Entry conditions} & The user is registered and logged in. \\
+        \hline
+        \textbf{Event Flow}       & 1 - The User navigates to their profile and taps the "My Trips" option. \\
+                                  & 2 - BBP Application requests the list of saved trips for the user from the Server. \\
+                                  & 3 - The Server retrieves all \texttt{Trip} objects associated with that user (R32). \\
+                                  & 4 - The Server returns a summary list (e.g., name, date, distance) of the trips. \\
+                                  & 5 - BBP Application displays the list of saved trips. \\
+                                  & 6 - The User taps on a specific \texttt{Trip} in the list. \\
+                                  & 7 - BBP Application requests the full details for the selected \texttt{tripID}. \\
+                                  & 8 - The Server retrieves the full \texttt{Trip} object, including its \texttt{GPS\_points}, \texttt{Statistic}, \texttt{Weather\_info}, and any associated \texttt{Obstacle\_report}s (R33). \\
+                                  & 9 - BBP Application displays the detailed trip summary. \\
+        \hline
+        \textbf{Exit condition}   & The user has viewed their list of trips or the details of a specific trip. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item The user has no saved trips. The system displays an empty list or a "No trips recorded" message.
+                                  \end{itemize}\\
+        \hline
+        \caption{View "My trips" use case.}
+        \label{tab:uc_view_my_trips}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_13.png}
+        \caption{UC13. View "My trips"}
+        \label{fig:UC13. View "My trips"}%
+    \end{center}
+\end{figure}
+\subsubsection*{UC14. Submit status report}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Registered User \\
+        \hline
+        \textbf{Entry conditions} & The user is registered, logged in, and is viewing the details of a \texttt{Path} (UC5). \\
+        \hline
+        \textbf{Event Flow}       & 1 - The User taps the "Report status" button. \\
+                                  & 2 - The app displays the status options (e.g., "Optimal", "Requires Maintenance"). \\
+                                  & 3 - The User selects a status and taps "Submit". \\
+                                  & 4 - BBP Application sends the new \texttt{Status\_report} to the Server, associated with the current \texttt{Path}. \\
+                                  & 5 - The Server saves the new \texttt{Status\_report}. \\
+                                  & 6 - The Server triggers a recalculation of the \texttt{Path}'s `derivedStatus` and `derivedScore` (R8, R9). \\
+        \hline
+        \textbf{Exit condition}   & The new \texttt{Status\_report} is saved. The \texttt{Path}'s score is updated. The user is returned to the \texttt{Path Details} screen. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item The user cancels the submission. No report is created.
+                                  \end{itemize}\\
+        \hline
+        \caption{Submit status report use case.}
+        \label{tab:uc_submit_status_report}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_14.png}
+        \caption{UC14. Submit status report}
+        \label{fig:UC14. Submit status report}%
+    \end{center}
+\end{figure}
+\subsubsection*{UC15. Submit Obstacle report}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Registered User \\
+        \hline
+        \textbf{Entry conditions} & The user is registered, logged in, and is viewing the details of a \texttt{Path} (UC5). \\
+        \hline
+        \textbf{Event Flow}       
+                                  & 1 - The User selects "Submit Obstacle" (R38). \\
+                                  & 2 - The app displays the obstacle report form (e.g., type of obstacle, location pin). \\
+                                  & 3 - The User selects an obstacle \texttt{type} (e.g., "Pothole"), places a pin on the map to indicate the location, and taps "Submit". \\
+                                  & 4 - BBP Application sends the new \texttt{Obstacle\_report} to the Server, associated with the current \texttt{Path}. \\
+                                  & 5 - The Server saves the new \texttt{Obstacle\_report}. \\
+                                  & 6 - The Server may trigger a recalculation of the \texttt{Path}'s `derivedScore` (R10), as obstacles affect the score. \\
+        \hline
+        \textbf{Exit condition}   & The new \texttt{Obstacle\_report} is saved. The \texttt{Path}'s score may be updated. The user is returned to the \texttt{Path Details} screen. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item The user cancels the submission. No report is created.
+                                    \item Invalid data (e.g., missing location). The system shows an error.
+                                  \end{itemize}\\
+        \hline
+        \caption{Submit Obstacle report use case.}
+        \label{tab:uc_submit_obstacle_report}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_15.png}
+        \caption{UC15. Submit Obstacle report}
+        \label{fig:UC15. Submit Obstacle report}%
+    \end{center}
+\end{figure}
+
+
+
+
+
+
 
 \begin{figure}[H]
     \begin{center}
@@ -636,91 +743,110 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 
 \newpage
-
 \subsection{Mapping on Goals}
-\label{subsec:mapping_on_goals}
 
-% Elenco dei Goals
-\begin{itemize}
-    \item \textbf{G1:} Support personal cycling activity tracking
-    \item \textbf{G2:} Gather, aggregate, and provide users with actionable data regarding cycle path conditions
-    \item \textbf{G3:} Facilitate the discovery and navigation of suitable cycling routes
-    \item \textbf{G4:} Enhance trip analysis by enriching recorded user trips with relevant meteorological and physical data
-    \item \textbf{G5:} Establish a community-based path evaluation system
-\end{itemize}
-
-% Goal G1
-\subsubsection*{G1: Support personal cycling activity tracking}
-
-\begin{table}[ht]
-\centering
-\caption{Goal G1: Support personal cycling activity tracking}
-\label{tab:G1}
-\begin{tabularx}{\textwidth}{|X|X|}
-\hline
-R1: BBP allows Users to sign up & D1: Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors. \\ \hline
-R2: BBP shall verify that the username and email provided during registration are not already in use. & D2: The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken. \\ \hline
-R19: BBP shall provide feedback to the user in case of failed login attempts (e.g., incorrect credentials). & D7: Users act in good faith when providing manual data or confirming automatic detections. \\ \hline
-\end{tabularx}
+\textbf{[G1] Support personal cycling activity tracking}
+\begin{table}[h!]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|}
+        \hline
+        \begin{itemize}
+            \item [R1] BBP allows Users to sign up.
+            \item [R2] BBP shall verify that the username and email provided during registration are not already in use.
+            \item [R3] BBP shall allow RCY to log in using their username/email and password.
+            \item [R6] BBP shall allow a logged-in user to log out.
+            \item [R7] BBP shall allow any user to search for public bike paths by specifying an origin and a destination.
+            \item [R14] BBP shall retrieve and display current weather forecast information for the selected path’s location.
+            \item [R15] BBP shall allow any user to initiate a navigation mode ("Follow Route") for a selected path.
+            \item [R19] If an anonymous user accepts registration after navigation, BBP shall allow them to complete registration and then save the navigated session as a Trip.
+        \end{itemize} 
+        & 
+        \begin{itemize}
+            \item [DA1] Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors.
+            \item [DA2] The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken.
+            \item [DA3] Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations).
+            \item [DA4] A data threshold exists to reliably distinguish significant movements (potholes) from normal biking vibrations.
+            \item [DA5] The mobile device remains physically attached (e.g., in a pocket or on a mount) to the user or bike during recording.
+            \item [DA7] Users act in good faith when providing manual data or confirming automatic detections.
+            \item [DA11] The external weather service API is available, stable, and provides accurate data.
+            \item [DA12] The user, while cycling, will not change the track or get lost.
+        \end{itemize} 
+        \\ \hline
+    \end{tabularx}
 \end{table}
 
-% Goal G2
-\subsubsection*{G2: Gather, aggregate, and provide actionable data regarding cycle path conditions}
-
-\begin{table}[ht]
-\centering
-\caption{Goal G2: Gather, aggregate, and provide actionable data regarding cycle path conditions}
-\label{tab:G2}
-\begin{tabularx}{\textwidth}{|X|X|}
-\hline
-\textbf{Requirement} & \textbf{Domain Assumption} \\ \hline
-R7: BBP shall allow any user to search for public bike paths by specifying an origin and a destination. & D3: Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations). \\ \hline
-R9: BBP shall calculate a merged status for each searched path based on its associated Status_report instances. & D4: A data threshold exists to reliably distinguish significant movements (potholes) from normal biking vibrations. \\ \hline
-\end{tabularx}
+\newpage
+\textbf{[G2] Gather, aggregate, and provide actionable data regarding cycle path conditions}
+\begin{table}[h!]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|}
+        \hline
+        \begin{itemize}
+            \item [R7] The system allows users to search for public cycling paths.
+            \item [R9] The system calculates and displays the aggregated status of paths.
+        \end{itemize} 
+        & 
+        \begin{itemize}
+            \item [D3] Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations).
+            \item [D4] A data threshold exists to reliably distinguish significant movements (potholes) from normal biking vibrations.
+        \end{itemize} 
+        \\ \hline
+    \end{tabularx}
 \end{table}
 
-% Goal G3
-\subsubsection*{G3: Facilitate the discovery and navigation of suitable cycling routes}
-
-\begin{table}[ht]
-\centering
-\caption{Goal G3: Facilitate the discovery and navigation of suitable cycling routes}
-\label{tab:G3}
-\begin{tabularx}{\textwidth}{|X|X|}
-\hline
-\textbf{Requirement} & \textbf{Domain Assumption} \\ \hline
-R14: BBP shall retrieve and display current weather forecast information for the selected path. & D12: The user, while cycling, will not change the track or get lost. \\ \hline
-R15: BBP shall allow any user to select a path from the search results to view its details. & D14: Paths refer to either dedicated bike tracks or roads with low traffic and cycling-compatible speeds. \\ \hline
-\end{tabularx}
+\newpage
+\textbf{[G3] Facilitate the discovery and navigation of suitable cycling routes}
+\begin{table}[h!]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|}
+        \hline
+        \begin{itemize}
+            \item [R14] The system retrieves and displays current weather data for the selected path.
+            \item [R15] The system allows users to start navigation for a selected path.
+        \end{itemize} 
+        & 
+        \begin{itemize}
+            \item [D12] The user, while cycling, will not change the track or get lost.
+            \item [D14] Paths refer to either dedicated bike tracks or roads with low traffic and cycling-compatible speeds.
+        \end{itemize} 
+        \\ \hline
+    \end{tabularx}
 \end{table}
 
-% Goal G4
-\subsubsection*{G4: Enhance trip analysis by enriching recorded user trips with relevant meteorological and physical data}
-
-\begin{table}[ht]
-\centering
-\caption{Goal G4: Enhance trip analysis by enriching recorded user trips with relevant meteorological and physical data}
-\label{tab:G4}
-\begin{tabularx}{\textwidth}{|X|X|}
-\hline
-\textbf{Requirement} & \textbf{Domain Assumption} \\ \hline
-R29: After recording, BBP shall retrieve and associate weather information with the trip. & D11: The external weather service API is available, stable, and provides accurate data. \\ \hline
-\end{tabularx}
+\newpage
+\textbf{[G4] Enhance trip analysis by enriching recorded user trips with relevant meteorological and physical data}
+\begin{table}[h!]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|}
+        \hline
+        \begin{itemize}
+            \item [R29] After recording, the system associates weather data with the trip.
+        \end{itemize} 
+        & 
+        \begin{itemize}
+            \item [D11] The external weather service API is available, stable, and provides accurate data.
+        \end{itemize} 
+        \\ \hline
+    \end{tabularx}
 \end{table}
 
-% Goal G5
-\subsubsection*{G5: Establish a community-based path evaluation system}
-
-\begin{table}[ht]
-\centering
-\caption{Goal G5: Establish a community-based path evaluation system}
-\label{tab:G5}
-\begin{tabularx}{\textwidth}{|X|X|}
-\hline
-\textbf{Requirement} & \textbf{Domain Assumption} \\ \hline
-R36: BBP shall allow RCY to manually create paths on a map. & D8: “Fresh” (recent) information is considered more relevant than older data when describing a path’s status. \\ \hline
-R37: BBP shall allow RCY to submit Status_reports manually for paths. & D9: Users provide correct and rational evaluations during path assessments. \\ \hline
-\end{tabularx}
+\newpage
+\textbf{[G5] Establish a community-based path evaluation system}
+\begin{table}[h!]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|}
+        \hline
+        \begin{itemize}
+            \item [R36] The system allows users to manually create paths on a map.
+            \item [R37] The system allows users to submit status reports manually for paths.
+        \end{itemize} 
+        & 
+        \begin{itemize}
+            \item [D8] “Fresh” (recent) information is considered more relevant than older data when describing a path’s status.
+            \item [D9] Users provide correct and rational evaluations during path assessments.
+        \end{itemize} 
+        \\ \hline
+    \end{tabularx}
 \end{table}
 
 
