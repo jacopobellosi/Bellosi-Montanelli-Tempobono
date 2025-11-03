@@ -408,29 +408,26 @@ This section lists the specific functional requirements that the Best Bike Paths
     \end{center}
 \end{figure}
 %Registred user activity
-\subsubsection*{UC7. Record Trip (Automatic)}
+\subsubsection*{UC7. Record Path (Automatic)}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
         \hline
-        \textbf{Actor}            & Registered User, Device Sensors (GPS, Accelerometer, Gyroscope), External Weather Service \\
+        \textbf{Actor}            & Registered User, Device Sensors (GPS, IMU), External Weather Service \\
         \hline
-        \textbf{Entry conditions} & The user is registered, logged in, and on the main map screen. \\
+        \textbf{Entry conditions} & The user is registered, logged in. (L'utente potrebbe aver selezionato un \texttt{Path} da seguire). \\
         \hline
         \textbf{Event Flow}       & 1 - The User taps the "Start Recording" button. \\
-                                  & 2 - BBP Application requests permissions for GPS and Motion Sensors. \\
-                                  & 3 - BBP Application activates \texttt{Device Sensors} [R22]. \\
-                                  & 4 - The app displays the recording HUD, showing real-time statistics [R21]. \\
-                                  & 5 - \textbf{In parallel:} The app records the user's \texttt{GPS\_points} sequence (R20) and monitors sensor data. \\
-                                  [cite_start]& 6 - \textbf{If} sensor data exceeds the threshold, the app internally logs a new \texttt{sensor\_event} (R23) [cite: 94-95]. \\
-                                  & 7 - The User taps the "Stop Recording" button (R24). \\
-                                  & 8 - BBP Application stops all sensors and finalizes the path geometry. \\
-                                  [cite_start]& 9 - BBP Application queries the \texttt{External Weather Service} and retrieves the weather conditions (R29) [cite: 86-87]. \\
-                                  [cite_start]& 10 - BBP Application calculates the final \texttt{Statistics} (R28) [cite: 85-88]. \\
-                                  & 11 - The system checks if any \texttt{sensor\_event}s were logged (R25). \\
-                                  & 12 - \textbf{If} events were logged, the flow is extended by \textbf{`Review Detections`} (UC8). \\
-                                  & 13 - \textbf{If} no events were logged (or after review), the system displays the "Save Trip" summary screen, triggering \textbf{`Save Trip`} (UC9). \\
+                                  & 2 - BBP Application activates \texttt{Device Sensors} [R22]. \\
+                                  & 3 - The app displays the recording HUD, [R21]. \\
+                                  & 4 - \textbf{In parallel:} The app records the user's \texttt{GPS\_points} sequence (R20) and monitors sensor data . \\
+                                  & 5 - \textbf{If} sensor data exceeds the threshold, the app internally logs a new \texttt{sensor\_event} (R23) . \\
+                                  & 6 - The User taps the "Stop Recording" button (R24). \\
+                                  & 7 - BBP Application stops all sensors and finalizes the \texttt{Path} geometry. \\
+                                  & 8 - BBP Application calculates the final \texttt{Statistics} (R28). \\
+                                  & 9 - BBP show the summary of the new path with the trip information, and in case the \textit{ReviewDetections}. \textbf{`Save Trip and Path`} (UC9)\\
+                                  
         \hline
-        \textbf{Exit condition}   & The user has completed the recording. The system proceeds to the review or save flow. \\
+        \textbf{Exit condition}   & The user has completed the recording. The system proceeds to the save flow (UC9). \\
         \hline
         \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
                                     \item The user discards the trip instead of saving. The recorded data is discarded.
@@ -442,7 +439,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \end{center}
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_7.png}
+        \includegraphics[width=0.75\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_7.png}
         \caption{UC7: Record Trip }
         \label{fig:UC7: Record Trip }%
     \end{center}
@@ -453,18 +450,17 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Actor}            & Registered User \\
         \hline
-        \textbf{Entry conditions} & The user has just completed \texttt{Record Trip (Automatic)} (UC7) . \\
+        \textbf{Entry conditions} & The user has just entered \texttt{Save Path and Trip} (UC9). \\
                                   & The system has logged one or more \texttt{sensor\_event}s (R25). \\
         \hline
-        \textbf{Event Flow}       & 1 - The BBP Application displays the \texttt{Review Detections} screen. \\
+        \textbf{Event Flow}       & 1 - The BBP Application displays the summary with the \texttt{Review Detections} screen. \\
                                   & 2 - The app shows the recorded path on a map, with pins marking the location of each logged \texttt{sensor\_event}. \\
                                   & 3 - The user reviews each detection (e.g., by tapping the pin). \\
                                   & 4 - For each event, the User chooses "Confirm" or "Ignore" (R26). \\
                                   & 5 - \textbf{If} "Confirm" is pressed, the system flags the \texttt{sensor\_event} as confirmed, ready to become an \texttt{Obstacle\_report} (R27). \\
                                   & 6 - \textbf{If} "Ignore" is pressed, the system flags the \texttt{sensor\_event} as rejected. \\
-                                  & 7 - The User taps "Finish Review". \\
         \hline
-        \textbf{Exit condition}   & All pending \texttt{sensor\_event}s have been processed (confirmed or ignored). The system proceeds to the "Save Trip" screen. \\
+        \textbf{Exit condition}   & All pending \texttt{sensor\_event}s have been processed. The system proceeds to the \texttt{Save Path and Trip} (UC9) decision. \\
         \hline
         \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
                                     \item The user exits the review screen prematurely. The system may treat all pending detections as "Ignored".
@@ -481,37 +477,137 @@ This section lists the specific functional requirements that the Best Bike Paths
         \label{fig:UC8: Review Detections}%
     \end{center}
 \end{figure}
-\subsubsection*{UC9. Save Trip}
+\subsubsection*{UC9. Save trip and path}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
         \hline
         \textbf{Actor}            & Registered User \\
         \hline
-        \textbf{Entry conditions} & The user has completed a \texttt{Record Trip (Automatic)} (UC7) and is on the summary screen. \\
+        \textbf{Entry conditions} & The user has just completed \texttt{Record Trip (Automatic)} (UC7). \\
+                                  & The application has the complete recorded data (geometry, stats, weather, and pending \texttt{sensor\_event}s). \\
         \hline
-        \textbf{Event Flow}       & 1 - BBP Application displays the trip summary (stats, weather, confirmed detections). \\
-                                  & 2 - The User enters a name for the \texttt{Trip}. \\
-                                  & 4 - The User taps the "Save" button or the "Discard" button. \\
-                                  & 5 - If "Save" was pressed, BBP Application sends all \texttt{Trip} data (geometry, stats, weather, reports, name, visibility) to the Server . \\
-                                  & 6 - The Server saves the \texttt{Trip} to the user's private archive (R30). \\
-                                  & 7 - The Server confirms the save. \\
-                                  & 8 - BBP Application displays a "Save successful" message. \\
+        \textbf{Event Flow}       & 1 - (Triggered by UC7) BBP Application displays the "Summary \& Save" screen, showing the map, final statistics (R28), and weather (R29). \\
+                                  & 2 - \textbf{Extension Point `Review Detections` (UC8):} \textbf{If} pending \texttt{sensor\_event}s exist (R25), the flow is extended by UC8, prompting the user to confirm/ignore detections . \\
+                                  & 3 - The User enters a name for the activity. \\
+                                  & 4 - \textbf{`<<include>>` `set visibility` (UC12):} The User selects the visibility for the \textbf{`Trip` (Public/Private for stats} and for the \textbf{`Path` (Public/Private for search) [R39]} \\
+                                  & 5 - The User taps "Save" or "Discard". \\
+                                  & 6 - \textbf{If} "Save" is pressed: \\
+                                  & \hspace{1em} a. BBP Application sends all finalised data (geometry, stats, weather, confirmed reports, name, visibilities) to the Server. \\
+                                  & \hspace{1em} b. The Server saves the \texttt{Trip} to the user's private archive (R31). \\
+                                  & \hspace{1em} c. The Server saves the \texttt{Path} with its chosen visibility (R39). \\
+                                  & \hspace{1em} d. \textbf{If} the \texttt{Trip} visibility was "Public", the Server updates the \texttt{Path}'s average statistics (R8, R9). \\
+                                  & 7 - \textbf{If} "Discard" is pressed, the flow terminates and data is deleted. \\
         \hline
-        \textbf{Exit condition}    \\
+        \textbf{Exit condition}   & The new \texttt{Trip} is saved. The new/updated \texttt{Path} is saved. Or all data is discarded. \\
         \hline
         \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
                                     \item Invalid data (e.g., missing name). The system shows an error and remains on the save screen.
                                   \end{itemize}\\
         \hline
-        \caption{Save Trip use case.}
-        \label{tab:uc_save_trip}
+        \caption{Save trip and path use case.}
+        \label{tab:uc_save_trip_path}
     \end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_9.png}
-        \caption{UC9: Save Trip/Path}
-        \label{fig:UC9: Save Trip/Path}%
+        \caption{UC9: Save Path and Trip}
+        \label{fig:UC9: Save Path and Trip}%
+    \end{center}
+\end{figure}
+\subsubsection*{UC10. set visibility (Included)}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Registered User \\
+        \hline
+        \textbf{Entry conditions} & The user is in the process of saving an activity (called by UC9 or UC12). \\
+        \hline
+        \textbf{Event Flow}       & 1 - (Triggered by UC9 or UC12) The system presents the User with the relevant visibility options [R39]. \\
+                                  & 2 - \textbf{If} called by UC9 (\texttt{Save trip and path}), the User selects visibility for both the \texttt{Trip} (stats aggregation) and the \texttt{Path} (search). \\
+                                  & 3 - \textbf{If} called by UC12 (\texttt{Save path}), the User selects visibility only for the \texttt{Path} (search). \\
+                                  & 4 - The User confirms the selection. \\
+        \hline
+        \textbf{Exit condition}   & The visibility preference(s) are set and returned to the calling use case. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item None. A default selection (e.g., "Private") is assumed.
+                                  \end{itemize}\\
+        \hline
+        \caption{set visibility (Included) use case.}
+        \label{tab:uc_set_visibility}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_10.png}
+        \caption{UC10: set visibility}
+        \label{fig:UC10: set visibility}%
+    \end{center}
+\end{figure}
+\subsubsection*{UC11. Create path manually}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Registered User \\
+        \hline
+        \textbf{Entry conditions} & The user is registered, logged in, and has selected the "Create Path Manually" option. \\
+        \hline
+        \textbf{Event Flow}       & 1 - BBP Application displays the manual route editor screen, showing a map. \\
+                                  & 2 - The User iteratively draws the path geometry by placing points on the map (R36). \\
+                                  & 3 - The User taps "Done" or "Finish" when the path geometry is complete. \\
+                                  & 4 - The system proceeds to the \textbf{`Save path`} use case (UC12), passing the new path data. \\
+        \hline
+        \textbf{Exit condition}   & The user has finished creating the path geometry. The system proceeds to the save flow (UC12). \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item The user cancels creation mid-way. The unsaved path data is discarded.
+                                  \end{itemize}\\
+        \hline
+        \caption{Create path manually use case.}
+        \label{tab:uc_create_path_manually}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_11.png}
+        \caption{UC11. Create path manually}
+        \label{fig:UC11. Create path manually}%
+    \end{center}
+\end{figure}
+\subsubsection*{UC12. Save path}
+\begin{center}
+    \begin{longtable}{|l|p{0.75\linewidth}|}
+        \hline
+        \textbf{Actor}            & Registered User \\
+        \hline
+        \textbf{Entry conditions} & The user has just completed \texttt{Create path manually} (UC11). \\
+                                  & The application has the new path geometry and any manual reports. \\
+        \hline
+        \textbf{Event Flow}       & 1 - (Triggered by UC11) BBP Application displays the "Save Path" screen. \\
+                                  & 2 - The User enters a name for the \texttt{Path}. \\
+                                  & 3 - \textbf{`<<include>>` `set visibility` (UC12):} The User selects the visibility for the \textbf{`Path`} (e.g., "Public" or "Private") [R39]. \\
+                                  & 4 - The User taps "Save" or "Discard". \\
+                                  & 5 - \textbf{If} "Save" is pressed: \\
+                                  & \hspace{1em} a. BBP Application sends all finalized data (geometry, name, visibility) to the Server. \\
+                                  & \hspace{1em} b. The Server saves the new \texttt{Path} with its chosen visibility (R39). \\
+                                  & 6 - \textbf{If} "Discard" is pressed, the flow terminates and data is deleted. \\
+        \hline
+        \textbf{Exit condition}   & The new \texttt{Path} is saved with the chosen visibility, or all data is discarded. \\
+        \hline
+        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
+                                    \item Invalid data (e.g., missing name). The system shows an error and remains on the save screen.
+                                  \end{itemize}\\
+        \hline
+        \caption{Save path use case.}
+        \label{tab:uc_save_path}
+    \end{longtable}
+\end{center}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_12.png}
+        \caption{UC12: Save path}
+        \label{fig:UC12: Save path}%
     \end{center}
 \end{figure}
 
@@ -541,11 +637,92 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 \newpage
 
-\subsection{Mapping on goals}
-\label{subsec:mapping_on_goals}%
+\subsection{Mapping on Goals}
+\label{subsec:mapping_on_goals}
 
-\caption{Traceability Matrix for Goals and Requirements}
-\label{tab:traceability}
+% Elenco dei Goals
+\begin{itemize}
+    \item \textbf{G1:} Support personal cycling activity tracking
+    \item \textbf{G2:} Gather, aggregate, and provide users with actionable data regarding cycle path conditions
+    \item \textbf{G3:} Facilitate the discovery and navigation of suitable cycling routes
+    \item \textbf{G4:} Enhance trip analysis by enriching recorded user trips with relevant meteorological and physical data
+    \item \textbf{G5:} Establish a community-based path evaluation system
+\end{itemize}
+
+% Goal G1
+\subsubsection*{G1: Support personal cycling activity tracking}
+
+\begin{table}[ht]
+\centering
+\caption{Goal G1: Support personal cycling activity tracking}
+\label{tab:G1}
+\begin{tabularx}{\textwidth}{|X|X|}
+\hline
+R1: BBP allows Users to sign up & D1: Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors. \\ \hline
+R2: BBP shall verify that the username and email provided during registration are not already in use. & D2: The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken. \\ \hline
+R19: BBP shall provide feedback to the user in case of failed login attempts (e.g., incorrect credentials). & D7: Users act in good faith when providing manual data or confirming automatic detections. \\ \hline
+\end{tabularx}
+\end{table}
+
+% Goal G2
+\subsubsection*{G2: Gather, aggregate, and provide actionable data regarding cycle path conditions}
+
+\begin{table}[ht]
+\centering
+\caption{Goal G2: Gather, aggregate, and provide actionable data regarding cycle path conditions}
+\label{tab:G2}
+\begin{tabularx}{\textwidth}{|X|X|}
+\hline
+\textbf{Requirement} & \textbf{Domain Assumption} \\ \hline
+R7: BBP shall allow any user to search for public bike paths by specifying an origin and a destination. & D3: Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations). \\ \hline
+R9: BBP shall calculate a merged status for each searched path based on its associated Status_report instances. & D4: A data threshold exists to reliably distinguish significant movements (potholes) from normal biking vibrations. \\ \hline
+\end{tabularx}
+\end{table}
+
+% Goal G3
+\subsubsection*{G3: Facilitate the discovery and navigation of suitable cycling routes}
+
+\begin{table}[ht]
+\centering
+\caption{Goal G3: Facilitate the discovery and navigation of suitable cycling routes}
+\label{tab:G3}
+\begin{tabularx}{\textwidth}{|X|X|}
+\hline
+\textbf{Requirement} & \textbf{Domain Assumption} \\ \hline
+R14: BBP shall retrieve and display current weather forecast information for the selected path. & D12: The user, while cycling, will not change the track or get lost. \\ \hline
+R15: BBP shall allow any user to select a path from the search results to view its details. & D14: Paths refer to either dedicated bike tracks or roads with low traffic and cycling-compatible speeds. \\ \hline
+\end{tabularx}
+\end{table}
+
+% Goal G4
+\subsubsection*{G4: Enhance trip analysis by enriching recorded user trips with relevant meteorological and physical data}
+
+\begin{table}[ht]
+\centering
+\caption{Goal G4: Enhance trip analysis by enriching recorded user trips with relevant meteorological and physical data}
+\label{tab:G4}
+\begin{tabularx}{\textwidth}{|X|X|}
+\hline
+\textbf{Requirement} & \textbf{Domain Assumption} \\ \hline
+R29: After recording, BBP shall retrieve and associate weather information with the trip. & D11: The external weather service API is available, stable, and provides accurate data. \\ \hline
+\end{tabularx}
+\end{table}
+
+% Goal G5
+\subsubsection*{G5: Establish a community-based path evaluation system}
+
+\begin{table}[ht]
+\centering
+\caption{Goal G5: Establish a community-based path evaluation system}
+\label{tab:G5}
+\begin{tabularx}{\textwidth}{|X|X|}
+\hline
+\textbf{Requirement} & \textbf{Domain Assumption} \\ \hline
+R36: BBP shall allow RCY to manually create paths on a map. & D8: “Fresh” (recent) information is considered more relevant than older data when describing a path’s status. \\ \hline
+R37: BBP shall allow RCY to submit Status_reports manually for paths. & D9: Users provide correct and rational evaluations during path assessments. \\ \hline
+\end{tabularx}
+\end{table}
+
 
 
 

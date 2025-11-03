@@ -63,10 +63,10 @@
 \end{center}
 
 % ======================
-% 2. path CONSULTATION
+% 2. Path CONSULTATION
 % ======================
 
-\subsubsection{path Consultation Scenarios}
+\subsubsection{Path Consultation Scenarios}
 \newcounter{rcs}
 \setcounter{rcs}{1}
 \newcommand{\crcs}{\thercs\stepcounter{rcs}}
@@ -80,9 +80,9 @@
         \hline
         \textbf{Preconditions} & Internet connection available (\hyperref[da:12]{DA12}). \\
         \hline
-        \textbf{Description} & Marco uses the search bar to set “Stazione Garibaldi” as the origin and “Parco di Monza” as the destination. The BBP system processes the query, computes path scores, and shows an ordered list. Marco selects “path A,” and the app displays the path, details (distance, elevation), and weather forecast (\hyperref[da:11]{DA11}). \\
+        \textbf{Description} & Marco uses the search bar to set “Stazione Garibaldi” as the origin and “Parco di Monza” as the destination. The BBP system processes the query, computes Path scores, and shows an ordered list. Marco selects “Path A,” and the app displays the Path, details (distance, elevation), and weather forecast (\hyperref[da:11]{DA11}). \\
         \hline
-        \textbf{Postconditions} & paths are displayed; user views the selected path and related data. \\
+        \textbf{Postconditions} & Paths are displayed; user views the selected Path and related data. \\
         \hline
     \end{longtable}
 \end{center}
@@ -94,11 +94,11 @@
         \hline
         \textbf{Actor} & BBP System \\
         \hline
-        \textbf{Preconditions} & User search triggered (Scenario 2.1). Data from past path reports available (\hyperref[da:8]{DA8})(\hyperref[da:9]{DA9}). \\
+        \textbf{Preconditions} & User search triggered (Scenario 2.1). Data from past Path reports available (\hyperref[da:8]{DA8})(\hyperref[da:9]{DA9}). \\
         \hline
-        \textbf{Description} & “path B” has three status updates: two “Requires Maintenance” and one “Optimal.” The system’s merging algorithm aggregates the data based on freshness (\hyperref[da:8]{DA8} and majority (\hyperref[da:9]{DA9}), assigning “Requires Maintenance.” The scoring algorithm uses this to compute a final score of 6.5. \\
+        \textbf{Description} & “Path B” has three status updates: two “Requires Maintenance” and one “Optimal.” The system’s merging algorithm aggregates the data based on freshness (\hyperref[da:8]{DA8} and majority (\hyperref[da:9]{DA9}), assigning “Requires Maintenance.” The scoring algorithm uses this to compute a final score of 6.5. \\
         \hline
-        \textbf{Postconditions} & Aggregated path status and updated score are displayed to the user. \\
+        \textbf{Postconditions} & Aggregated Path status and updated score are displayed to the user. \\
         \hline
     \end{longtable}
 \end{center}
@@ -106,15 +106,15 @@
 \begin{center} 
     \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
-        \textbf{Scenario ID} & \textbf{2.\crcs – Search (Exception – No path Found)} \\
+        \textbf{Scenario ID} & \textbf{2.\crcs – Search (Exception – No Path Found)} \\
         \hline
         \textbf{Actor} & Marco (user) \\
         \hline
         \textbf{Preconditions} & Query between remote or unsupported locations. \\
         \hline
-        \textbf{Description} & Marco searches for a path, but no publishable results match the criteria. The BBP system displays: “No BBP path found. Be the first to create one!” \\
+        \textbf{Description} & Marco searches for a Path, but no publishable results match the criteria. The BBP system displays: “No BBP Path found. Be the first to create one!” \\
         \hline
-        \textbf{Postconditions} & No results displayed; user invited to create a path. \\
+        \textbf{Postconditions} & No results displayed; user invited to create a Path. \\
         \hline
     \end{longtable}
 \end{center}
@@ -126,9 +126,9 @@
         \hline
         \textbf{Actor} & Marco (user) \\
         \hline
-        \textbf{Preconditions} & A path has been selected. Accurate GPS assumed (\hyperref[da:2]{DA2}). \\
+        \textbf{Preconditions} & A Path has been selected. Accurate GPS assumed (\hyperref[da:2]{DA2}). \\
         \hline
-        \textbf{Description} & Marco presses “Follow path”, The app loads the path on an External navigation app. This app guides him along the path. Ultimately, Marcom returns to BBP, offering him the data of the trip and offers to register Marco so he can save his ride information. \\
+        \textbf{Description} & Marco presses “Follow Path”, The app loads the Path on an External navigation app. This app guides him along the Path. Ultimately, Marcom returns to BBP, offering him the data of the trip and offers to register Marco so he can save his ride information. \\
         \hline
         \textbf{Postconditions} & Trip completed; user may register or view data summary. \\
         \hline
@@ -137,10 +137,10 @@
 
 
 % ======================
-% 3. path CREATION
+% 3. Path CREATION
 % ======================
 
-\subsubsection{path Creation Scenarios}
+\subsubsection{Path Creation Scenarios}
 \newcounter{rc}
 \setcounter{rc}{1}
 \newcommand{\crc}{\therc\stepcounter{rc}}
@@ -148,15 +148,15 @@
 \begin{center} 
     \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
        \hline
-        \textbf{Scenario ID} & \textbf{3.\crc – Manual path Creation (Success)} \\
+        \textbf{Scenario ID} & \textbf{3.\crc – Manual Path Creation (Success)} \\
         \hline
         \textbf{Actor} & Anna (registered user) \\
         \hline
         \textbf{Preconditions} & User logged in; understands options (\hyperref[da:10]{DA10}). \\
         \hline
-        \textbf{Description} & From her profile, Anna selects “Create Manual path.” She draws the path on the map, names it “Tuesday Ride,” places maintenance pins, activates “Make Public,” and presses “Save” (\hyperref[da:2]{DA2}). The path becomes available to others. \\
+        \textbf{Description} & From her profile, Anna selects “Create Manual Path.” She draws the Path on the map, names it “Tuesday Ride,” places maintenance pins, activates “Make Public,” and presses “Save” (\hyperref[da:2]{DA2}). The Path becomes available to others. \\
       \hline
-     \textbf{Postconditions} & The new path is created and visible to all users. \\
+     \textbf{Postconditions} & The new Path is created and visible to all users. \\
        \hline
     \end{longtable}
 \end{center}
@@ -202,9 +202,9 @@
         \hline
         \textbf{Actor} & Carlo (registered user) \\
         \hline
-        \textbf{Preconditions} & Flat and obstacle-free path; no sensor spikes (\hyperref[da:4]{DA4}). \\
+        \textbf{Preconditions} & Flat and obstacle-free Path; no sensor spikes (\hyperref[da:4]{DA4}). \\
         \hline
-        \textbf{Description} & Carlo rides on a smooth path. No anomalies are detected. When pressing “End and Save,” BBP skips the “Review” step and directly shows the summary screen. \\
+        \textbf{Description} & Carlo rides on a smooth Path. No anomalies are detected. When pressing “End and Save,” BBP skips the “Review” step and directly shows the summary screen. \\
         \hline
         \textbf{Postconditions} & Trip saved successfully without detected issues. \\
         \hline
@@ -234,15 +234,15 @@ The system's structure revolves around the base \textbf{User} entity. The \textt
 
 A core distinction is made between a \texttt{Trip} and a \texttt{Path}. A \texttt{Trip} represents a specific, private cycling session recorded by a \texttt{Registered\_user}. It is fundamentally defined as a composition of multiple \texttt{GPS\_points}, each containing latitude, longitude, and a timestamp, thus capturing the entire journey. Furthermore, each \texttt{Trip} is linked via composition to exactly one \texttt{Statistic} object (holding calculated data like \texttt{avg\_speed}, \texttt{distance}, \texttt{duration}) and associated with one \texttt{Weather\_info} object (containing \texttt{temperature}, \texttt{wind\_speed}, \texttt{conditions}) obtained from external sources.
 
-Conversely, the \texttt{Path} class represents a public, discoverable path, potentially derived from a user's \texttt{Trip} or created manually. Like a \texttt{Trip}, it is composed of \texttt{GPS\_points} defining its geometry. Crucially, a \texttt{Path} serves as an aggregation point for community feedback, being associated with multiple \texttt{Report} instances. The \texttt{<<Abstract>> Report} class acts as the base for all user-submitted information regarding a \texttt{Path}, containing a vital \texttt{timestamp} attribute used for the merging algorithm's "freshness" logic. It has two concrete specializations:
+Conversely, the \texttt{Path} class represents a public, discoverable Path, potentially derived from a user's \texttt{Trip} or created manually. Like a \texttt{Trip}, it is composed of \texttt{GPS\_points} defining its geometry. Crucially, a \texttt{Path} serves as an aggregation point for community feedback, being associated with multiple \texttt{Report} instances. The \texttt{<<Abstract>> Report} class acts as the base for all user-submitted information regarding a \texttt{Path}, containing a vital \texttt{timestamp} attribute used for the merging algorithm's "freshness" logic. It has two concrete specializations:
 \begin{itemize}[noitemsep, topsep=0pt]
-    \item \texttt{Status\_report}: Captures user assessments of the path's condition via the \texttt{<<Enum>> status} attribute (e.g., ``Optimal'', ``Requires Maintenance'').
+    \item \texttt{Status\_report}: Captures user assessments of the Path's condition via the \texttt{<<Enum>> status} attribute (e.g., ``Optimal'', ``Requires Maintenance'').
     \item \texttt{Obstacle\_report}: Represents specific issues like potholes, categorized by an \texttt{<<Enum>> type}. Importantly, it maintains a \texttt{[0..1]} association with a \texttt{sensor\_event}, linking a confirmed report back to the raw sensor data that potentially triggered its detection.
 \end{itemize}
 
 The \texttt{sensor\_event} class models the raw detection triggered by device sensors (accelerometer/gyroscope) during a \texttt{Trip}, storing its location and timestamp before user confirmation. The interaction with external systems (conceptually noted, though not modeled as domain classes) like device sensors and weather services is fundamental for data acquisition.
 
-Overall, the diagram establishes a clear architecture separating \textbf{user management}, private \textbf{trip recording} with detailed metrics, public \textbf{path representation}, and a structured \textbf{reporting system} capable of handling community feedback and sensor-based obstacle detection through inheritance.
+Overall, the diagram establishes a clear architecture separating \textbf{user management}, private \textbf{trip recording} with detailed metrics, public \textbf{Path representation}, and a structured \textbf{reporting system} capable of handling community feedback and sensor-based obstacle detection through inheritance.
 
 
 
@@ -275,9 +275,9 @@ The process begins when the system presents the user with the option to log in, 
 \end{figure}
 
 \paragraph{Search and Display.}
-This diagram illustrates the user journey for finding bike paths in BBP. The process begins when the user accesses the search page and inputs their desired start and destination points. The system then enters a processing phase where it identifies relevant paths and computes their scores, incorporating community-provided status updates through a merging algorithm .
+This diagram illustrates the user journey for finding bike Paths in BBP. The process begins when the user accesses the search page and inputs their desired start and destination points. The system then enters a processing phase where it identifies relevant Paths and computes their scores, incorporating community-provided status updates through a merging algorithm .
 
-Following this, a check determines if any paths were found. If no results are available, a message like "Be The First!" is displayed, and the process ends. If results are found, the system presents a list of paths ordered by score . At this point, the user can either select a specific path to view its details or abort the search, returning to the initial search page. If a path is selected, the system displays comprehensive information including the map, calculated statistics, and the aggregated path status , after which this workflow concludes.
+Following this, a check determines if any Paths were found. If no results are available, a message like "Be The First!" is displayed, and the process ends. If results are found, the system presents a list of Paths ordered by score . At this point, the user can either select a specific Path to view its details or abort the search, returning to the initial search page. If a Path is selected, the system displays comprehensive information including the map, calculated statistics, and the aggregated Path status , after which this workflow concludes.
 
 \begin{figure}[H]
     \begin{center}
@@ -289,11 +289,11 @@ Following this, a check determines if any paths were found. If no results are av
 
 
 \paragraph{Scoring \& Merging.}
-It starts when the search triggers the fetching of all past users reports related to the path.
+It starts when the search triggers the fetching of all past users reports related to the Path.
 
-First, it checks if any reports exist. If there's no data, the process stops for that path. If reports are found, the system merges them, aggregating user feedback (primarily status reports) to determine a representative condition. A check follows to see if the merging resulted in conflicts (e.g., no clear majority status). If a conflict exists, the freshness rule is applied, prioritizing the most recent reports to decide the final status .
+First, it checks if any reports exist. If there's no data, the process stops for that Path. If reports are found, the system merges them, aggregating user feedback (primarily status reports) to determine a representative condition. A check follows to see if the merging resulted in conflicts (e.g., no clear majority status). If a conflict exists, the freshness rule is applied, prioritizing the most recent reports to decide the final status .
 
-Once a definitive, merged status is established (either directly or after resolving conflicts), the system computes the path's score . This final score, along with the merged status, is then outputted ("Score computed, Result page") for use in the search results, completing the evaluation workflow.
+Once a definitive, merged status is established (either directly or after resolving conflicts), the system computes the Path's score . This final score, along with the merged status, is then outputted ("Score computed, Result page") for use in the search results, completing the evaluation workflow.
 
 \begin{figure}[H]
     \begin{center}
@@ -304,7 +304,7 @@ Once a definitive, merged status is established (either directly or after resolv
 \end{figure}
 
 \paragraph{Navigation.}
-After a path has been selected from the search results, the User taps "Follow path". The BBP system then loads the chosen path onto the External navigation service and begins acquiring GPS data to provide stats data based on the user's current position (GPS assumed to be available per DA2).
+After a Path has been selected from the search results, the User taps "Follow Path". The BBP system then loads the chosen Path onto the External navigation service and begins acquiring GPS data to provide stats data based on the user's current position (GPS assumed to be available per DA2).
 
 When the User reaches the destination, the user go back on BBP that analyzes the travel data and checks the user's status. If the user is Anonymous, the system displays an end-of-trip screen offering registration. If the Anonymous User chooses to register ("User accepted"), BBP guides them through the registration process; upon successful registration, the trip is saved to their new account, and the system then displays the trip summary. If the Anonymous User refuses registration ("User refused"), BBP simply presents a view-only summary without permanently storing the ride details, and the process ends.
 
@@ -318,29 +318,29 @@ Conversely, if the User navigating is already Registered, upon arrival at the de
     \end{center}
 \end{figure}
 
-\paragraph{Manual path Creation.}
-From their profile or a dedicated menu, the User selects the option to create a new path manually, initiating the process ("Manual path Selected"). BBP then presents the Manual path Editor page, typically displaying a map interface ready for input. The User iteratively builds the path by interacting with the editor's tools, adding or undoing segments point by point ("User add/undo segment"). This loop continues until the User indicates the path geometry is complete ("Path Completed? - Yes").
+\paragraph{Manual Path Creation.}
+From their profile or a dedicated menu, the User selects the option to create a new Path manually, initiating the process ("Manual Path Selected"). BBP then presents the Manual Path Editor page, typically displaying a map interface ready for input. The User iteratively builds the Path by interacting with the editor's tools, adding or undoing segments point by point ("User add/undo segment"). This loop continues until the User indicates the Path geometry is complete ("Path Completed? - Yes").
 
-Upon completion, the system may perform an initial calculation of basic geometric properties like distance ("/ calculate stats"). The system then prompts the User, asking if they wish to add specific maintenance or status pins along the path ("Add Maintenance Pins?"). If the User chooses yes ("Yes"), they utilize the provided tool ("Adding maintenance pin tool") to place these markers ("User add pin"). Once finished adding pins, or if they chose not to add any ("No"), the User proceeds to attach metadata. This involves entering essential details like the path Name and setting its visibility (Public or Private).
+Upon completion, the system may perform an initial calculation of basic geometric properties like distance ("/ calculate stats"). The system then prompts the User, asking if they wish to add specific maintenance or status pins along the Path ("Add Maintenance Pins?"). If the User chooses yes ("Yes"), they utilize the provided tool ("Adding maintenance pin tool") to place these markers ("User add pin"). Once finished adding pins, or if they chose not to add any ("No"), the User proceeds to attach metadata. This involves entering essential details like the Path Name and setting its visibility (Public or Private).
 
-Finally, the User initiates the save action, triggering a system validation check ("saved checking validity"). If the submitted path and metadata are deemed invalid ("Invalid")—for example, if a name is missing—the process terminates, likely displaying an error to the User. If the data is valid ("Valid / publish path"), the system saves the path. If marked as public, it's indexed and made available to the community; otherwise, it's saved privately to the User's account. The manual creation process then successfully concludes.
+Finally, the User initiates the save action, triggering a system validation check ("saved checking validity"). If the submitted Path and metadata are deemed invalid ("Invalid")—for example, if a name is missing—the process terminates, likely displaying an error to the User. If the data is valid ("Valid / publish Path"), the system saves the Path. If marked as public, it's indexed and made available to the community; otherwise, it's saved privately to the User's account. The manual creation process then successfully concludes.
 
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/ManualPathCreation.drawio.png}
-        \caption{Manual path Creation state diagram.}
-        \label{fig:Manual_path_Creation_sd}%
+        \caption{Manual Path Creation state diagram.}
+        \label{fig:Manual_Path_Creation_sd}%
     \end{center}
 \end{figure}
 
-\paragraph{Automatic path Creation.}
-When the User presses "Start Recording", BBP initializes the session, updates the display (HUD), and activates the necessary device sensors. Two key processes then run concurrently: the system continuously listens to GPS data to construct the path's geometry, and simultaneously monitors other sensors (accelerometer/gyroscope) to detect potential obstacles like potholes . Any sensor reading that surpasses a predefined threshold is internally logged as a pending detection, allowing the user to continue riding without immediate interruption.
+\paragraph{Automatic Path Creation.}
+When the User presses "Start Recording", BBP initializes the session, updates the display (HUD), and activates the necessary device sensors. Two key processes then run concurrently: the system continuously listens to GPS data to construct the Path's geometry, and simultaneously monitors other sensors (accelerometer/gyroscope) to detect potential obstacles like potholes . Any sensor reading that surpasses a predefined threshold is internally logged as a pending detection, allowing the user to continue riding without immediate interruption.
 
-Once the User presses "End", both data streams stop. The system first elaborates the recorded path, calculating metrics such as total distance and elevation change. It then performs a crucial check: is a review required? This is determined by verifying if any pending detections were logged during the trip (PendingDetections > 0).
+Once the User presses "End", both data streams stop. The system first elaborates the recorded Path, calculating metrics such as total distance and elevation change. It then performs a crucial check: is a review required? This is determined by verifying if any pending detections were logged during the trip (PendingDetections > 0).
 
-If a review is necessary ("Yes"), BBP presents an interface showing the locations of the potential detections on the recorded path ("Show where are the detection"). The user is prompted to confirm or reject each detection individually . Only those explicitly confirmed by the user are retained for reporting purposes.
+If a review is necessary ("Yes"), BBP presents an interface showing the locations of the potential detections on the recorded Path ("Show where are the detection"). The user is prompted to confirm or reject each detection individually . Only those explicitly confirmed by the user are retained for reporting purposes.
 
-After the review step is completed (or if no review was needed initially), the system calculates the final trip summary, incorporating the derived statistics, and fetches the relevant weather information for the time and place of the ride . The complete Trip object, including the path, statistics, weather data, and any confirmed obstacle detections, is then persisted (stored). Finally, BBP displays the summary screen to the user. From this screen, the user has the option to publish the path ("Yes / publish track"), making it visible to the community, or simply keep it private/discard the recording ("No / discard and go homepage"), concluding the automatic recording workflow
+After the review step is completed (or if no review was needed initially), the system calculates the final trip summary, incorporating the derived statistics, and fetches the relevant weather information for the time and place of the ride . The complete Trip object, including the Path, statistics, weather data, and any confirmed obstacle detections, is then persisted (stored). Finally, BBP displays the summary screen to the user. From this screen, the user has the option to publish the Path ("Yes / publish track"), making it visible to the community, or simply keep it private/discard the recording ("No / discard and go homepage"), concluding the automatic recording workflow
 
 \begin{figure}[H]
     \begin{center}
@@ -359,27 +359,28 @@ Here are listed a summary of the main functions of the BBP system:\\\\
 \textbf{Signup:} The User enters email and password to create a new BBP account; If checks fail (e.g., email already exists), BBP shows an error message, otherwise the user is redirected to the map as a registered user.\\
 \textbf{Login:} The User types credentials (nickname/email and password); if valid, BBP starts the session and shows the main map; otherwise, an error is shown and the User remains on the login page.\\
 \textbf{Logout:} The User ends the current session; subsequent access requires logging in again.\\
-\textbf{Search path:} The User specifies origin and destination; BBP computes scores and returns an ordered list of publishable paths.\\
-\textbf{View path details:} After selecting a path, BBP displays the polyline, distance, elevation, the merged current status, reported obstacles, and the weather forecast associated with the path .\\
-\textbf{Follow path (Navigation):} The User taps “Follow path”; BBP redirect to an External navigation service and use GPS to acquire travel data. At the end, BBP show the summary of the trip and offer registration to save the data.\\
-\textbf{Start Automatic Recording:} A registered User starts a session; BBP tracks the path (GPS) and live stats while acquiring motion-sensor data (accelerometer/gyroscope).\\
+\textbf{Search Path:} The User specifies origin and destination; BBP computes scores and returns an ordered list of publishable Paths.\\
+\textbf{View Path details:} After selecting a Path, BBP displays the polyline, distance, elevation, the merged current status, reported obstacles, and the weather forecast associated with the Path .\\
+\textbf{Follow Path (Navigation):} The User taps “Follow Path”; BBP redirect to an External navigation service and use GPS to acquire travel data. At the end, BBP show the summary of the trip and offer registration to save the data.\\
+\textbf{Start Automatic Recording:} A registered User starts a session; BBP tracks the Path (GPS) and live stats while acquiring motion-sensor data (accelerometer/gyroscope).\\
 \textbf{Automatic Detection Review:} At the end of recording, BBP asks the User to confirm or reject sensor-detected anomalies (e.g., potholes); only confirmed detections are retained.\\
 \textbf{End \& Save Trip:} BBP computes trip statistics and attaches a weather snapshot; the trip (and any confirmed detections) is saved to the User’s archive.\\
-\textbf{Manual path dreation:} The User opens the editor, draws the path, optionally adds maintenance pins, sets type and visibility, and presses “Save.”\\
-\textbf{Publish/Privacy Choice:} When saving a manually created path, the User can make it Public (visible to everyone) or keep it Private in their library.\\
-\textbf{path Scoring \& Merging:} For searched paths, BBP aggregates community reports by majority and freshness to derive the current status and compute the path score shown in results.\\
+\textbf{Manual Path creation :} The User opens the editor, draws the Path, optionally adds maintenance pins, sets type and visibility, and presses “Save.”\\
+\textbf{Publish/Privacy Path choice:} When saving a manually created Path, the User can make it Public (visible to everyone) or keep it Private in their library.\\
+\textbf{Publish/Privacy Trip Choice:} After a Trip (Navigation or automatic Path creation), the User can make it Public (visible to everyone as statistics of the Path) or keep it Private in their library.\\
+\textbf{Path Scoring \& Merging:} For searched Paths, BBP aggregates community reports by majority and freshness to derive the current status and compute the Path score shown in results.\\
 \textbf{My Trips \& Summaries:} Registered Users can view stored trips with summaries (distance, duration, elevation, average speed) and associated weather info.\\
-\textbf{Notifications \& Messages:} BBP displays confirmations, success, or error messages during key actions (e.g., save completed, invalid credentials, no path found).\\
+\textbf{Notifications \& Messages:} BBP displays confirmations, success, or error messages during key actions (e.g., save completed, invalid credentials, no Path found).\\
 
 \section{User characteristic}
 \label{sec:User_characteristic}%
 
 There are two categories of BBP users: Anonymous Users and Registered Users. Their main characteristics:
 \begin{itemize}
-    \item \textbf{Anonymous User (Guest).} Can use BBP without an account to search for paths between an origin and a destination and visualize them on the map, ranked by score. May follow an existing path (navigation / view-only trip summary), but cannot save rides or publish information. A network connection and location access are required during use.  
-    \item \textbf{Registered User.} Creates an account to record and store personal trips, view trip statistics (e.g., total distance, average speed), and—when available—have trips enriched with weather data retrieved from an external service. Can contribute publishable information about bike paths in two ways: (i) manual mode by entering path information, and (ii) automated mode by letting BBP acquire GPS plus motion-sensor data (accelerometer/gyroscope) while riding; automated detections are confirmed/corrected by the user before publication. Registered users can also choose whether contributed information is public (publishable) or kept private.
+    \item \textbf{Anonymous User (Guest).} Can use BBP without an account to search for Paths between an origin and a destination and visualize them on the map, ranked by score. May follow an existing Path (navigation / view-only trip summary), but cannot save rides or publish information. A network connection and location access are required during use.  
+    \item \textbf{Registered User.} Creates an account to record and store personal trips, view trip statistics (e.g., total distance, average speed), and—when available—have trips enriched with weather data retrieved from an external service. Can contribute publishable information about bike Paths in two ways: (i) manual mode by entering Path information, and (ii) automated mode by letting BBP acquire GPS plus motion-sensor data (accelerometer/gyroscope) while riding; automated detections are confirmed/corrected by the user before publication. Registered users can also choose whether contributed information is public (publishable) or kept private.
 \end{itemize}
-Both user types benefit from the system’s path scoring and visualization; only registered users can save trips and contribute new information (manual or automated).
+Both user types benefit from the system’s Path scoring and visualization; only registered users can save trips and contribute new information (manual or automated).
 
 \section{Assumptions, dependencies and constraints}
 \label{sec:assumptions_dependencies_constraints}%
@@ -396,7 +397,7 @@ Both user types benefit from the system’s path scoring and visualization; only
         \hline
         DA\cda \label{da:1} & Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors. \\
         \hline
-        DA\cda \label{da:2} & The device's GPS sensor provides location data accurate enough to faithfully reconstruct the path taken. \\
+        DA\cda \label{da:2} & The device's GPS sensor provides location data accurate enough to faithfully reconstruct the Path taken. \\
         \hline
         DA\cda \label{da:3} & Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations). \\
         \hline
@@ -408,9 +409,9 @@ Both user types benefit from the system’s path scoring and visualization; only
         \hline
         DA\cda \label{da:7} & Users act in good faith when providing manual data or confirming automatic detections. \\
         \hline
-        DA\cda \label{da:8} & “Fresh” (recent) information is considered more relevant than older data when describing a path’s status. \\
+        DA\cda \label{da:8} & “Fresh” (recent) information is considered more relevant than older data when describing a Path’s status. \\
         \hline
-        DA\cda \label{da:9} & Users provide correct and rational evaluations during path assessments. \\
+        DA\cda \label{da:9} & Users provide correct and rational evaluations during Path assessments. \\
         \hline
         DA\cda \label{da:10} & Users can correctly understand and distinguish the provided status levels (e.g., “Optimal”, “Requires Maintenance”). \\
         \hline
@@ -418,7 +419,7 @@ Both user types benefit from the system’s path scoring and visualization; only
         \hline
         DA\cda \label{da:12} & The user, while cycling, will not change the track or get lost. \\
         \hline
-        DA\cda \label{da:13} & The device has an active internet connection when searching, saving, or publishing a path. \\
+        DA\cda \label{da:13} & The device has an active internet connection when searching, saving, or publishing a Path. \\
         \hline
         DA\cda \label{da:14} & Paths refer to either dedicated bike tracks or roads with low traffic and cycling-compatible speeds (as per the problem statement). \\
         \hline
@@ -426,7 +427,7 @@ Both user types benefit from the system’s path scoring and visualization; only
         \hline
         DA\cda \label{da:16} & Users will start the recording at the beginning of the trail and end it at the finish line. \\
         \hline
-        DA\cda \label{da:15} & Users will not commit errors while drawing or following the path \\
+        DA\cda \label{da:15} & Users will not commit errors while drawing or following the Path \\
         \hline
         \caption{Domain assumptions.}
         \label{tab:domainassmptn_tab}%
