@@ -1,0 +1,301 @@
+<alloy builddate="2024-07-09T10:29:01.569Z">
+
+<instance bitwidth="4" maxseq="4" mintrace="-1" maxtrace="-1" command="Run FindPublicPathWithActivity for 3 Path, 3 Trip, 3 Registered_user, 5 GPS_point, 3 Statistic, 3 Weather_info, 3 Report, 3 sensor_event" filename="C:\Users\Utente\OneDrive\humanProject\web\Bellosi-Montanelli-Tempobono\RASD\LaTeXCode\Alloy\Alloy.als" tracelength="1" backloop="0">
+
+<sig label="seq/Int" ID="0" parentID="1" builtin="yes">
+</sig>
+
+<sig label="Int" ID="1" parentID="2" builtin="yes">
+</sig>
+
+<sig label="String" ID="3" parentID="2" builtin="yes">
+</sig>
+
+<sig label="this/Optimal" ID="4" parentID="5" one="yes">
+   <atom label="Optimal$0"/>
+</sig>
+
+<sig label="this/Medium" ID="6" parentID="5" one="yes">
+   <atom label="Medium$0"/>
+</sig>
+
+<sig label="this/RequiresMaintenance" ID="7" parentID="5" one="yes">
+   <atom label="RequiresMaintenance$0"/>
+</sig>
+
+<sig label="this/PathStatus" ID="5" parentID="2" abstract="yes" enum="yes">
+</sig>
+
+<sig label="this/Pothole" ID="8" parentID="9" one="yes">
+   <atom label="Pothole$0"/>
+</sig>
+
+<sig label="this/Roadwork" ID="10" parentID="9" one="yes">
+   <atom label="Roadwork$0"/>
+</sig>
+
+<sig label="this/Other" ID="11" parentID="9" one="yes">
+   <atom label="Other$0"/>
+</sig>
+
+<sig label="this/ObstacleType" ID="9" parentID="2" abstract="yes" enum="yes">
+</sig>
+
+<sig label="this/Public" ID="12" parentID="13" one="yes">
+   <atom label="Public$0"/>
+</sig>
+
+<sig label="this/Private" ID="14" parentID="13" one="yes">
+   <atom label="Private$0"/>
+</sig>
+
+<sig label="this/Visibility" ID="13" parentID="2" abstract="yes" enum="yes">
+</sig>
+
+<sig label="this/GPS_point" ID="15" parentID="2">
+   <atom label="GPS_point$0"/>
+</sig>
+
+<sig label="this/Statistic" ID="16" parentID="2">
+   <atom label="Statistic$0"/>
+</sig>
+
+<sig label="this/Weather_info" ID="17" parentID="2">
+   <atom label="Weather_info$0"/>
+</sig>
+
+<sig label="this/Registered_user" ID="18" parentID="2">
+   <atom label="Registered_user$0"/>
+   <atom label="Registered_user$1"/>
+</sig>
+
+<field label="trips" ID="19" parentID="18">
+   <tuple> <atom label="Registered_user$0"/> <atom label="Trip$0"/> </tuple>
+   <tuple> <atom label="Registered_user$1"/> <atom label="Trip$1"/> </tuple>
+   <types> <type ID="18"/> <type ID="20"/> </types>
+</field>
+
+<field label="createdPaths" ID="21" parentID="18">
+   <tuple> <atom label="Registered_user$0"/> <atom label="Path$1"/> </tuple>
+   <tuple> <atom label="Registered_user$1"/> <atom label="Path$0"/> </tuple>
+   <types> <type ID="18"/> <type ID="22"/> </types>
+</field>
+
+<field label="submittedReports" ID="23" parentID="18">
+   <tuple> <atom label="Registered_user$0"/> <atom label="Obstacle_report$0"/> </tuple>
+   <types> <type ID="18"/> <type ID="24"/> </types>
+</field>
+
+<sig label="this/Path" ID="22" parentID="2">
+   <atom label="Path$0"/>
+   <atom label="Path$1"/>
+</sig>
+
+<field label="geometry" ID="25" parentID="22">
+   <tuple> <atom label="Path$1"/> <atom label="GPS_point$0"/> </tuple>
+   <types> <type ID="22"/> <type ID="15"/> </types>
+</field>
+
+<field label="pathVisibility" ID="26" parentID="22">
+   <tuple> <atom label="Path$0"/> <atom label="Private$0"/> </tuple>
+   <tuple> <atom label="Path$1"/> <atom label="Public$0"/> </tuple>
+   <types> <type ID="22"/> <type ID="13"/> </types>
+</field>
+
+<field label="creator" ID="27" parentID="22">
+   <tuple> <atom label="Path$0"/> <atom label="Registered_user$1"/> </tuple>
+   <tuple> <atom label="Path$1"/> <atom label="Registered_user$0"/> </tuple>
+   <types> <type ID="22"/> <type ID="18"/> </types>
+</field>
+
+<field label="reports" ID="28" parentID="22">
+   <tuple> <atom label="Path$1"/> <atom label="Obstacle_report$0"/> </tuple>
+   <types> <type ID="22"/> <type ID="24"/> </types>
+</field>
+
+<field label="performances" ID="29" parentID="22">
+   <tuple> <atom label="Path$1"/> <atom label="Trip$0"/> </tuple>
+   <tuple> <atom label="Path$1"/> <atom label="Trip$1"/> </tuple>
+   <types> <type ID="22"/> <type ID="20"/> </types>
+</field>
+
+<sig label="this/sensor_event" ID="30" parentID="2">
+   <atom label="sensor_event$0"/>
+</sig>
+
+<field label="location" ID="31" parentID="30">
+   <tuple> <atom label="sensor_event$0"/> <atom label="GPS_point$0"/> </tuple>
+   <types> <type ID="30"/> <type ID="15"/> </types>
+</field>
+
+<field label="trip" ID="32" parentID="30">
+   <tuple> <atom label="sensor_event$0"/> <atom label="Trip$0"/> </tuple>
+   <types> <type ID="30"/> <type ID="20"/> </types>
+</field>
+
+<sig label="this/Trip" ID="20" parentID="2">
+   <atom label="Trip$0"/>
+   <atom label="Trip$1"/>
+</sig>
+
+<field label="trace" ID="33" parentID="20">
+   <tuple> <atom label="Trip$0"/> <atom label="GPS_point$0"/> </tuple>
+   <tuple> <atom label="Trip$1"/> <atom label="GPS_point$0"/> </tuple>
+   <types> <type ID="20"/> <type ID="15"/> </types>
+</field>
+
+<field label="stats" ID="34" parentID="20">
+   <tuple> <atom label="Trip$0"/> <atom label="Statistic$0"/> </tuple>
+   <tuple> <atom label="Trip$1"/> <atom label="Statistic$0"/> </tuple>
+   <types> <type ID="20"/> <type ID="16"/> </types>
+</field>
+
+<field label="weather" ID="35" parentID="20">
+   <tuple> <atom label="Trip$0"/> <atom label="Weather_info$0"/> </tuple>
+   <tuple> <atom label="Trip$1"/> <atom label="Weather_info$0"/> </tuple>
+   <types> <type ID="20"/> <type ID="17"/> </types>
+</field>
+
+<field label="owner" ID="36" parentID="20">
+   <tuple> <atom label="Trip$0"/> <atom label="Registered_user$0"/> </tuple>
+   <tuple> <atom label="Trip$1"/> <atom label="Registered_user$1"/> </tuple>
+   <types> <type ID="20"/> <type ID="18"/> </types>
+</field>
+
+<field label="path" ID="37" parentID="20">
+   <tuple> <atom label="Trip$0"/> <atom label="Path$1"/> </tuple>
+   <tuple> <atom label="Trip$1"/> <atom label="Path$1"/> </tuple>
+   <types> <type ID="20"/> <type ID="22"/> </types>
+</field>
+
+<field label="tripVisibility" ID="38" parentID="20">
+   <tuple> <atom label="Trip$0"/> <atom label="Private$0"/> </tuple>
+   <tuple> <atom label="Trip$1"/> <atom label="Public$0"/> </tuple>
+   <types> <type ID="20"/> <type ID="13"/> </types>
+</field>
+
+<field label="detections" ID="39" parentID="20">
+   <tuple> <atom label="Trip$0"/> <atom label="sensor_event$0"/> </tuple>
+   <types> <type ID="20"/> <type ID="30"/> </types>
+</field>
+
+<sig label="this/Status_report" ID="40" parentID="24">
+</sig>
+
+<field label="status" ID="41" parentID="40">
+   <types> <type ID="40"/> <type ID="5"/> </types>
+</field>
+
+<sig label="this/Obstacle_report" ID="42" parentID="24">
+   <atom label="Obstacle_report$0"/>
+</sig>
+
+<field label="type" ID="43" parentID="42">
+   <tuple> <atom label="Obstacle_report$0"/> <atom label="Other$0"/> </tuple>
+   <types> <type ID="42"/> <type ID="9"/> </types>
+</field>
+
+<field label="location" ID="44" parentID="42">
+   <tuple> <atom label="Obstacle_report$0"/> <atom label="GPS_point$0"/> </tuple>
+   <types> <type ID="42"/> <type ID="15"/> </types>
+</field>
+
+<field label="triggeredBy" ID="45" parentID="42">
+   <tuple> <atom label="Obstacle_report$0"/> <atom label="sensor_event$0"/> </tuple>
+   <types> <type ID="42"/> <type ID="30"/> </types>
+</field>
+
+<sig label="this/Report" ID="24" parentID="2" abstract="yes">
+</sig>
+
+<field label="timestamp" ID="46" parentID="24">
+   <tuple> <atom label="Obstacle_report$0"/> <atom label="7"/> </tuple>
+   <types> <type ID="24"/> <type ID="1"/> </types>
+</field>
+
+<field label="author" ID="47" parentID="24">
+   <tuple> <atom label="Obstacle_report$0"/> <atom label="Registered_user$0"/> </tuple>
+   <types> <type ID="24"/> <type ID="18"/> </types>
+</field>
+
+<field label="path" ID="48" parentID="24">
+   <tuple> <atom label="Obstacle_report$0"/> <atom label="Path$1"/> </tuple>
+   <types> <type ID="24"/> <type ID="22"/> </types>
+</field>
+
+<sig label="ordering/Ord" ID="49" parentID="2" one="yes" private="yes">
+   <atom label="ordering/Ord$0"/>
+</sig>
+
+<field label="First" ID="50" parentID="49" private="yes">
+   <tuple> <atom label="ordering/Ord$0"/> <atom label="Optimal$0"/> </tuple>
+   <types> <type ID="49"/> <type ID="5"/> </types>
+</field>
+
+<field label="Next" ID="51" parentID="49" private="yes">
+   <tuple> <atom label="ordering/Ord$0"/> <atom label="Optimal$0"/> <atom label="Medium$0"/> </tuple>
+   <tuple> <atom label="ordering/Ord$0"/> <atom label="Medium$0"/> <atom label="RequiresMaintenance$0"/> </tuple>
+   <types> <type ID="49"/> <type ID="5"/> <type ID="5"/> </types>
+</field>
+
+<sig label="open$3/Ord" ID="52" parentID="2" one="yes" private="yes">
+   <atom label="open$3/Ord$0"/>
+</sig>
+
+<field label="First" ID="53" parentID="52" private="yes">
+   <tuple> <atom label="open$3/Ord$0"/> <atom label="Pothole$0"/> </tuple>
+   <types> <type ID="52"/> <type ID="9"/> </types>
+</field>
+
+<field label="Next" ID="54" parentID="52" private="yes">
+   <tuple> <atom label="open$3/Ord$0"/> <atom label="Pothole$0"/> <atom label="Roadwork$0"/> </tuple>
+   <tuple> <atom label="open$3/Ord$0"/> <atom label="Roadwork$0"/> <atom label="Other$0"/> </tuple>
+   <types> <type ID="52"/> <type ID="9"/> <type ID="9"/> </types>
+</field>
+
+<sig label="open$4/Ord" ID="55" parentID="2" one="yes" private="yes">
+   <atom label="open$4/Ord$0"/>
+</sig>
+
+<field label="First" ID="56" parentID="55" private="yes">
+   <tuple> <atom label="open$4/Ord$0"/> <atom label="Public$0"/> </tuple>
+   <types> <type ID="55"/> <type ID="13"/> </types>
+</field>
+
+<field label="Next" ID="57" parentID="55" private="yes">
+   <tuple> <atom label="open$4/Ord$0"/> <atom label="Public$0"/> <atom label="Private$0"/> </tuple>
+   <types> <type ID="55"/> <type ID="13"/> <type ID="13"/> </types>
+</field>
+
+<sig label="univ" ID="2" builtin="yes">
+</sig>
+
+<skolem label="$FindPublicPathWithActivity_p" ID="58">
+   <tuple> <atom label="Path$1"/> </tuple>
+   <types> <type ID="22"/> </types>
+</skolem>
+
+<skolem label="$FindPublicPathWithActivity_t1" ID="59">
+   <tuple> <atom label="Trip$1"/> </tuple>
+   <types> <type ID="20"/> </types>
+</skolem>
+
+<skolem label="$FindPublicPathWithActivity_t2" ID="60">
+   <tuple> <atom label="Trip$0"/> </tuple>
+   <types> <type ID="20"/> </types>
+</skolem>
+
+<skolem label="$FindPublicPathWithActivity_r" ID="61">
+   <tuple> <atom label="Obstacle_report$0"/> </tuple>
+   <types> <type ID="42"/> </types>
+</skolem>
+
+</instance>
+
+<source filename="C:\Users\Utente\OneDrive\humanProject\web\Bellosi-Montanelli-Tempobono\RASD\LaTeXCode\Alloy\Alloy.als" content="// ----------&#x000a;// Best Bike Paths (BBP) Alloy Model&#x000a;// Modella la struttura e i vincoli del sistema BBP come definito nel RASD.&#x000a;// ----------&#x000a;&#x000a;// ----------&#x000a;// 1. Tipi Enumerati (Enums)&#x000a;// Definisce i set di costanti per Status e Visibilit&#x00e0;.&#x000a;// ----------&#x000a;enum PathStatus { Optimal, Medium, RequiresMaintenance }&#x000a;enum ObstacleType { Pothole, Roadwork, Other }&#x000a;enum Visibility { Public, Private }&#x000a;&#x000a;// ----------&#x000a;// 2. Signatures (Le Entit&#x00e0; del Sistema)&#x000a;// Definisce le &quot;classi&quot; e le loro relazioni, come da Class Diagram.&#x000a;// ----------&#x000a;&#x000a;// Atomi di base per i dati&#x000a;sig GPS_point {}&#x000a;sig Statistic {}&#x000a;sig Weather_info {}&#x000a;&#x000a;// L&apos;utente&#x000a;sig Registered_user {&#x000a;    // Relazioni inverse: un utente possiede/crea...&#x000a;    trips: set Trip,&#x000a;    createdPaths: set Path,&#x000a;    submittedReports: set Report&#x000a;}&#x000a;&#x000a;// Il &quot;Modello&quot; di un percorso&#x000a;sig Path {&#x000a;    geometry: set GPS_point,         // Il tracciato GPS che definisce il percorso&#x000a;    pathVisibility: one Visibility,  // Visibilit&#x00e0; del Path (per la ricerca)&#x000a;    creator: one Registered_user,    // Chi ha creato questo Path&#x000a;    &#x000a;    // Relazioni inverse&#x000a;    reports: set Report,             // Tutti i report (status/obstacle) su questo Path&#x000a;    performances: set Trip           // Tutti i Trip registrati su questo Path&#x000a;}&#x000a;&#x000a;// Un evento grezzo del sensore&#x000a;sig sensor_event {&#x000a;    location: one GPS_point,         // Dove &#x00e8; stato rilevato&#x000a;    trip: one Trip                   // Durante quale Trip &#x00e8; stato rilevato&#x000a;}&#x000a;&#x000a;// La &quot;Performance&quot; su un percorso&#x000a;sig Trip {&#x000a;    trace: set GPS_point,            // Il tracciato GPS *registrato* dall&apos;utente&#x000a;    stats: one Statistic,            // Le statistiche *personali* di questo Trip&#x000a;    weather: one Weather_info,       // Il meteo *durante* questo Trip&#x000a;    owner: one Registered_user,      // L&apos;utente che ha registrato questo Trip&#x000a;    path: one Path,                  // Il Path a cui questo Trip &#x00e8; associato&#x000a;    tripVisibility: one Visibility,  // Visibilit&#x00e0; del Trip (per l&apos;aggregazione delle statistiche)&#x000a;    &#x000a;    // Relazione inversa&#x000a;    detections: set sensor_event     // Gli eventi grezzi rilevati durante questo Trip&#x000a;}&#x000a;&#x000a;// Gerarchia dei Report (come da Class Diagram)&#x000a;abstract sig Report {&#x000a;    timestamp: one Int,              // Per la logica di &quot;freschezza&quot; (R9)&#x000a;    author: one Registered_user,     // Chi ha inviato il report&#x000a;    path: one Path                   // Il Path a cui questo report si riferisce&#x000a;}&#x000a;&#x000a;// Report sullo stato (es. &quot;Strada rovinata&quot;)&#x000a;sig Status_report extends Report {&#x000a;    status: one PathStatus&#x000a;}&#x000a;&#x000a;// Report su un ostacolo (confermato)&#x000a;sig Obstacle_report extends Report {&#x000a;    type: one ObstacleType,&#x000a;    location: one GPS_point,         // Posizione dell&apos;ostacolo&#x000a;    // Un Obstacle_report &#x00e8; generato da un sensor_event confermato (R28)&#x000a;    triggeredBy: lone sensor_event   // &apos;lone&apos; = zero o uno [cite: 171]&#x000a;}&#x000a;&#x000a;// ----------&#x000a;// 3. Facts (Invarianti del Modello)&#x000a;// Regole che devono essere VERE in ogni istanza valida del sistema.&#x000a;// ----------&#x000a;fact ModelInvariants {&#x000a;    // ---- Coerenza delle Relazioni Inverse ----&#x000a;    // (Assicura che se A &#x00e8; collegato a B, B sia collegato ad A)&#x000a;    trips = ~owner&#x000a;    createdPaths = ~creator&#x000a;    submittedReports = ~author&#x000a;    reports = ~path&#x000a;    performances = ~path&#x000a;    detections = ~trip&#x000a;&#x000a;    // ---- Vincoli Logici (Requisiti) ----&#x000a;&#x000a;    // R28: Un Obstacle_report pu&#x00f2; esistere solo se &#x00e8; stato triggerato&#x000a;    // da un sensor_event.&#x000a;    all r: Obstacle_report {&#x000a;        some r.triggeredBy&#x000a;    }&#x000a;&#x000a;    // Un sensor_event pu&#x00f2; triggerare al massimo un Obstacle_report.&#x000a;    all e: sensor_event {&#x000a;        lone e.~triggeredBy&#x000a;    }&#x000a;&#x000a;    // Un Obstacle_report (che &#x00e8; confermato) deve riferirsi allo&#x000a;    // stesso Path del Trip che lo ha rilevato.&#x000a;    all r: Obstacle_report {&#x000a;        r.path = r.triggeredBy.trip.path&#x000a;    }&#x000a;&#x000a;    // L&apos;autore di un Obstacle_report (automatico) deve essere&#x000a;    // il proprietario del Trip che lo ha rilevato.&#x000a;    all r: Obstacle_report {&#x000a;        r.author = r.triggeredBy.trip.owner&#x000a;    }&#x000a;&#x000a;    // L&apos;evento (rilevamento grezzo) deve essere parte&#x000a;    // dell&apos;elenco di rilevamenti di quel Trip.&#x000a;    all r: Obstacle_report {&#x000a;        r.triggeredBy in r.triggeredBy.trip.detections&#x000a;    }&#x000a;}&#x000a;&#x000a;// ----------&#x000a;// 4. Predicati (Scenari Esempio)&#x000a;// Per trovare istanze che soddisfano criteri specifici.&#x000a;// ----------&#x000a;&#x000a;// Trova un&apos;istanza di un Path Pubblico con 2 Trip (1 Pubblico, 1 Privato)&#x000a;// e 1 Obstacle Report confermato.&#x000a;pred FindPublicPathWithActivity {&#x000a;    some p: Path {&#x000a;        p.pathVisibility = Public&#x000a;        some disj t1, t2: Trip {&#x000a;            // Entrambi i Trip sono su questo Path&#x000a;            t1.path = p and t2.path = p&#x000a;            // Il Trip t1 &#x00e8; pubblico (aggiorna le medie)&#x000a;            t1.tripVisibility = Public&#x000a;            // Il Trip t2 &#x00e8; privato (solo per l&apos;utente)&#x000a;            t2.tripVisibility = Private&#x000a;            // Sono di utenti diversi&#x000a;            t1.owner != t2.owner&#x000a;        }&#x000a;        // Il Path ha almeno un report di ostacolo confermato&#x000a;        some r: Obstacle_report {&#x000a;            r.path = p&#x000a;        }&#x000a;    }&#x000a;}&#x000a;// Esegui lo scenario (come richiesto da )&#x000a;run FindPublicPathWithActivity for 3 Path, 3 Trip, 3 Registered_user, 5 GPS_point, 3 Statistic, 3 Weather_info, 3 Report, 3 sensor_event&#x000a;// ----------&#x000a;// 5. Assertions (Verifiche dei Requisiti)&#x000a;// Propriet&#x00e0; che vogliamo verificare sul modello.&#x000a;// ----------&#x000a;&#x000a;// Un&apos;asserzione per verificare la logica di visibilit&#x00e0; (R37/R39).&#x000a;// Asserzione 1: Se un Trip &#x00e8; &quot;Pubblico&quot; (per le statistiche),&#x000a;// deve essere associato a un Path che &#x00e8; anch&apos;esso &quot;Pubblico&quot; (per la ricerca).&#x000a;// (Non ha senso aggregare statistiche per un Path che nessuno pu&#x00f2; vedere).&#x000a;assert PublicTripsOnPublicPaths {&#x000a;    all t: Trip {&#x000a;        t.tripVisibility = Public implies t.path.pathVisibility = Public&#x000a;    }&#x000a;}&#x000a;// Controlla l&apos;asserzione (come richiesto da )&#x000a;check PublicTripsOnPublicPaths for 5&#x000a;&#x000a;// Asserzione 2: Se un Path &#x00e8; &quot;Privato&quot;, tutti i Trip registrati&#x000a;// su di esso devono appartenere al creatore di quel Path.&#x000a;assert PrivatePathPrivacy {&#x000a;    all p: Path {&#x000a;        p.pathVisibility = Private implies {&#x000a;            // &apos;p.performances&apos; contiene tutti i trip di quel path&#x000a;            all t: p.performances {&#x000a;                t.owner = p.creator&#x000a;            }&#x000a;        }&#x000a;    }&#x000a;}&#x000a;// Controlla l&apos;asserzione&#x000a;check PrivatePathPrivacy for 5"/>
+
+<source filename="\$alloy4$\models\util\integer.als" content="module util/integer&#x000a;&#x000a;/*&#x000a; * A collection of utility functions for using Integers in Alloy.&#x000a; * Note that integer overflows are silently truncated to the current bitwidth&#x000a; * using the 2&apos;s complement arithmetic, unless the &quot;forbid overfows&quot; option is&#x000a; * turned on, in which case only models that don&apos;t have any overflows are &#x000a; * analyzed. &#x000a; */&#x000a;&#x000a;fun add  [n1, n2: Int] : Int { this/plus[n1, n2] }&#x000a;fun plus [n1, n2: Int] : Int { n1 fun/add n2 }&#x000a;&#x000a;fun sub   [n1, n2: Int] : Int { this/minus[n1, n2] }&#x000a;fun minus [n1, n2: Int] : Int { n1 fun/sub n2 }&#x000a;&#x000a;fun mul [n1, n2: Int] : Int { n1 fun/mul n2 }&#x000a;&#x000a;/**&#x000a; * Performs the division with &quot;round to zero&quot; semantics, except the following 3 cases&#x000a; * 1) if a is 0, then it returns 0&#x000a; * 2) else if b is 0, then it returns 1 if a is negative and -1 if a is positive&#x000a; * 3) else if a is the smallest negative integer, and b is -1, then it returns a&#x000a; */&#x000a;fun div [n1, n2: Int] : Int { n1 fun/div n2 }&#x000a;&#x000a;/** answer is defined to be the unique integer that satisfies &quot;a = ((a/b)*b) + remainder&quot; */&#x000a;fun rem [n1, n2: Int] : Int { n1 fun/rem n2 }&#x000a;&#x000a;/** negate */&#x000a;fun negate [n: Int] : Int { 0 fun/sub n }&#x000a;&#x000a;/** equal to */&#x000a;pred eq [n1, n2: Int] { int[n1] = int[n2] }&#x000a;&#x000a;/** greater than */&#x000a;pred gt [n1, n2: Int] { n1 &gt; n2 }&#x000a;&#x000a;/** less then */&#x000a;pred lt [n1, n2: Int] { n1 &lt; n2 }&#x000a;&#x000a;/** greater than or equal */&#x000a;pred gte [n1, n2: Int] { n1 &gt;= n2 }&#x000a;&#x000a;/** less than or equal */&#x000a;pred lte [n1, n2: Int] { n1 &lt;= n2 }&#x000a;&#x000a;/** integer is zero */&#x000a;pred zero [n: Int] { n = 0 }&#x000a;&#x000a;/** positive */&#x000a;pred pos  [n: Int] { n &gt; 0 }&#x000a;&#x000a;/** negative */&#x000a;pred neg  [n: Int] { n &lt; 0 }&#x000a;&#x000a;/** non-positive */&#x000a;pred nonpos [n: Int] { n &lt;= 0 }&#x000a;&#x000a;/** non-negative */&#x000a;pred nonneg [n: Int] { n &gt;= 0 }&#x000a;&#x000a;/** signum (aka sign or sgn) */&#x000a;fun signum [n: Int] : Int { n&lt;0 =&gt; (0 fun/sub 1) else (n&gt;0 =&gt; 1 else 0) }&#x000a;&#x000a;/**&#x000a; * returns the ith element (zero-based) from the set s&#x000a; * in the ordering of &apos;next&apos;, which is a linear ordering&#x000a; * relation like that provided by util/ordering&#x000a; */&#x000a;fun int2elem[i: Int, next: univ-&gt;univ, s: set univ] : lone s {&#x000a;  {e: s | #^next.e = int i }&#x000a;}&#x000a;&#x000a;/**&#x000a; * returns the index of the element (zero-based) in the&#x000a; * ordering of next, which is a linear ordering relation&#x000a; * like that provided by util/ordering&#x000a; */&#x000a;fun elem2int[e: univ, next: univ-&gt;univ] : lone Int {&#x000a;  Int[#^next.e]&#x000a;}&#x000a;&#x000a;/** returns the largest integer in the current bitwidth */&#x000a;fun max:one Int { fun/max }&#x000a;&#x000a;/** returns the smallest integer in the current bitwidth */&#x000a;fun min:one Int { fun/min }&#x000a;&#x000a;/** maps each integer (except max) to the integer after it */&#x000a;fun next:Int-&gt;Int { fun/next }&#x000a;&#x000a;/** maps each integer (except min) to the integer before it */&#x000a;fun prev:Int-&gt;Int { ~next }&#x000a;&#x000a;/** given a set of integers, return the largest element */&#x000a;fun max [es: set Int]: lone Int { es - es.^prev }&#x000a;&#x000a;/** given a set of integers, return the smallest element */&#x000a;fun min [es: set Int]: lone Int { es - es.^next }&#x000a;&#x000a;/** given an integer, return all integers prior to it */&#x000a;fun prevs [e: Int]: set Int { e.^prev }&#x000a;&#x000a;/** given an integer, return all integers following it */&#x000a;fun nexts [e: Int]: set Int { e.^next }&#x000a;&#x000a;/** returns the larger of the two integers */&#x000a;fun larger [e1, e2: Int]: Int { let a=int[e1], b=int[e2] | (a&lt;b =&gt; b else a) }&#x000a;&#x000a;/** returns the smaller of the two integers */&#x000a;fun smaller [e1, e2: Int]: Int { let a=int[e1], b=int[e2] | (a&lt;b =&gt; a else b) }&#x000a;"/>
+
+<source filename="\$alloy4$\models\util\ordering.als" content="module util/ordering[exactly elem]&#x000a;&#x000a;/*&#x000a; * Creates a single linear ordering over the atoms in elem. It also constrains all&#x000a; * the atoms to exist that are permitted by the scope on elem. That is, if the scope&#x000a; * on a signature S is 5, opening util/ordering[S] will force S to have 5 elements&#x000a; * and create a linear ordering over those five elements. The predicates and&#x000a; * functions below provide access to properties of the linear ordering, such as&#x000a; * which element is first in the ordering, or whether a given element precedes&#x000a; * another. You cannotcreate multiple linear orderings over the same signature with&#x000a; * this model. If you that functionality, try using the util/sequence module instead.&#x000a; *&#x000a; * Technical comment:&#x000a; * An important constraint: elem must contain all atoms permitted by the scope.&#x000a; * This is to let the analyzer optimize the analysis by setting all fields of each&#x000a; * instantiation of Ord to predefined values: e.g. by setting &apos;last&apos; to the highest&#x000a; * atom of elem and by setting &apos;next&apos; to {&lt;T0,T1&gt;,&lt;T1,T2&gt;,...&lt;Tn-1,Tn&gt;}, where n is&#x000a; * the scope of elem. Without this constraint, it might not be true that Ord.last is&#x000a; * a subset of elem, and that the domain and range of Ord.next lie inside elem.&#x000a; *&#x000a; * author: Ilya Shlyakhter&#x000a; * revisions: Daniel jackson&#x000a; */&#x000a;&#x000a;private one sig Ord {&#x000a;   First: set elem,&#x000a;   Next: elem -&gt; elem&#x000a;} {&#x000a;   pred/totalOrder[elem,First,Next]&#x000a;}&#x000a;&#x000a;/** first */&#x000a;fun first: one elem { Ord.First }&#x000a;&#x000a;/** last */&#x000a;fun last: one elem { elem - (next.elem) }&#x000a;&#x000a;/** return a mapping from each element to its predecessor */&#x000a;fun prev : elem-&gt;elem { ~(Ord.Next) }&#x000a;&#x000a;/** return a mapping from each element to its successor */&#x000a;fun next : elem-&gt;elem { Ord.Next }&#x000a;&#x000a;/** return elements prior to e in the ordering */&#x000a;fun prevs [e: elem]: set elem { e.^(~(Ord.Next)) }&#x000a;&#x000a;/** return elements following e in the ordering */&#x000a;fun nexts [e: elem]: set elem { e.^(Ord.Next) }&#x000a;&#x000a;/** e1 is less than e2 in the ordering */&#x000a;pred lt [e1, e2: elem] { e1 in prevs[e2] }&#x000a;&#x000a;/** e1 is greater than e2 in the ordering */&#x000a;pred gt [e1, e2: elem] { e1 in nexts[e2] }&#x000a;&#x000a;/** e1 is less than or equal to e2 in the ordering */&#x000a;pred lte [e1, e2: elem] { e1=e2 || lt [e1,e2] }&#x000a;&#x000a;/** e1 is greater than or equal to e2 in the ordering */&#x000a;pred gte [e1, e2: elem] { e1=e2 || gt [e1,e2] }&#x000a;&#x000a;/** returns the larger of the two elements in the ordering */&#x000a;fun larger [e1, e2: elem]: elem { lt[e1,e2] =&gt; e2 else e1 }&#x000a;&#x000a;/** returns the smaller of the two elements in the ordering */&#x000a;fun smaller [e1, e2: elem]: elem { lt[e1,e2] =&gt; e1 else e2 }&#x000a;&#x000a;/**&#x000a; * returns the largest element in es&#x000a; * or the empty set if es is empty&#x000a; */&#x000a;fun max [es: set elem]: lone elem { es - es.^(~(Ord.Next)) }&#x000a;&#x000a;/**&#x000a; * returns the smallest element in es&#x000a; * or the empty set if es is empty&#x000a; */&#x000a;fun min [es: set elem]: lone elem { es - es.^(Ord.Next) }&#x000a;&#x000a;assert correct {&#x000a;  let mynext = Ord.Next |&#x000a;  let myprev = ~mynext | {&#x000a;     ( all b:elem | (lone b.next) &amp;&amp; (lone b.prev) &amp;&amp; (b !in b.^mynext) )&#x000a;     ( (no first.prev) &amp;&amp; (no last.next) )&#x000a;     ( all b:elem | (b!=first &amp;&amp; b!=last) =&gt; (one b.prev &amp;&amp; one b.next) )&#x000a;     ( !one elem =&gt; (one first &amp;&amp; one last &amp;&amp; first!=last &amp;&amp; one first.next &amp;&amp; one last.prev) )&#x000a;     ( one elem =&gt; (first=elem &amp;&amp; last=elem &amp;&amp; no myprev &amp;&amp; no mynext) )&#x000a;     ( myprev=~mynext )&#x000a;     ( elem = first.*mynext )&#x000a;     (all disj a,b:elem | a in b.^mynext or a in b.^myprev)&#x000a;     (no disj a,b:elem | a in b.^mynext and a in b.^myprev)&#x000a;     (all disj a,b,c:elem | (b in a.^mynext and c in b.^mynext) =&gt;(c in a.^mynext))&#x000a;     (all disj a,b,c:elem | (b in a.^myprev and c in b.^myprev) =&gt;(c in a.^myprev))&#x000a;  }&#x000a;}&#x000a;run {} for exactly 0 elem expect 0&#x000a;run {} for exactly 1 elem expect 1&#x000a;run {} for exactly 2 elem expect 1&#x000a;run {} for exactly 3 elem expect 1&#x000a;run {} for exactly 4 elem expect 1&#x000a;check correct for exactly 0 elem&#x000a;check correct for exactly 1 elem&#x000a;check correct for exactly 2 elem&#x000a;check correct for exactly 3 elem&#x000a;check correct for exactly 4 elem&#x000a;check correct for exactly 5 elem&#x000a;"/>
+
+</alloy>
