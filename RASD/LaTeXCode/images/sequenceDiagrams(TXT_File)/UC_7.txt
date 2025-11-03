@@ -1,12 +1,14 @@
 actor "Registered User" as User
 participant "BBP Application" as App
 participant "Device Sensors (GPS, IMU)" as Sensors
-participant "External Weather Service" as Weather
+
 
 User->>App: tapsStartRecording()
-App->>User: showRecordingHUD()
+App-->>User: showRecordingHUD()
+activate App
 
 App->>Sensors: startLocationUpdates()
+
 activate Sensors
 App->>Sensors: startSensorMonitoring()
 
@@ -30,18 +32,10 @@ App->>Sensors: stopLocationUpdates()
 App->>Sensors: stopSensorMonitoring()
 deactivate Sensors
 
-App->>Weather: getWeatherForTrip(tripData)
-activate Weather
-Weather-->>App: 200_OK(weatherInfo)
-deactivate Weather
 
-note left of App: App calculates final statistics
+
+note left of App: App calculates final statistics  
 note left of App: Checks if sensor events were logged
-App->>User: showSummary(stats)
-opt Review is Required (Events > 0)
-    note over App: Triggers UC8: Review Detections
-    App->>User: showReviewScreen(events)
-end
-    note over App: Triggers:UC Save Trip
-    note over App: Triggers:UC Save Path
-    
+
+note over App: Triggers:UC9 Save Path and Trip
+deactivate App
