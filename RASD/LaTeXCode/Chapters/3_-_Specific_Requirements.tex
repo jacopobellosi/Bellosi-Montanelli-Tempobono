@@ -821,13 +821,18 @@ This section lists the specific functional requirements that the Best Bike Paths
     \begin{tabularx}{\textwidth}{|X|X|}
         \hline
         \begin{itemize}
-            \item [R14] The system retrieves and displays current weather data for the selected path.
-            \item [R15] The system allows users to start navigation for a selected path.
+            \item [R14] BBP shall retrieve and display current weather forecast information for the selected path’s location.
+            \item [R15] BBP shall allow any user to initiate a navigation mode ("Follow Route") for a selected path.
+            \item [R16] Upon completion of navigation by a user, BBP shall show the summary of the trip (e.g., avg. speed, distance,...).
+            \item [R17] Upon completion of navigation by an anonymous user, BBP shall offer the option to register.
+            \item [R18] If an anonymous user refuses registration after navigation, BBP shall discard the navigation session data.
+            \item [R19] If an anonymous user accepts registration after navigation, BBP shall allow them to complete registration and then save the navigated session as a Trip.
         \end{itemize} 
         & 
         \begin{itemize}
-            \item [D12] The user, while cycling, will not change the track or get lost.
-            \item [D14] Paths refer to either dedicated bike tracks or roads with low traffic and cycling-compatible speeds.
+            \item [DA2] The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken.
+            \item [DA12] The user, while cycling, will not change the track or get lost.
+            \item [DA14] Paths refer to either dedicated bike tracks or roads with low traffic and cycling-compatible speeds.
         \end{itemize} 
         \\ \hline
     \end{tabularx}
