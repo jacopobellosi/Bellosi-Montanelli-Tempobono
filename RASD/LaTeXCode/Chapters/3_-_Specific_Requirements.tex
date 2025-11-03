@@ -846,10 +846,12 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \begin{itemize}
             \item [R29] After recording, the system associates weather data with the trip.
+            \item[R30] After recording, the system retrieves and associates weather information with the trip.
+            \item[R31] The system allows the user to save the completed Trip (path, stats, weather, confirmed reports) to their private archive.
         \end{itemize} 
         & 
         \begin{itemize}
-            \item [D11] The external weather service API is available, stable, and provides accurate data.
+            \item [DA11] The external weather service API is available, stable, and provides accurate data.
         \end{itemize} 
         \\ \hline
     \end{tabularx}
@@ -862,13 +864,20 @@ This section lists the specific functional requirements that the Best Bike Paths
     \begin{tabularx}{\textwidth}{|X|X|}
         \hline
         \begin{itemize}
-            \item [R36] The system allows users to manually create paths on a map.
-            \item [R37] The system allows users to submit status reports manually for paths.
+            \item [R36] BBP shall provide an editor for RCY to manually create a path geometry on a map.
+            \item [R37] BBP shall allow RCY to submit Status_reports manually for paths.
+            \item [R38] BBP shall allow RCY to submit Obstacle_reports manually for paths.
+            \item [R39] BBP shall allow an RCY to specify the visibility (Public/Private) when saving a trip or manually created path.
+            \item [R40] BBP shall display feedback messages (confirmations, errors) to the user.
+            \item [R]
         \end{itemize} 
         & 
         \begin{itemize}
-            \item [D8] “Fresh” (recent) information is considered more relevant than older data when describing a path’s status.
-            \item [D9] Users provide correct and rational evaluations during path assessments.
+            \item [DA1] Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors.
+            \item [DA2] The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken.
+            \item [DA8] “Fresh” (recent) information is considered more relevant than older data when describing a path’s status.
+            \item [DA9] Users provide correct and rational evaluations during path assessments.
+            \item [DA10] Users can correctly understand and distinguish the provided status levels (e.g., "Optimal", "Requires Maintenance").
         \end{itemize} 
         \\ \hline
     \end{tabularx}
