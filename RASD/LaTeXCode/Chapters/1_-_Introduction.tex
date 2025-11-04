@@ -3,8 +3,7 @@ The Best Bike Paths (BBP) initiative is architectured with the intent to facilit
 \newpage
 
 \section{Purpose}
-developers who must implement the requirements and can detailed description of BBP.
-It is addressed to the developers who have to implement the requirements and could be used as an agreement between the customer and the contractors.\\ 
+This document provides a detailed description of the BBP system for the developers who must implement the requirements. It is addressed to the developers and could be used as an agreement between the customer and the contractors.
 The document is also intended to provide the customer with a clear and unambiguous description of the system's functionalities and constraints, allowing the customer to validate the requirements and to verify if the system meets the expectations.
 
 \subsection{Goals}
@@ -59,21 +58,23 @@ Functionality within the scope includes: recording user trips (both manually and
         \hline
         WP\cwp      & A User wants to access their account (Login).   \\
         \hline
-        WP\cwp      & A User wants to LogOut   \\
-        \hline
         WP\cwp      & A User wants to find a cycling path between point A and point B.   \\
         \hline
         WP\cwp      & A User wants to view the details of a path (e.g., status, weather, elevation gain). \\
         \hline
-        WP\cwp      & A Registered User wants to record their activity (distance, speed) while cycling (automatic mode).   \\
+        WP\cwp      & A Registered User wants to create a Trip by navigating on an existent path  \\
+        \hline
+        WP\cwp      & A Registered User wants to record a new path by cycling(automatic mode).   \\
         \hline
         WP\cwp      & A Registered User wants to plan a path “at the desk” by drawing it on the map (manual mode).   \\
         \hline
         WP\cwp      & A Registered User wants to save a trip in their personal archive.   \\
         \hline
-        WP\cwp      & A Registered User wants to add a path(manually or automatic).   \\
+        WP\cwp      & When the user wants to navigate a path the BBP invoke the external navigation service passing the travel data.   \\
         \hline
         WP\cwp      & A Registered User wants to manually report a problem (e.g., pothole, obstacle) on a path.   \\
+        \hline
+        WP\cwp      & A Registered User wants to manually update the status on a path.   \\
         \hline
         WP\cwp      & A Registered User wants to confirm/reject a problem report (e.g., pothole) automatically detected by the app.   \\
         \hline
@@ -108,9 +109,7 @@ Functionality within the scope includes: recording user trips (both manually and
     \hline
     SP\csp  & The User selects the status of a route in manual mode (e.g., Optimal, Requires maintenance). & User & BBP \\
     \hline
-    SP\csp  & The User confirms an automatically detected issue (e.g., pothole or obstacle). & User & BBP \\
-    \hline
-    SP\csp  & The User rejects or corrects an incorrect automatic detection. & User & BBP \\
+    SP\csp  & The User rejects or corrects an incorrect automatic detection issue (e.g., pothole or obstacle).& User & BBP \\
     \hline
     SP\csp  & The User selects a specific route from the displayed result list. & User & BBP \\
     \hline
@@ -118,7 +117,7 @@ Functionality within the scope includes: recording user trips (both manually and
     \hline
     SP\csp  & BBP displays the interactive map. & BBP & User \\
     \hline
-    SP\csp  & BBP renders the recorded route trace on the map. & BBP & User \\
+    SP\csp  & BBP renders the recorded path trace on the map. & BBP & User \\
     \hline
     SP\csp  & BBP shows real-time statistics (speed, distance, duration) during recording. & BBP & User \\
     \hline
@@ -165,7 +164,7 @@ Functionality within the scope includes: recording user trips (both manually and
             \hline
             BBP             & BestBikePaths                   \\
             \hline
-            User            & All CYs and ACYs                           \\
+            User            & All RCYs and ACYs                           \\
             \hline
             API             & Application Programming Interface                           \\
             \hline
