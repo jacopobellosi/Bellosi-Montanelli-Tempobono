@@ -1,4 +1,4 @@
-actor "Registered User" as User
+actor "RCY" as User
 participant "BBP Application" as App
 
 User->>App: tapsCreateManualPath()
@@ -12,10 +12,11 @@ loop User draws path
     deactivate App
 end
 
-
-
 User->>App: tapsFinishCreation()
+note over App: Triggers UC14: Add Status report
+note over App: Triggers UC15: Add Obstacle report
+
 note left of App: Passes created data to the Save Path workflow
-App-->>User: showSavePathScreen(pathData)
+
 note over App: Triggers UC11: Save path
 deactivate App
