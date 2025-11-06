@@ -1,4 +1,4 @@
-The Best Bike Paths (BBP) initiative is architectured with the intent to facilitate Cyclists in both enhancing their riding experiences and contributing verifiable data regarding bike paths. Cyclists generate path reports and obstacle notifications either manually or by verifying sensor-generated suggestions, and these reports are systematically organized to assist in efficient route exploration. The objective of the project is to deliver a robust and user-centric platform enabling Cyclists and Visitors to identify optimized routes, share substantive empirical evidence, and maintain the currency of path quality. This document, herein referred to as the Requirements Analysis and Specification Document (RASD), encompasses comprehensive information requisite for the seamless implementation of the BBP system, with a particular emphasis on the interactions between the system and the diverse actors interfacing with it.
+The Best Bike Paths (BBP) initiative is architectured with the intent to facilitate Cyclists in both enhancing their riding experiences and contributing verifiable data regarding bike paths. Cyclists generate path reports and obstacle notifications either manually or by verifying sensor-generated suggestions, and these reports are systematically organized to assist in efficient path exploration. The objective of the project is to deliver a robust and user-centric platform enabling Cyclists and Visitors to identify optimized paths, share substantive empirical evidence, and maintain the currency of path quality. This document, herein referred to as the Requirements Analysis and Specification Document (RASD), encompasses comprehensive information requisite for the seamless implementation of the BBP system, with a particular emphasis on the interactions between the system and the diverse actors interfacing with it.
 
 \newpage
 
@@ -20,9 +20,9 @@ Below there's a table that lists all the goals of the BBP system:
         \hline
         G\cg        &   Support personal cycling activity tracking\\
         \hline
-        G\cg        &   To gather, aggregate, and provide users with actionable data regarding cycle path conditions (e.g., surface status, obstacles, potholes) to support route planning and inform maintenance entities.\\
+        G\cg        &   To gather, aggregate, and provide users with actionable data regarding cycle path conditions (e.g., surface status, obstacles, potholes) to support path planning and inform maintenance entities.\\
         \hline
-        G\cg        &  Facilitating the discovery and navigation of suitable routes\\
+        G\cg        &  Facilitating the discovery and navigation of suitable paths\\
         \hline
         G\cg        &   To enhance trip analysis by enriching recorded user trips with relevant meteorological and physical data retrieved from external services.\\
         \hline
@@ -38,9 +38,9 @@ Below there's a table that lists all the goals of the BBP system:
 \subsection{Scope}
 \label{subsec:scope}%
 
-The scope of the Best Bike Paths (BBP) system is to define a software platform, consisting of a mobile application and a backend system, designed to assist cyclists through intelligent route discovery, personal trip recording, and collaborative path evaluation . The system's primary scope is to enable both Anonymous and Registered Users to find, assess, and share cycling routes based on real, user-generated data and sensor-based observations .
+The scope of the Best Bike Paths (BBP) system is to define a software platform, consisting of a mobile application and a backend system, designed to assist cyclists through intelligent path discovery, personal trip recording, and collaborative path evaluation. The system's primary scope is to enable both Anonymous and Registered Users to find, assess, and share cycling paths based on real, user-generated data and sensor-based observations.
 
-Functionality within the scope includes: recording user trips (both manually and automatically via smartphone sensors ); calculating route scores based on community reports ; aggregating community data according to freshness and consensus ; and integrating external meteorological data. While anonymous users can browse public data, the full scope of data contribution, anomaly confirmation, and trip personalization is restricted to Registered Users.
+The functionalities within the scope of the system include several key features. Users can track their trips either manually or automatically using the sensors on their smartphones. It also calculates scores for each path based on feedback from the community. These scores are determined by considering both freshness of the data and the overall consensus among users. In addition, external weather data are integrated to make the information even more accurate and useful. Although anonymous users can explore public data, only registered users can actively contribute—such as adding new data, confirming anomalies, and customizing their path recommendations.
 
 \newpage
 
@@ -62,7 +62,7 @@ Functionality within the scope includes: recording user trips (both manually and
         \hline
         WP\cwp      & A User wants to view the details of a path (e.g., status, weather, elevation gain). \\
         \hline
-        WP\cwp      & A Registered User wants to create a Trip by navigating on an existent path  \\
+        WP\cwp      & A Registered User wants to create a Trip by navigating on an existent path.  \\
         \hline
         WP\cwp      & A Registered User wants to record a new path by cycling(automatic mode).   \\
         \hline
@@ -107,11 +107,9 @@ Functionality within the scope includes: recording user trips (both manually and
     \hline
     SP\csp  & The User stops automatic trip recording. & User & BBP \\
     \hline
-    SP\csp  & The User selects the status of a route in manual mode (e.g., Optimal, Requires maintenance). & User & BBP \\
+    SP\csp  & The User report the status of a path (e.g., Optimal, Requires maintenance). & User & BBP \\
     \hline
-    SP\csp  & The User rejects or corrects an incorrect automatic detection issue (e.g., pothole or obstacle).& User & BBP \\
-    \hline
-    SP\csp  & The User selects a specific route from the displayed result list. & User & BBP \\
+    SP\csp  & The User selects a specific path from the displayed result list. & User & BBP \\
     \hline
     SP\csp  & BBP displays informational or error messages (e.g., Save completed, GPS error). & BBP & User \\
     \hline
@@ -123,11 +121,11 @@ Functionality within the scope includes: recording user trips (both manually and
     \hline
     SP\csp  & BBP displays the trip summary statistics (average speed, elevation gain, total distance). & BBP & User \\
     \hline
-    SP\csp  & BBP shows a ranked list of routes based on the computed score. & BBP & User\\
+    SP\csp  & BBP shows a ranked list of paths based on the computed score. & BBP & User\\
     \hline
-    SP\csp  & BBP displays the aggregated (merged) status of a route. & BBP & User \\
+    SP\csp  & BBP displays the aggregated (merged) status of a path. & BBP & User \\
     \hline
-    SP\csp  & BBP shows weather data associated with the route (temperature, wind, conditions). & BBP & User \\
+    SP\csp  & BBP shows weather data associated with the path (temperature, wind, conditions). & BBP & User \\
     \hline
     SP\csp  & BBP displays a confirmation request for an automatic detection (popup / notification). & BBP & User\\
     \hline
@@ -137,8 +135,17 @@ Functionality within the scope includes: recording user trips (both manually and
     \hline
     SP\csp  & The gyroscope provides rotation data (x, y, z) to BBP. & Gyroscope & BBP \\
     \hline
+    SP\csp & BBP sends an API request (e.g., with path coordinates/timestamps) to the external weather service.& BBP & Weather API \\
+    \hline
     SP\csp  & The external weather service sends JSON data on temperature, wind, and atmospheric conditions. & Weather API & BBP \\
     \hline
+    SP\csp  & The User starts a navigation. & User & BBP \\
+    \hline
+    SP\csp & After SP21, BBP sends a request (e.g., URL Scheme / Intent) to the device's Operating System to open an external navigation app with the selected path/destination. & BBP & OS / External Navigator \\
+    \hline
+    SP\csp  & The User exit the external navigation app, and close the navigation on BBP. & User & BBP \\
+    \hline
+    
 
         \caption{Shared Phenomenas.}
         \label{tab:sharedph_tab}%
@@ -188,7 +195,7 @@ Functionality within the scope includes: recording user trips (both manually and
 \section{Revision history}
 \label{sec:revision_history}%
 \begin{itemize}
-    \item \textbf{Version 1.0} - 
+    \item \textbf{Version 1.0} - 12/11/2025
 \end{itemize}
 
 

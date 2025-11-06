@@ -21,7 +21,7 @@
         \hline
         \textbf{Preconditions} & Internet connection available (\hyperref[da:12]{DA12}). \\
         \hline
-        \textbf{Description} & Anna opens the BBP app and taps “Register.” She enters her email and password. Upon confirmation, the system creates the account, authenticates her, and redirects her to the main map screen as a registered user. \\
+        \textbf{Description} & Anna opens the BBP app and taps “Register.” She enters her email and password. The system creates the account, authenticates her, and redirects her to the main map screen as a registered user. \\
         \hline
         \textbf{Postconditions} & The user account is created, and Anna is logged in. \\
         \hline
@@ -35,7 +35,7 @@
         \hline
         \textbf{Actor} & Carlo (registered user) \\
         \hline
-        \textbf{Preconditions} & Valid credentials and Internet connection (\hyperref[da:12]{DA12}). \\
+        \textbf{Preconditions} & Valid credentials and Internet connection (\hyperref[da:13]{DA13}). \\
         \hline
         \textbf{Description} & Carlo opens the app, selects “Login,” enters his credentials (“CarloMTB,” password), and presses “Sign In.” The BBP system verifies them and grants access, showing the main map screen. \\
         \hline
@@ -78,9 +78,9 @@
         \hline
         \textbf{Actor} & Marco (anonymous user) \\
         \hline
-        \textbf{Preconditions} & Internet connection available (\hyperref[da:12]{DA12}). \\
+        \textbf{Preconditions} & Internet connection available (\hyperref[da:13]{DA13}). \\
         \hline
-        \textbf{Description} & Marco uses the search bar to set “Stazione Garibaldi” as the origin and “Parco di Monza” as the destination. The BBP system processes the query, computes Path scores, and shows an ordered list. Marco selects “Path A,” and the app displays the Path, details (distance, elevation), and weather forecast (\hyperref[da:11]{DA11}). \\
+        \textbf{Description} & Marco uses the search bar to set “Stazione Garibaldi” as the origin and “Parco di Monza” as the destination. The BBP system processes the query, computes Path scores, and shows an ordered list. Marco selects “Path A,” and the app displays the Path, details (distance, elevation), and weather forecast (\hyperref[da:12]{DA12}). \\
         \hline
         \textbf{Postconditions} & Paths are displayed; user views the selected Path and related data. \\
         \hline
@@ -128,9 +128,9 @@
         \hline
         \textbf{Preconditions} & A Path has been selected. Accurate GPS assumed (\hyperref[da:2]{DA2}). \\
         \hline
-        \textbf{Description} & Marco presses “Follow Path”, The app loads the Path on an External navigation app. This app guides him along the Path. Ultimately, Marcom returns to BBP, offering him the data of the trip and offers to register Marco so he can save his ride information. \\
+        \textbf{Description} & Marco presses “Follow Path”, The application imports the Path into an external navigation app, which then directs him along the path. Eventually, Marco returns to BBP, stops the trip recording, and BBP provides him with the trip data and suggests registering Marco so he can save his trip details. \\
         \hline
-        \textbf{Postconditions} & Trip completed; user may register or view data summary. \\
+        \textbf{Postconditions} & Trip completed; user view summary and may register. \\
         \hline
     \end{longtable}
 \end{center}
@@ -152,9 +152,9 @@
         \hline
         \textbf{Actor} & Anna (registered user) \\
         \hline
-        \textbf{Preconditions} & User logged in; understands options (\hyperref[da:10]{DA10}). \\
+        \textbf{Preconditions} & User logged in; understands options (\hyperref[da:17]{DA17}). \\
         \hline
-        \textbf{Description} & From her profile, Anna selects “Create Manual Path.” She draws the Path on the map, names it “Tuesday Ride,” places maintenance pins, activates “Make Public,” and presses “Save” (\hyperref[da:2]{DA2}). The Path becomes available to others. \\
+        \textbf{Description} & From her profile, Anna selects “Create Manual Path.” She draws the Path on the map, names it “Tuesday Ride,” activates “Make Public,” and presses “Save” (\hyperref[da:17]{DA17}). The Path becomes available to others. \\
       \hline
      \textbf{Postconditions} & The new Path is created and visible to all users. \\
        \hline
@@ -172,7 +172,7 @@
         \hline
         \textbf{Preconditions} & Accurate GPS data (\hyperref[da:2]{DA2}), reliable threshold (\hyperref[da:4]{DA4}), device fixed to bike (\hyperref[da:5]{DA5}). \\
         \hline
-        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. While riding, a strong shock occurs due to a pothole. Sensors send data spikes to BBP. Upon completion, BBP asks for confirmation; Carlo validates correct detections and saves the trip. The app displays weather data (\hyperref[da:11]{DA11}) and summary before saving (\hyperref[da:12]{DA12}). \\
+        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. While riding, a strong shock occurs due to a pothole. Sensors send data spikes to BBP. Upon completion, BBP asks for confirmation (\hyperref[da:9]{DA9}); Carlo validates correct detections and saves the trip. The app displays weather data (\hyperref[da:11]{DA11}) and summary before saving (\hyperref[da:12]{DA12}). \\
         \hline
         \textbf{Postconditions} & Trip data and confirmed detections are stored in Carlo’s archive. \\
         \hline
@@ -188,7 +188,7 @@
         \hline
         \textbf{Preconditions} & Same as Scenario 3.2; false detection occurs. \\
         \hline
-        \textbf{Description} & Carlo’s recording continues, but the detected spike results from jumping off a curb. When asked to confirm detections, Carlo (acting in good faith, (\hyperref[da:7]{DA7})) presses “No, ignore” for incorrect ones. The BBP system cancels invalid detections, and Carlo completes the trip as in Scenario 3.2. \\
+        \textbf{Description} & Carlo’s recording continues, but the detected spike results from jumping off a curb. After terminating the recording, when asked to confirm detections, Carlo (acting in good faith, (\hyperref[da:9]{DA9})) presses “No, ignore” for incorrect ones. The BBP system cancels invalid detections, and Carlo completes the trip as in Scenario 3.2. \\
         \hline
         \textbf{Postconditions} & False detections are removed; valid trip data saved. \\
         \hline
@@ -275,9 +275,9 @@ The process begins when the system presents the user with the option to log in, 
 \end{figure}
 
 \paragraph{Search and Display.}
-This diagram illustrates the user journey for finding bike Paths in BBP. The process begins when the user accesses the search page and inputs their desired start and destination points. The system then enters a processing phase where it identifies relevant Paths and computes their scores, incorporating community-provided status updates through a merging algorithm .
+This diagram illustrates the user journey for finding bike Paths in BBP. The process begins when the user accesses the search page and inputs their desired start and destination points. The system then enters a processing phase where it identifies relevant Paths and computes their scores, incorporating community-provided status updates through a merging algorithm.
 
-Following this, a check determines if any Paths were found. If no results are available, a message like "Be The First!" is displayed, and the process ends. If results are found, the system presents a list of Paths ordered by score . At this point, the user can either select a specific Path to view its details or abort the search, returning to the initial search page. If a Path is selected, the system displays comprehensive information including the map, calculated statistics, and the aggregated Path status , after which this workflow concludes.
+Following this, a check determines if any Paths were found. If no results are available, a message like "Be The First!" is displayed, and the process ends. If results are found, the system presents a list of Paths ordered by score. At this point, the user can either select a specific Path to view its details or abort the search, returning to the initial search page. If a Path is selected, the system displays comprehensive information including the map, calculated statistics, and the aggregated Path status, after which this workflow concludes.
 
 \begin{figure}[H]
     \begin{center}
@@ -291,7 +291,7 @@ Following this, a check determines if any Paths were found. If no results are av
 \paragraph{Scoring \& Merging.}
 It starts when the search triggers the fetching of all past users reports related to the Path.
 
-First, it checks if any reports exist. If there's no data, the process stops for that Path. If reports are found, the system merges them, aggregating user feedback (primarily status reports) to determine a representative condition. A check follows to see if the merging resulted in conflicts (e.g., no clear majority status). If a conflict exists, the freshness rule is applied, prioritizing the most recent reports to decide the final status .
+First, it checks if any reports exist. If there's no data, the process stops for that Path. If reports are found, the system merges them, aggregating user feedback (primarily status reports) to determine a representative condition. A check follows to see if the merging resulted in conflicts (e.g., no clear majority status). If a conflict exists, the freshness rule is applied, prioritizing the most recent reports to decide the final status.
 
 Once a definitive, merged status is established (either directly or after resolving conflicts), the system computes the Path's score . This final score, along with the merged status, is then outputted ("Score computed, Result page") for use in the search results, completing the evaluation workflow.
 
@@ -306,9 +306,9 @@ Once a definitive, merged status is established (either directly or after resolv
 \paragraph{Navigation.}
 After a Path has been selected from the search results, the User taps "Follow Path". The BBP system then loads the chosen Path onto the External navigation service and begins acquiring GPS data to provide stats data based on the user's current position (GPS assumed to be available per DA2).
 
-When the User reaches the destination, the user go back on BBP that analyzes the travel data and checks the user's status. If the user is Anonymous, the system displays an end-of-trip screen offering registration. If the Anonymous User chooses to register ("User accepted"), BBP guides them through the registration process; upon successful registration, the trip is saved to their new account, and the system then displays the trip summary. If the Anonymous User refuses registration ("User refused"), BBP simply presents a view-only summary without permanently storing the ride details, and the process ends.
+When the User reaches the destination, the user go back on BBP that analyses the travel data and checks the user's status. At the end of the trip, the system displays a summary screen. If the user is Anonymous, BBP first shows the trip summary in view-only mode. Then, the system offers registration. If the Anonymous User chooses to register ("User accepted"), BBP guides them through the registration process; upon successful registration, the trip is saved to their new account. If the Anonymous User refuses registration ("User refused"), BBP keeps the summary in view-only mode without permanently storing the ride details, and the process ends.
 
-Conversely, if the User navigating is already Registered, upon arrival at the destination, the trip is automatically saved to their account . The system then presents an option to view the summary ("Show button for trip summary"). The Authenticated User can choose to view the detailed summary ("Button pressed" leading to "Display trip summary") or simply exit the navigation screen ("Close"), concluding the process.
+Conversely, if the User navigating is already Registered, upon arrival at the destination, BBP will show the summary of the trip. BBP then presents an option to view the summary ("Show summary and save button"), the registered user after viewing the summary can choose to save the trip or not.
 
 \begin{figure}[H]
     \begin{center}
@@ -377,7 +377,7 @@ Here are listed a summary of the main functions of the BBP system:\\\\
 
 There are two categories of BBP users: Anonymous Users and Registered Users. Their main characteristics:
 \begin{itemize}
-    \item \textbf{Anonymous User (Guest).} Can use BBP without an account to search for Paths between an origin and a destination and visualize them on the map, ranked by score. May follow an existing Path (navigation / view-only trip summary), but cannot save rides or publish information. A network connection and location access are required during use.  
+    \item \textbf{Anonymous User (Guest).} Can use BBP without an account to search for Paths between an origin and a destination and visualize them on the map, ranked by score. May follow an existing Path (navigation / view-only trip summary), but cannot save rides or publish information. A network connection and location access are required during use.
     \item \textbf{Registered User.} Creates an account to record and store personal trips, view trip statistics (e.g., total distance, average speed), and—when available—have trips enriched with weather data retrieved from an external service. Can contribute publishable information about bike Paths in two ways: (i) manual mode by entering Path information, and (ii) automated mode by letting BBP acquire GPS plus motion-sensor data (accelerometer/gyroscope) while riding; automated detections are confirmed/corrected by the user before publication. Registered users can also choose whether contributed information is public (publishable) or kept private.
 \end{itemize}
 Both user types benefit from the system’s Path scoring and visualization; only registered users can save trips and contribute new information (manual or automated).
