@@ -552,7 +552,8 @@ This section lists the specific functional requirements that the Best Bike Paths
         \textbf{Event Flow}       & 1 - BBP Application displays the manual route editor screen, showing a map. \\
                                   & 2 - The User iteratively draws the path geometry by placing points on the map (R36). \\
                                   & 3 - The User taps "Done" or "Finish" when the path geometry is complete. \\
-                                  & 4 - The system proceeds to the \textbf{`Save path`} use case (UC12), passing the new path data. \\
+                                  & 4 - The registred user can now add a path status or report a Obstacle report (UC14,UC15). \\
+                                  & 5 - BBP proceeds to the \textbf{`Save path`} use case (UC12), passing the new path data. \\
         \hline
         \textbf{Exit condition}   & The user has finished creating the path geometry. The system proceeds to the save flow (UC12). \\
         \hline
@@ -647,7 +648,7 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Actor}            & Registered User \\
         \hline
-        \textbf{Entry conditions} & The user is registered, logged in, and is viewing the details of a \texttt{Path} (UC5). \\
+        \textbf{Entry conditions} & The user is registered, logged in, and is viewing the details of a \texttt{Path} (UC5) or is adding a \texttt{Path manually}  (UC11). \\
         \hline
         \textbf{Event Flow}       & 1 - The User taps the "Report status" button. \\
                                   & 2 - The app displays the status options (e.g., "Optimal", "Requires Maintenance"). \\
@@ -656,7 +657,7 @@ This section lists the specific functional requirements that the Best Bike Paths
                                   & 5 - The Server saves the new \texttt{Status\_report}. \\
                                   & 6 - The Server triggers a recalculation of the \texttt{Path}'s `derivedStatus` and `derivedScore` (R8, R9). \\
         \hline
-        \textbf{Exit condition}   & The new \texttt{Status\_report} is saved. The \texttt{Path}'s score is updated. The user is returned to the \texttt{Path Details} screen. \\
+        \textbf{Exit condition}   & The new \texttt{Status\_report} is saved. The \texttt{Path}'s score is updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
         \hline
         \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
                                     \item The user cancels the submission. No report is created.
@@ -679,7 +680,7 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Actor}            & Registered User \\
         \hline
-        \textbf{Entry conditions} & The user is registered, logged in, and is viewing the details of a \texttt{Path} (UC5). \\
+        \textbf{Entry conditions} & The user is registered, logged in, and is viewing the details of a \texttt{Path} (UC5) or is adding a \texttt{Path manually}  (UC11). \\
         \hline
         \textbf{Event Flow}       
                                   & 1 - The User selects "Submit Obstacle" (R38). \\
@@ -689,7 +690,7 @@ This section lists the specific functional requirements that the Best Bike Paths
                                   & 5 - The Server saves the new \texttt{Obstacle\_report}. \\
                                   & 6 - The Server may trigger a recalculation of the \texttt{Path}'s `derivedScore` (R10), as obstacles affect the score. \\
         \hline
-        \textbf{Exit condition}   & The new \texttt{Obstacle\_report} is saved. The \texttt{Path}'s score may be updated. The user is returned to the \texttt{Path Details} screen. \\
+        \textbf{Exit condition}   & The new \texttt{Obstacle\_report} is saved. The \texttt{Path}'s score may be updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
         \hline
         \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
                                     \item The user cancels the submission. No report is created.
