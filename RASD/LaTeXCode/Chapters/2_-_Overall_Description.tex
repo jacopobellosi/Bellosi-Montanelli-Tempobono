@@ -147,17 +147,17 @@
 
 \begin{center} 
     \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
-       \hline
+        \hline
         \textbf{Scenario ID} & \textbf{3.\crc – Manual Path Creation (Success)} \\
         \hline
         \textbf{Actor} & Anna (registered user) \\
         \hline
-        \textbf{Preconditions} & User logged in; understands options (\hyperref[da:17]{DA17}). \\
+        \textbf{Preconditions} & User logged in; understands options (\hyperref[da:10]{DA10}). \\
         \hline
-        \textbf{Description} & From her profile, Anna selects “Create Manual Path.” She draws the Path on the map, names it “Tuesday Ride,” activates “Make Public,” and presses “Save” (\hyperref[da:17]{DA17}). The Path becomes available to others. \\
-      \hline
-     \textbf{Postconditions} & The new Path is created and visible to all users. \\
-       \hline
+        \textbf{Description} & From her profile, Anna selects “Create Manual Path.” She draws the Path on the map, names it “Tuesday Ride,” activates “Make Public,” and presses “Save” (\hyperref[da:13]{DA13}). The Path becomes available to others. \\
+        \hline
+       \textbf{Postconditions} & The new Path is created and visible to all users. \\
+        \hline
     \end{longtable}
 \end{center}
 
@@ -166,29 +166,33 @@
 \begin{center}
     \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
-        \textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (Success \& Pothole Detection) – Key Scenario} \\
+        \textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (Success, Auto-Pause GPS \& Detection) – Key Scenario} \\
         \hline
         \textbf{Actor} & Carlo (registered user) \\
         \hline
         \textbf{Preconditions} & Accurate GPS data (\hyperref[da:2]{DA2}), reliable threshold (\hyperref[da:4]{DA4}), device fixed to bike (\hyperref[da:5]{DA5}). \\
         \hline
-        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. While riding, a strong shock occurs due to a pothole. Sensors send data spikes to BBP. Upon completion, BBP asks for confirmation (\hyperref[da:9]{DA9}); Carlo validates correct detections and saves the trip. The app displays weather data (\hyperref[da:11]{DA11}) and summary before saving (\hyperref[da:12]{DA12}). \\
+        % --- DESCRIZIONE MODIFICATA ---
+        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. While riding, Carlo stops for 5 minutes. The app detects low  speed and \textbf{automatically pauses the GPS coordinate recording (R25)}, but the \textbf{session timer (Elapsed Time) continues to run}. When Carlo restarts cycling, the app automatically resumes GPS tracking (R26). Later, a strong shock occurs due to a pothole. Sensors send data spikes to BBP (R24). Upon completion, BBP asks for confirmation (\hyperref[da:7]{DA7}); Carlo validates correct detections (R27) and saves the trip. The app displays summary (R29) before saving /publishng path and trip(\hyperref[da:13]{DA13}). \\
+        % --- FINE MODIFICA ---
         \hline
-        \textbf{Postconditions} & Trip data and confirmed detections are stored in Carlo’s archive. \\
+        \textbf{Postconditions} & Trip data ('Elapsed Time' and confirmed detections) are stored in Carlo’s archive. 'Average Speed' is calculated using 'Elapsed Time'. \\
         \hline
     \end{longtable}
 \end{center}
 
 \begin{center}
     \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
-       \hline
+        \hline
         \textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (False Detection \& User Correction)} \\
         \hline
         \textbf{Actor} & Carlo (registered user) \\
         \hline
         \textbf{Preconditions} & Same as Scenario 3.2; false detection occurs. \\
         \hline
-        \textbf{Description} & Carlo’s recording continues, but the detected spike results from jumping off a curb. After terminating the recording, when asked to confirm detections, Carlo (acting in good faith, (\hyperref[da:9]{DA9})) presses “No, ignore” for incorrect ones. The BBP system cancels invalid detections, and Carlo completes the trip as in Scenario 3.2. \\
+        % --- DESCRIZIONE MODIFICATA ---
+        \textbf{Description} & Carlo’s recording continues (including auto-pauses of the GPS while the timer runs), but the detected spike results from jumping off a curb. After terminating the recording, when asked to confirm detections (R26), Carlo (acting in good faith, (\hyperref[da:7]{DA7})) presses “No, ignore” for incorrect ones (R27). The BBP system cancels invalid detections, and Carlo completes the trip as in Scenario 3.2. \\
+        % --- FINE MODIFICA ---
         \hline
         \textbf{Postconditions} & False detections are removed; valid trip data saved. \\
         \hline
@@ -198,19 +202,20 @@
 \begin{center}
     \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
-        \textbf{Scenario ID} & \textbf{3.4 – Automatic Recording (No Detections)} \\
+        \textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (No Detections)} \\
         \hline
         \textbf{Actor} & Carlo (registered user) \\
         \hline
         \textbf{Preconditions} & Flat and obstacle-free Path; no sensor spikes (\hyperref[da:4]{DA4}). \\
         \hline
-        \textbf{Description} & Carlo rides on a smooth Path. No anomalies are detected. When pressing “End and Save,” BBP skips the “Review” step and directly shows the summary screen. \\
+        % --- DESCRIZIONE MODIFICATA ---
+        \textbf{Description} & Carlo rides on a smooth Path. The system correctly applies auto-pause/resume of the GPS during stops, while the timer continues. No anomalies are detected (R24). When pressing “End and Save,” BBP skips the “Review” step (R26) and directly shows the summary screen. \\
+        % --- FINE MODIFICA ---
         \hline
         \textbf{Postconditions} & Trip saved successfully without detected issues. \\
         \hline
     \end{longtable}
 \end{center}
-
 \newpage
 
 \subsection{Class diagrams}
@@ -333,14 +338,15 @@ Finally, the User initiates the save action, triggering a system validation chec
     \end{center}
 \end{figure}
 
-\paragraph{Automatic Path Creation.}
-When the User presses "Start Recording", BBP initializes the session, updates the display (HUD), and activates the necessary device sensors. Two key processes then run concurrently: the system continuously listens to GPS data to construct the Path's geometry, and simultaneously monitors other sensors (accelerometer/gyroscope) to detect potential obstacles like potholes . Any sensor reading that surpasses a predefined threshold is internally logged as a pending detection, allowing the user to continue riding without immediate interruption.
+\paragraph{Automatic Recording.} When the User presses "Start Recording" (R20), BBP initializes the session, updates the display (HUD), and activates the necessary device sensors (R23). Two key processes then run concurrently: the system listens to GPS data to construct the path's geometry (R21) and simultaneously monitors other sensors (accelerometer/gyroscope) to detect potential obstacles (R24).
 
-Once the User presses "End", both data streams stop. The system first elaborates the recorded Path, calculating metrics such as total distance and elevation change. It then performs a crucial check: is a review required? This is determined by verifying if any pending detections were logged during the trip (PendingDetections > 0).
+This tracking process includes the "Auto-Pause" logic based on user speed. If the speed drops below a set threshold ("Users speed below the treshold"), the system pauses only the GPS and sensor data logging. Crucially, the main session timer continues to run ("/ keep the timer") to track the total elapsed time. When the user's speed increases again ("Users speed back up the treshold"), the system automatically resumes listening to the sensors and recording the GPS track (R25, R26).
 
-If a review is necessary ("Yes"), BBP presents an interface showing the locations of the potential detections on the recorded Path ("Show where are the detection"). The user is prompted to confirm or reject each detection individually . Only those explicitly confirmed by the user are retained for reporting purposes.
+Once the User presses "End", both parallel data streams stop. The system first elaborates the recorded path geometry ("Elaborate path") and calculates the final statistics (R29), which will be based on the total Elapsed Time (il timer che ha continuato a scorrere).
 
-After the review step is completed (or if no review was needed initially), the system calculates the final trip summary, incorporating the derived statistics, and fetches the relevant weather information for the time and place of the ride . The complete Trip object, including the Path, statistics, weather data, and any confirmed obstacle detections, is then persisted (stored). Finally, BBP displays the summary screen to the user. From this screen, the user has the option to publish the Path ("Yes / publish track"), making it visible to the community, or simply keep it private/discard the recording ("No / discard and go homepage"), concluding the automatic recording workflow
+The system then performs a crucial check: is a review required? ("Review required? (PendingDetections > 0)") (R28). If a review is necessary ("Yes"), BBP presents an interface showing the locations of the potential detections ("Show where are the detection"), prompting the user to confirm or reject each detection individually (R29, R30).
+
+After the review step is completed (or if no review was needed), the system displays the final trip summary, incorporating the derived statistics and the fetched weather information (R32). From this screen, the user has the option to publish the path ("Publish path?") (R39) or simply discard the recording ("No / discard and go homepage"), concluding the automatic recording workflow.
 
 \begin{figure}[H]
     \begin{center}
@@ -425,7 +431,7 @@ Both user types benefit from the system’s Path scoring and visualization; only
         \hline
         DA\cda \label{da:15} & Users grant permissions for location and motion sensors; otherwise, only manual mode and browsing are available. \\
         \hline
-        DA\cda \label{da:16} & Users will start the recording at the beginning of the trail and end it at the finish line. \\
+        DA\cda \label{da:16} & Users will start the recording at the beginning of the trail and end it at the finish line, and are unable to close the app to ensure continuous recording. \\
         \hline
         DA\cda \label{da:15} & Users will not commit errors while drawing or following the Path \\
         \hline
