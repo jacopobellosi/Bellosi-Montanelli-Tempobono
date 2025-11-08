@@ -999,11 +999,11 @@
         <mxCell id="MqaVxOKF3NtJazyf6rnj-6" value="Users speed below the treshold / keep the timer" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="570" y="210" width="100" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="MqaVxOKF3NtJazyf6rnj-7" value="Users speed below the treshold" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="560" y="464.05" width="100" height="30" as="geometry" />
-        </mxCell>
         <mxCell id="MqaVxOKF3NtJazyf6rnj-8" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;Users speed back up the treshold&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="439" y="269.5" width="111" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="MqaVxOKF3NtJazyf6rnj-9" value="Users speed below the treshold / keep the timer" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="570" y="464.05" width="100" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
