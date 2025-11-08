@@ -54,9 +54,6 @@ This section lists the specific functional requirements that the Best Bike Paths
 \endlastfoot
 
 % --- User Management ---
-
-
-% --- User Management ---
 \setcounter{reqcounter}{0} % Reset counter just before the first data row
 \stepcounter{reqcounter} \thereqcounter & BBP allows Users to sign up \\
 \hline
@@ -110,6 +107,14 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall internally log a \texttt{sensor\_event} when sensor data exceeds a predefined threshold. \\
 \hline
+
+% --- INSERITI NUOVI REQUISITI PER OPZIONE A ---
+\stepcounter{reqcounter} \thereqcounter & BBP shall automatically pause the GPS coordinate recording (R21) if the user's speed remains below a defined threshold (e.g., 2 km/h) for a specified duration (e.g., 2 minutes). \\
+\hline
+\stepcounter{reqcounter} \thereqcounter & BBP shall automatically resume the GPS coordinate recording (R21) if the user's speed exceeds the defined threshold after an auto-pause. \\
+\hline
+% --- --------------------------------------- ---
+
  \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to stop the automatic trip recording. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & Upon stopping recording, if \texttt{sensor\_event}s were logged, BBP shall present them to the user for review. \\
@@ -118,8 +123,12 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall create an \texttt{Obstacle\_report} associated with the trip only for confirmed \texttt{sensor\_event}s. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & After recording (and review), BBP shall calculate final trip statistics. \\
+
+% --- REQUISITO DELLE STATISTICHE MODIFICATO (ORA R31) ---
+\stepcounter{reqcounter} \thereqcounter & After recording (and review), BBP shall calculate final trip statistics. The 'Average Speed' (avg\_speed) shall be calculated using 'Elapsed Time' and 'Total Distance'. \\
 \hline
+% --- --------------------------------------- ---
+
  \stepcounter{reqcounter} \thereqcounter & After recording, BBP shall retrieve and associate weather information with the trip. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall allow the user to save the completed \texttt{Trip} (path, stats, weather, confirmed reports) to their private archive. \\
@@ -137,7 +146,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall allow RCY to submit \texttt{Obstacle\_report}s manually for paths. \\
 \hline
-\stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY, during the save process (UC9, UC12), to specify: (1) The visibility of the \texttt{Path} (Public/Private for search), and (2) The visibility of the \texttt{Trip} (Public/Private for statistics aggregation). \\ % R37 (ex-R39)
+\stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY, during the save process (UC9, UC12), to specify: (1) The visibility of the \texttt{Path} (Public/Private for search), and (2) The visibility of the \texttt{Trip} (Public/Private for statistics aggregation). \\
 \hline
 
 % --- General ---
@@ -412,16 +421,21 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Entry conditions} & The user is registered, logged in. (L'utente potrebbe aver selezionato un \texttt{Path} da seguire). \\
         \hline
-        \textbf{Event Flow}       & 1 - The User taps the "Start Recording" button. \\
-                                  & 2 - BBP Application activates \texttt{Device Sensors} [R22]. \\
-                                  & 3 - The app displays the recording HUD, [R21]. \\
-                                  & 4 - \textbf{In parallel:} The app records the user's \texttt{GPS\_points} sequence (R20) and monitors sensor data . \\
-                                  & 5 - \textbf{If} sensor data exceeds the threshold, the app internally logs a new \texttt{sensor\_event} (R23) . \\
-                                  & 6 - The User taps the "Stop Recording" button (R24). \\
-                                  & 7 - BBP Application stops all sensors and finalizes the \texttt{Path} geometry. \\
-                                  & 8 - BBP Application calculates the final \texttt{Statistics} (R28). \\
-                                  & 9 - BBP show the summary of the new path with the trip information, and in case the \textit{ReviewDetections}. \textbf{`Save Trip and Path`} (UC9)\\
+        \textbf{Event Flow}       & 1 - The User taps the "Start Recording" button (R20). \\
+                                  & 2 - BBP Application activates \texttt{Device Sensors} (R23). \\
+                                  & 3 - The app displays the recording HUD, showing real-time statistics (R22). \\
+                                  & 4 - \textbf{In parallel:} The app records the user's \texttt{GPS\_points} sequence (R21) and monitors sensor data (R23). \\
                                   
+                                  % --- LOGICA AGGIUNTA QUI (Opzione A) ---
+                                  & 5 - \textbf{Auto-Pause Logic:} If speed is below the threshold, GPS coordinate recording (R21) is paused (R25). The 'Elapsed Time' timer (R22) continues to run. \\
+                                  & 6 - \textbf{Auto-Resume Logic:} If speed exceeds the threshold after a pause, GPS coordinate recording (R21) resumes (R26). \\
+                                  % --- FINE LOGICA AGGIUNTA ---
+
+                                  & 7 - \textbf{If} sensor data exceeds the threshold, the app internally logs a new \texttt{sensor\_event} (R24). \\
+                                  & 8 - The User taps the "Stop Recording" button (R27). \\
+                                  & 9 - BBP Application stops all sensors and finalizes the \texttt{Path} geometry. \\
+                                  & 10 - BBP Application calculates the final \texttt{Statistics} (R31). \\
+                                  & 11 - BBP show the summary of the new path with the trip information, and in case the \textit{ReviewDetections}. \textbf{`Save Trip and Path`} (UC9)\\
         \hline
         \textbf{Exit condition}   & The user has completed the recording. The system proceeds to the save flow (UC9). \\
         \hline
