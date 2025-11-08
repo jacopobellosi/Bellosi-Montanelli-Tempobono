@@ -4,7 +4,6 @@
  * -----------------------------------------------------------------
  */
 
-sig String {}
 sig GpsPoint {}
 sig Detection {}
 
@@ -68,7 +67,7 @@ enum Screen {
 
 sig State {
     validTokens: set SessionToken,
-    userSessions: lone (SystemUser -> SessionToken),
+    userSessions: SystemUser -> lone SessionToken,
     appLocalToken: lone SessionToken,
     loggedInUser: one SystemUser,
 
@@ -83,34 +82,35 @@ sig State {
     confirmedDetections: set Detection
 }
 
-pred unchanged_data(s, s': State) {
-    s'.paths = s.paths
-    s'.trips = s.trips
-    s'.reports = s.reports
+
+pred unchanged_data(s, s2: State) {
+    s2.paths = s.paths
+    s2.trips = s.trips
+    s2.reports = s.reports
 }
 
-pred unchanged_session(s, s': State) {
-    s'.validTokens = s.validTokens
-    s'.userSessions = s.userSessions
-    s'.appLocalToken = s.appLocalToken
-    s'.loggedInUser = s.loggedInUser
+pred unchanged_session(s, s2: State) {
+    s2.validTokens = s.validTokens
+    s2.userSessions = s.userSessions
+    s2.appLocalToken = s.appLocalToken
+    s2.loggedInUser = s.loggedInUser
 }
 
-pred unchanged_app_context(s, s': State) {
-    s'.appTripData = s.appTripData
-    s'.appPathData = s.appPathData
-    s'.pendingDetections = s.pendingDetections
-    s'.confirmedDetections = s.confirmedDetections
+pred unchanged_app_context(s, s2: State) {
+    s2.appTripData = s.appTripData
+    s2.appPathData = s.appPathData
+    s2.pendingDetections = s.pendingDetections
+    s2.confirmedDetections = s.confirmedDetections
 }
 
-pred unchanged_app_trip_recording(s, s': State) {
-    s'.appTripData = s.appTripData
-    s'.pendingDetections = s.pendingDetections
-    s'.confirmedDetections = s.confirmedDetections
+pred unchanged_app_trip_recording(s, s2: State) {
+    s2.appTripData = s.appTripData
+    s2.pendingDetections = s.pendingDetections
+    s2.confirmedDetections = s.confirmedDetections
 }
 
-pred unchanged_app_path_creation(s, s': State) {
-    s'.appPathData = s.appPathData
+pred unchanged_app_path_creation(s, s2: State) {
+    s2.appPathData = s.appPathData
 }
 
 pred init(s: State) {
