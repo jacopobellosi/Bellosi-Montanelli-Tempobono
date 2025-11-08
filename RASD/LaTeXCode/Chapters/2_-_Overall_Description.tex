@@ -224,7 +224,7 @@
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=0.9\linewidth]{UML_Class_Diagram.png}
+        \includegraphics[width=1\linewidth]{UML_Class_Diagram.png}
         \caption{High level Class Diagram.}
         \label{fig:UML}%
     \end{center}
@@ -342,11 +342,11 @@ Finally, the User initiates the save action, triggering a system validation chec
 
 This tracking process includes the "Auto-Pause" logic based on user speed. If the speed drops below a set threshold ("Users speed below the treshold"), the system pauses only the GPS and sensor data logging. Crucially, the main session timer continues to run ("/ keep the timer") to track the total elapsed time. When the user's speed increases again ("Users speed back up the treshold"), the system automatically resumes listening to the sensors and recording the GPS track (R25, R26).
 
-Once the User presses "End", both parallel data streams stop. The system first elaborates the recorded path geometry ("Elaborate path") and calculates the final statistics (R29), which will be based on the total Elapsed Time (il timer che ha continuato a scorrere).
+Once the User presses "End", both parallel data streams stop. The system first elaborates the recorded path geometry ("Elaborate path") and calculates the final statistics (R29), which will be based on the total Elapsed Time.
 
 The system then performs a crucial check: is a review required? ("Review required? (PendingDetections > 0)") (R28). If a review is necessary ("Yes"), BBP presents an interface showing the locations of the potential detections ("Show where are the detection"), prompting the user to confirm or reject each detection individually (R29, R30).
 
-After the review step is completed (or if no review was needed), the system displays the final trip summary, incorporating the derived statistics and the fetched weather information (R32). From this screen, the user has the option to publish the path ("Publish path?") (R39) or simply discard the recording ("No / discard and go homepage"), concluding the automatic recording workflow.
+After the review step is completed (or if no review was needed), the system displays the final trip summary. From this screen, the user has the option to publish the path and the trip("Publish path?") (R39) or simply discard the recording ("No / discard and go homepage"), concluding the automatic recording workflow.
 
 \begin{figure}[H]
     \begin{center}
@@ -368,11 +368,11 @@ Here are listed a summary of the main functions of the BBP system:\\\\
 \textbf{Search Path:} The User specifies origin and destination; BBP computes scores and returns an ordered list of publishable Paths.\\
 \textbf{View Path details:} After selecting a Path, BBP displays the polyline, distance, elevation, the merged current status, reported obstacles, and the weather forecast associated with the Path .\\
 \textbf{Follow Path (Navigation):} The User taps “Follow Path”; BBP redirect to an External navigation service and use GPS to acquire travel data. At the end, BBP show the summary of the trip and offer registration to save the data.\\
-\textbf{Start Automatic Recording:} A registered User starts a session; BBP tracks the Path (GPS) and live stats while acquiring motion-sensor data (accelerometer/gyroscope).\\
+\textbf{Start Automatic Recording:} A registered User starts a session; BBP records the \textbf{Trip's geometry} (GPS) and live stats while acquiring motion-sensor data. The system automatically pauses GPS/sensor recording (but not the elapsed time) when the user stops (R25) and resumes when they restart (R26).\\
 \textbf{Automatic Detection Review:} At the end of recording, BBP asks the User to confirm or reject sensor-detected anomalies (e.g., potholes); only confirmed detections are retained.\\
 \textbf{End \& Save Trip:} BBP computes trip statistics and attaches a weather snapshot; the trip (and any confirmed detections) is saved to the User’s archive.\\
-\textbf{Manual Path creation :} The User opens the editor, draws the Path, optionally adds maintenance pins, sets type and visibility, and presses “Save.”\\
-\textbf{Publish/Privacy Path choice:} When saving a manually created Path, the User can make it Public (visible to everyone) or keep it Private in their library.\\
+\textbf{Manual Path creation :} The User opens the editor, draws the Path, optionally adds maintenance pins or the path status, sets type and visibility, and presses “Save.”\\
+\textbf{Publish/Privacy Path choice:} When saving a manually or automatically created Path, the User can make it Public (visible to everyone) or keep it Private in their library.\\
 \textbf{Publish/Privacy Trip Choice:} After a Trip (Navigation or automatic Path creation), the User can make it Public (visible to everyone as statistics of the Path) or keep it Private in their library.\\
 \textbf{Path Scoring \& Merging:} For searched Paths, BBP aggregates community reports by majority and freshness to derive the current status and compute the Path score shown in results.\\
 \textbf{My Trips \& Summaries:} Registered Users can view stored trips with summaries (distance, duration, elevation, average speed) and associated weather info.\\
