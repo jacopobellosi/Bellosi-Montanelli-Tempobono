@@ -817,7 +817,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="8UM9-lkRLOdaGEXSaJpx" name="Page-7">
-    <mxGraphModel dx="983" dy="540" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1426" dy="783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -900,7 +900,7 @@
         <mxCell id="rIBPtIWW_f57pgUy0Pyg-13" value="Review required?&lt;div&gt;(PendingDetections &amp;gt;0)&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="870" y="274.5" width="130" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="rIBPtIWW_f57pgUy0Pyg-14" value="Summary&lt;div&gt;&amp;amp; Weather Info&lt;/div&gt;" style="points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];shape=mxgraph.bpmn.task2;whiteSpace=wrap;rectStyle=rounded;size=10;html=1;container=1;expand=0;collapsible=0;taskMarker=abstract;" parent="1" vertex="1">
+        <mxCell id="rIBPtIWW_f57pgUy0Pyg-14" value="Summary" style="points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];shape=mxgraph.bpmn.task2;whiteSpace=wrap;rectStyle=rounded;size=10;html=1;container=1;expand=0;collapsible=0;taskMarker=abstract;" parent="1" vertex="1">
           <mxGeometry x="1031" y="290.5" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="rIBPtIWW_f57pgUy0Pyg-15" value="Show where are the detection" style="points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];shape=mxgraph.bpmn.task2;whiteSpace=wrap;rectStyle=rounded;size=10;html=1;container=1;expand=0;collapsible=0;taskMarker=abstract;" parent="1" vertex="1">
@@ -974,7 +974,7 @@
         <mxCell id="0jxTgOazYjC2OD2H-V45-9" value="No / discard and go homepage" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1221" y="369.5" width="90" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="0jxTgOazYjC2OD2H-V45-10" value="Yes / publish track" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
+        <mxCell id="0jxTgOazYjC2OD2H-V45-10" value="Yes / publish track and trip" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1260" y="294.5" width="90" height="30" as="geometry" />
         </mxCell>
         <mxCell id="0jxTgOazYjC2OD2H-V45-15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="0jxTgOazYjC2OD2H-V45-12" target="rIBPtIWW_f57pgUy0Pyg-1" edge="1">
