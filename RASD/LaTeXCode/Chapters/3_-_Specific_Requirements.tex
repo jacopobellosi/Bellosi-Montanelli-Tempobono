@@ -769,8 +769,8 @@ This section lists the specific functional requirements that the Best Bike Paths
     \begin{tabularx}{\textwidth}{|X|X|}
         \hline
         \begin{itemize}
-            \item [R7] The system allows users to search for public cycling paths.
-            \item [R9] The system calculates and displays the aggregated status of paths.
+            \item [R7] BBP shall allow any user to search for public bike paths by specifying an origin and a destination.
+            \item [R9] BBP shall calculate a merged status for each searched path based on its associated Status\_report instances, applying freshness and majority rules
             \item [R10] BBP shall calculate a score for each searched path based on its reports/conditions and metrics.
             \item [R11] BBP shall display search results as a list of paths ordered by the calculated score.
             \item [R12] BBP shall allow any user to select a path from the search results to view its details.
@@ -811,13 +811,13 @@ This section lists the specific functional requirements that the Best Bike Paths
         \begin{itemize}
             \item [R23] During automatic recording, the system shall monitor accelerometer and gyroscope data.
             \item [R24] BBP shall internally log a sensor\_event when sensor data exceeds a predefined threshold.
-            \item [R25] BBP shall allow an RCY to stop the automatic trip recording.
-            \item [R26] Upon stopping recording, if sensor\_events were logged, BBP shall present them to the user for review.
-            \item [R27] BBP shall allow the user to confirm or ignore each sensor\_event during review.
-            \item [R28] BBP shall create an Obstacle\_report associated with the trip only for confirmed sensor\_events.
-            \item [R29] After recording (and review), BBP shall calculate final trip statistics.
-            \item [R30] After recording, BBP shall retrieve and associate weather information with the trip.
-            \item [R31] BBP shall allow the user to save the completed Trip (path, stats, weather, confirmed reports) to their private archive.
+            \item [R27] BBP shall allow an RCY to stop the automatic trip recording.
+            \item [R28] Upon stopping recording, if sensor\_events were logged, BBP shall present them to the user for review.
+            \item [R29] BBP shall allow the user to confirm or ignore each sensor\_event during review.
+            \item [R30] BBP shall create an Obstacle\_report associated with the trip only for confirmed sensor\_events.
+            \item [R31] After recording (and review), BBP shall calculate final trip statistics. The ’Average Speed’ (avg\_speed) shall be calculated using ’Elapsed Time’ and ’Total Distance’.
+            \item [R32] After recording, BBP shall retrieve and associate weather information with the trip.
+            \item [R33] BBP shall allow the user to save the completed Trip (path, stats, weather, confirmed reports) to their private archive.
         \end{itemize}
         &
         \begin{itemize}
@@ -858,9 +858,9 @@ This section lists the specific functional requirements that the Best Bike Paths
     \begin{tabularx}{\textwidth}{|X|X|}
         \hline
         \begin{itemize}
-            \item [R29] After recording, the system associates weather data with the trip.
-            \item[R30] After recording, the system retrieves and associates weather information with the trip.
-            \item[R31] The system allows the user to save the completed Trip (path, stats, weather, confirmed reports) to their private archive.
+            \item [R31] After recording (and review), BBP shall calculate final trip statistics. The ’Average Speed’ (avg\_speed) shall be calculated using ’Elapsed Time’ and ’Total Distance’.
+            \item[R32] After recording, BBP shall retrieve and associate weather information with the trip.
+            \item[R33] BBP shall allow the user to save the completed Trip (path, stats, weather, confirmed reports) to their private archive
         \end{itemize} 
         & 
         \begin{itemize}
@@ -880,7 +880,7 @@ This section lists the specific functional requirements that the Best Bike Paths
             \item [R36] BBP shall provide an editor for RCY to manually create a path geometry on a map.
             \item [R37] BBP shall allow RCY to submit Status\_reports manually for paths.
             \item [R38] BBP shall allow RCY to submit Obstacle\_reports manually for paths.
-            \item [R39] BBP shall allow an RCY to specify the visibility (Public/Private) when saving a trip or manually created path.
+            \item [R39] BBP shall allow an RCY, during the save process (UC9, UC12), to specify: (1) The visibility of the Path (Public/Private for search), and (2) The visibility of the Trip (Public/Private for statistics aggregation).
             \item [R40] BBP shall display feedback messages (confirmations, errors) to the user.
         \end{itemize} 
         & 
