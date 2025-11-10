@@ -1,7 +1,7 @@
 actor "Registered User" as User
 participant "BBP Application" as App
 
-note over App: UC7 (`Record Trip`) finished and triggered this review (R25).
+note over App: UC9 (`Save trip and path`) triggered this review (R28).
 App->>User: showSummaryAndReviewScreen(pendingEvents)
 activate App
 
@@ -22,5 +22,5 @@ loop for each event
     end
 end
 
-note over App: Proceeds to UC9: Save Path and Trip
+note over App: Continues on UC9: Save Path and Trip
 deactivate App
