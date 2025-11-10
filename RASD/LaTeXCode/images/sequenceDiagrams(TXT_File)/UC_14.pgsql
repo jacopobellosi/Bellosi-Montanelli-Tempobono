@@ -2,7 +2,7 @@ actor "Registered User" as User
 participant "BBP Application" as App
 participant "BBP Server" as Server
 
-note over User, App: User is viewing Path Details (UC5)
+note over User, App: User is viewing Path Details (UC5) or adding Path manually (UC11)
 
 User->>App: tapsSubmitReport()
 activate App
