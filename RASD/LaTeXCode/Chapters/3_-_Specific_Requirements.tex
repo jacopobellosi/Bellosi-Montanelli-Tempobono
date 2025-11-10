@@ -4,7 +4,7 @@ This section details the interfaces between the Best Bike Paths (BBP) system and
 
 \subsection{User interfaces}
 \label{subsec:User_interfaces}%
-The primary user interface for the BBP system will be a native mobile application designed for smartphones (iOS and Android platforms). The interface must prioritize clarity, usability, and robustness, particularly for outdoor use under varying light conditions. It will adopt a map-centric design, prominently displaying geographical data and route information. Key interaction elements will include a clear search bar for origin/destination input, interactive map elements for manual route creation and viewing details, easily accessible buttons for critical functions like starting/stopping automatic recording, and a dedicated Heads-Up Display (HUD) during active recording sessions showing real-time statistics (speed, distance, time) with high legibility. The interface will also incorporate clear feedback mechanisms and prompts for user input, such as the review and confirmation of automatically detected sensor events presented at the conclusion of a trip . Navigation between different sections (e.g., Map, Search Results, My Trips, User Profile) must be intuitive and consistent throughout the application.
+The primary user interface for the BBP system will be a native mobile application designed for smartphones (IOS and Android platforms). The interface must prioritize clarity, usability, and robustness, particularly for outdoor use under varying light conditions. It will adopt a map-centric design, prominently displaying geographical data and route information. Key interaction elements will include a clear search bar for origin/destination input, interactive map elements for manual route creation and viewing details, easily accessible buttons for critical functions like starting/stopping automatic recording, and a dedicated Heads-Up Display (HUD) during active recording sessions showing real-time statistics (speed, distance, time) with high legibility. The interface will also incorporate clear feedback mechanisms and prompts for user input, such as the review and confirmation of automatically detected sensor events presented at the conclusion of a trip . Navigation between different sections (e.g., Map, Search Results, My Trips, User Profile) must be intuitive and consistent throughout the application.
 \subsection{Hardware interfaces}
 \label{subsec:hardware_interfaces}%
 The BBP system requires direct interaction with specific hardware components integral to the user's mobile device. Foremost is the Global Positioning System (GPS) receiver, from which the application must continuously acquire accurate location data (latitude, longitude, timestamp) to track the user's position during navigation and automatic trip recording. Secondly, BBP must interface with the device's inertial measurement unit (IMU) sensors, specifically the accelerometer and gyroscope. Access to the raw data streams from these sensors is mandatory for the implementation of the automatic obstacle detection feature, enabling BBP to identify significant motion events that may correspond to real-world path anomalies, such as potholes. Furthermore, the application relies on standard smartphone hardware, including the touchscreen display for all user input and output, and potentially the device's vibration motor for non-visual notifications (e.g., indicating a potential obstacle has been logged). BBP assumes these hardware components are functional and accessible via the device's operating system APIs.
@@ -69,7 +69,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
 
 % --- Path Discovery & Navigation ---
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow any user to search for public bike paths by specifying an origin and a destination. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow users to search for public bike paths by specifying an origin and a destination. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall retrieve all relevant \texttt{Report} instances associated with the paths found during a search. \\
 \hline
@@ -131,7 +131,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 
  \stepcounter{reqcounter} \thereqcounter & After recording, BBP shall retrieve and associate weather information with the trip. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow the user to save the completed \texttt{Trip} (path, stats, weather, confirmed reports) to their private archive. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow RCY to save the completed \texttt{Trip} (path, stats, weather, confirmed reports) to their private archive. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to view their list of saved trips. \\
 \hline
@@ -207,12 +207,12 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Entry conditions} & The user is anonymous and is on a screen with a "Register" option. \\
         \hline
-        \textbf{Event Flow}       & 1 - BBP shows the main screen with a "Register" button. \\
+        \textbf{Event Flow}       & 1 - BBP shows the main screen with a "Register" button. (R1)\\
                                   & 2 - The User taps the "Register" button. \\
                                   & 3 - BBP shows the registration form. \\
                                   & 4 - The User inserts their username, email, and password in the form. \\
                                   & 5 - The User taps the "Submit" button. \\
-                                  & 6 - BBP checks all credentials (e.g., uniqueness, password matching). \\
+                                  & 6 - BBP checks all credentials (e.g., uniqueness, password matching).(R2) \\
                                   & 7 - BBP creates the new Registered User account in the system. \\
                                   & 8 - BBP automatically logs in the user and redirects to the main map screen. \\
         \hline
@@ -245,10 +245,10 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Entry conditions} & The user is anonymous and is on a screen with a "Log In" option. \\
         \hline
-        \textbf{Event Flow}       & 1 - BBP shows the login form. \\
+        \textbf{Event Flow}       & 1 - BBP shows the login form.(R3) \\
                                   & 2 - The User inserts their username (or email) and password. \\
                                   & 3 - The User taps the "Log In" button. \\
-                                  & 4 - BBP checks the credentials against the database. \\
+                                  & 4 - BBP checks the credentials against the database.(R4) \\
                                   & 5 - BBP authenticates the user and creates an access session. \\
         \hline
         \textbf{Exit condition}   & The user is authenticated as a Registered User and is redirected to the main map screen. \\
@@ -280,7 +280,7 @@ This section lists the specific functional requirements that the Best Bike Paths
         \textbf{Entry conditions} & The user is currently authenticated (logged in) in the BBP system. \\
         \hline
         \textbf{Event Flow}       & 1 - The User navigates to their profile or settings menu. \\
-                                  & 2 - The User taps the "Log Out" button. \\
+                                  & 2 - The User taps the "Log Out" button.(R6) \\
                                   & 3 - BBP invalidates and terminates the user's session. \\
                                   & 4 - BBP redirects the user to the main map screen (now as an Anonymous User). \\
         \hline
@@ -311,15 +311,15 @@ This section lists the specific functional requirements that the Best Bike Paths
         \textbf{Entry conditions} & The user is on the main screen of the application. \\
         \hline
         \textbf{Event Flow}       & 1 - The User enters an origin and a destination in the search bar. \\
-                                  & 2 - The User taps the "Search" button. \\
+                                  & 2 - The User taps the "Search" button.(R7) \\
                                   & 3 - BBP sends the query to the Server. \\
                                   & 4 - The Server identifies all relevant public \texttt{Path}s. \\
                                   & 5 - For each path, the Server retrieves all associated \texttt{Status\_report} and \texttt{Obstacle\_report} instances. \\
-                                  & 6 - The Server applies the merging logic (freshness, majority) to calculate the `derivedStatus` for each path . \\
-                                  & 7 - The Server applies the scoring logic to calculate the `derivedScore` for each path . \\
+                                  & 6 - The Server applies the merging logic (freshness, majority) to calculate the `derivedStatus` for each path . (R9)(R8)\\
+                                  & 7 - The Server applies the scoring logic to calculate the `derivedScore` for each path .(R10) \\
                                   & 8 - The Server queries the \texttt{External Weather Service} for forecast data for the relevant locations . \\
                                   & 9 - The Server returns the list of paths, ordered by score, including their status and weather info. \\
-                                  & 10 - BBP displays the ordered list of routes to the User. \\
+                                  & 10 - BBP displays the ordered list of routes to the User. (R11)\\
         \hline
         \textbf{Exit condition}   & The user is presented with a list of matching paths ordered by score, or a "No results" message. \\
         \hline
@@ -347,12 +347,12 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Entry conditions} & The user is viewing a list of search results (\texttt{pathList}) from UC4. \\
         \hline
-        \textbf{Event Flow}       & 1 - The User taps on a specific path from the results list. \\
+        \textbf{Event Flow}       & 1 - The User taps on a specific path from the results list. (R12)\\
                                   & 2 - BBP Application sends the selected \texttt{pathID} to the Server. \\
                                   & 3 - The Server retrieves the full details for the path, including its complete list of \texttt{GPS\_points}, all associated \texttt{Status\_report}s, and all \texttt{Obstacle\_report}s. \\
-                                  & 4 - The Server applies the merging logic (R8) using the reports to calculate the definitive \texttt{derivedStatus}. \\
-                                  & 5 - The Server queries the \texttt{External Weather Service} for an updated forecast (R13) . \\
-                                  & 6 - The Server returns all path details (geometry, inclination, merged status, obstacles, weather) to the Application. \\
+                                  & 4 - The Server applies the merging logic (R9) using the reports to calculate the definitive \texttt{derivedStatus}. \\
+                                  & 5 - The Server queries the \texttt{External Weather Service} for an updated forecast (R14) . \\
+                                  & 6 - The Server returns all path details (geometry, inclination, merged status, obstacles, weather) to the Application. (R13)\\
                                   & 7 - BBP Application displays the \texttt{Path Details} screen to the User. \\
         \hline
         \textbf{Exit condition}   & The user is viewing the detailed information for the selected path. \\
@@ -381,19 +381,19 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Entry conditions} & The user is viewing the \texttt{Path Details} screen (from UC5). \\
         \hline
-        \textbf{Event Flow}       & 1 - The User taps the "Follow Route" button. \\
+        \textbf{Event Flow}       & 1 - The User taps the "Follow Route" button.(R15) \\
                                   & 2 - BBP Application loads the path geometry (from the existing \texttt{Path}) onto the navigation screen. \\
-                                  & 3 - BBP Application requests continuous location updates from the \texttt{Device Sensors} (GPS) [R15]. \\
+                                  & 3 - BBP Application requests continuous location updates from the \texttt{Device Sensors} (GPS) . \\
                                   & 4 - The application displays the user's current location on the path route and calculates session statistics (time, distance, speed) . \\
-                                  & 5 - \textbf{Note:} The app does not record the full geometry (it's already known) (R22, R23). \\
+                                  & 5 - \textbf{Note:} The app does not record the full geometry (it's already known). \\
                                   & 6 - The User arrives at the destination (or manually taps "Stop Navigation"). \\
                                   & 7 - BBP Application stops the location updates and finalizes the session statistics. \\
-                                  & 8 - BBP Application displays a "Summary" screen showing the session statistics (time, distance, avg speed). \\
-                                  & 9 - \textbf{If User is Anonymous:} The Summary screen includes a "Register to Save" button (R16). \\
-                                  & 10 - The Anonymous User taps "Register to Save", completes registration (UC1), selects a visibility (Public/Private), and the activity (stats-only) is saved (R18). \\
+                                  & 8 - BBP Application displays a "Summary" screen showing the session statistics (time, distance, avg speed).(R16) \\
+                                  & 9 - \textbf{If User is Anonymous:} The Summary screen includes a "Register to Save" button (R17)(R18). \\
+                                  & 10 - The Anonymous User taps "Register to Save", completes registration (UC1), selects a visibility (Public/Private), and the activity (stats-only) is saved (R19). \\
                                   & 11 - \textbf{If User is Registered:} The Summary screen includes a "Save Activity" button. \\
-                                  & 12 - The Registered User taps "Save Activity", selects a visibility (Public/Private) , and the activity (stats-only) is saved to their archive. \\
-                                  & 13 - If the user (Anonymous or Registered) exits the summary screen without saving/registering, the session data is discarded (R17). \\
+                                  & 12 - The Registered User taps "Save Activity", selects a visibility (Public/Private) , and the activity (stats-only) is saved to their archive.(R33) \\
+                                  & 13 - If the user (Anonymous or Registered) exits the summary screen without saving/registering, the session data is discarded (R18). \\
         \hline
         \textbf{Exit condition}   & The user has completed navigation. The session activity (stats-only) is either saved with a visibility setting or discarded. \\
         \hline
@@ -461,13 +461,13 @@ This section lists the specific functional requirements that the Best Bike Paths
         \textbf{Actor}            & Registered User \\
         \hline
         \textbf{Entry conditions} & The user has just entered \texttt{Save Path and Trip} (UC9). \\
-                                  & The system has logged one or more \texttt{sensor\_event}s (R25). \\
+                                  & The system has logged one or more \texttt{sensor\_event}s (R24). \\
         \hline
         \textbf{Event Flow}       & 1 - The BBP Application displays the summary with the \texttt{Review Detections} screen. \\
-                                  & 2 - The app shows the recorded path on a map, with pins marking the location of each logged \texttt{sensor\_event}. \\
+                                  & 2 - The app shows the recorded path on a map, with pins marking the location of each logged \texttt{sensor\_event}.(R28) \\
                                   & 3 - The user reviews each detection (e.g., by tapping the pin). \\
-                                  & 4 - For each event, the User chooses "Confirm" or "Ignore" (R26). \\
-                                  & 5 - \textbf{If} "Confirm" is pressed, the system flags the \texttt{sensor\_event} as confirmed, ready to become an \texttt{Obstacle\_report} (R27). \\
+                                  & 4 - For each event, the User chooses "Confirm" or "Ignore" (R29). \\
+                                  & 5 - \textbf{If} "Confirm" is pressed, the system flags the \texttt{sensor\_event} as confirmed, ready to become an \texttt{Obstacle\_report} (R30). \\
                                   & 6 - \textbf{If} "Ignore" is pressed, the system flags the \texttt{sensor\_event} as rejected. \\
         \hline
         \textbf{Exit condition}   & All pending \texttt{sensor\_event}s have been processed. The system proceeds to the \texttt{Save Path and Trip} (UC9) decision. \\
