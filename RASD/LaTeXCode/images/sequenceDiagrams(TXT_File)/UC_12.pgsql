@@ -7,7 +7,7 @@ App->>User: showSavePathScreen(pathData)
 activate App
 User->>App: entersName(pathName)
 
-note over User, App: <<includes>> UC10: Set Visibility
+note over User, App: <<includes>> UC12: Set Visibility
 
 
 alt User Saves
