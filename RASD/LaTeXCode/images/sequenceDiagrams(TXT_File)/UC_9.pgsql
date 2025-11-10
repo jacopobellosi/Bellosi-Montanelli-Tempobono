@@ -27,11 +27,11 @@ alt User Saves [Event Flow Step 6]
     App->>Server: saveTripAndPath(tripData, confirmedEvents, name, tripVisibility, pathVisibility)
     activate Server
 
-        note right of Server: Saves the private Trip (R31)
-        note right of Server: Saves the Path (R39)
+        note right of Server: Saves the private Trip 
+        note right of Server: Saves the Path 
         
         alt visibility is "Public"
-            note right of Server: Updates Path average stats (R8, R9)
+            note right of Server: Updates Path average stats 
         end
         
         Server-->>App: 201_Created(savedIDs)
