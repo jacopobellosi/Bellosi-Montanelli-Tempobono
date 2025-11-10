@@ -97,7 +97,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
 
 % --- Trip Recording & Management ---
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to start an automatic trip recording session. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow an RCY to start an automatic path recording session. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & During automatic recording, BBP shall record the user's GPS coordinates sequence. \\
 \hline
@@ -730,37 +730,53 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 
 \newpage
-\subsection{Mapping on Goals}
+\subsection{Mapping on goals}
 
 \textbf{[G1] Support personal cycling activity tracking}
-\begin{table}[h!]
-    \centering
-    \begin{tabularx}{\textwidth}{|X|X|}
-        \hline
-        \begin{itemize}
-            \item [R1] BBP allows Users to sign up.
-            \item [R2] BBP shall verify that the username and email provided during registration are not already in use.
-            \item [R3] BBP shall allow RCY to log in using their username/email and password.
-            \item [R6] BBP shall allow a logged-in user to log out.
-            \item [R7] BBP shall allow any user to search for public bike paths by specifying an origin and a destination.
-            \item [R14] BBP shall retrieve and display current weather forecast information for the selected path’s location.
-            \item [R15] BBP shall allow any user to initiate a navigation mode ("Follow Route") for a selected path.
-            \item [R19] If an anonymous user accepts registration after navigation, BBP shall allow them to complete registration and then save the navigated session as a Trip.
-        \end{itemize} 
-        & 
-        \begin{itemize}
-            \item [DA1] Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors.
-            \item [DA2] The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken.
-            \item [DA3] Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations).
-            \item [DA4] A data threshold exists to reliably distinguish significant movements (potholes) from normal biking vibrations.
-            \item [DA5] The mobile device remains physically attached (e.g., in a pocket or on a mount) to the user or bike during recording.
-            \item [DA7] Users act in good faith when providing manual data or confirming automatic detections.
-            \item [DA11] The external weather service API is available, stable, and provides accurate data.
-            \item [DA12] The user, while cycling, will not change the track or get lost.
-        \end{itemize} 
-        \\ \hline
-    \end{tabularx}
-\end{table}
+\usepackage{longtable, tabularx}
+
+\begin{longtable}{|X|X|}
+\caption{Requisiti e Assunzioni} \\
+\hline
+\textbf{Requisiti} & \textbf{Assunzioni} \\ \hline
+\endfirsthead
+
+\hline
+\textbf{Requisiti} & \textbf{Assunzioni} \\ \hline
+\endhead
+
+\begin{itemize}
+   \item [\textbf{R1-R6:}] Authentication and Profile Management requirements (Signup, Login, View Personal Page, Logout).
+   \item [\textbf{R15:}] BBP shall allow any user to initiate a navigation mode ("Follow Route") for a selected path.
+   \item [\textbf{R16:}] Upon completion of navigation by a user, BBP shall show the summary of the trip (example: avg. speed, distance,...).
+   \item [\textbf{R19:}] BBP shall allow an anonymous user who accepts registration to save the navigated session as a \texttt{Trip}.
+   \item [\textbf{R20:}] BBP shall allow an RCY to start an automatic trip recording session.
+   \item [\textbf{R21:}] During automatic recording, BBP shall record the user's GPS coordinates sequence.
+   \item [\textbf{R22:}] During automatic recording, BBP shall display real-time statistics (speed, distance, time).
+   \item [\textbf{R25:}] BBP shall automatically pause the GPS coordinate recording if speed is below threshold.
+   \item [\textbf{R26:}] BBP shall automatically resume the GPS coordinate recording if speed is above threshold.
+   \item [\textbf{R27:}] BBP shall allow an RCY to stop the automatic trip recording.
+   \item [\textbf{R31:}] BBP shall calculate final trip statistics ('Elapsed Time', 'Average Speed').
+   \item [\textbf{R32:}] BBP shall retrieve and associate weather information with the trip.
+   \item [\textbf{R33:}] BBP shall allow the user to save the completed \texttt{Trip} to their private archive.
+   \item [\textbf{R34:}] BBP shall allow an RCY to view their list of saved trips.
+   \item [\textbf{R35:}] BBP shall allow an RCY to view the details of a saved trip.
+   \item [\textbf{R40:}] BBP shall display feedback messages (confirmations, errors).
+\end{itemize}
+&
+\begin{itemize}
+    \item [DA1] Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors.
+    \item [DA2] The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken.
+    \item [DA3] Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations).
+    \item [DA4] A data threshold exists to reliably distinguish significant movements (potholes) from normal biking vibrations.
+    \item [DA5] The mobile device remains physically attached (e.g., in a pocket or on a mount) to the user or bike during recording.
+    \item [DA7] Users act in good faith when providing manual data or confirming automatic detections.
+    \item [DA11] The external weather service API is available, stable, and provides accurate data.
+    \item [DA12] The user, while cycling, will not change the track or get lost.
+\end{itemize}
+\\ \hline
+
+\end{longtable}
 
 \newpage
 \textbf{[G2] Gather, aggregate, and provide actionable data regarding cycle path conditions}
@@ -803,32 +819,6 @@ This section lists the specific functional requirements that the Best Bike Paths
     \end{tabularx}
 \end{table}
 
-\newpage
-\begin{table}[h!]
-    \centering
-    \begin{tabularx}{\textwidth}{|X|X|}
-        \hline
-        \begin{itemize}
-            \item [R23] During automatic recording, the system shall monitor accelerometer and gyroscope data.
-            \item [R24] BBP shall internally log a sensor\_event when sensor data exceeds a predefined threshold.
-            \item [R27] BBP shall allow an RCY to stop the automatic trip recording.
-            \item [R28] Upon stopping recording, if sensor\_events were logged, BBP shall present them to the user for review.
-            \item [R29] BBP shall allow the user to confirm or ignore each sensor\_event during review.
-            \item [R30] BBP shall create an Obstacle\_report associated with the trip only for confirmed sensor\_events.
-            \item [R31] After recording (and review), BBP shall calculate final trip statistics. The ’Average Speed’ (avg\_speed) shall be calculated using ’Elapsed Time’ and ’Total Distance’.
-            \item [R32] After recording, BBP shall retrieve and associate weather information with the trip.
-            \item [R33] BBP shall allow the user to save the completed Trip (path, stats, weather, confirmed reports) to their private archive.
-        \end{itemize}
-        &
-        \begin{itemize}
-            \item [DA15] Users grant permissions for location and motion sensors; otherwise, only manual mode and browsing are available.
-            \item [DA16] Users will start the recording at the beginning of the trail and end it at the finish line.
-            \item [DA17] Users will not commit errors while drawing or following the path.
-        \end{itemize}
-    \\ \hline
-    \end{tabularx}
-\end{table}
-        
 \newpage
 \textbf{[G3] Facilitate the discovery and navigation of suitable cycling routes}
 \begin{table}[h!]
