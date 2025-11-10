@@ -496,16 +496,16 @@ This section lists the specific functional requirements that the Best Bike Paths
         \textbf{Entry conditions} & The user has just completed \texttt{Record Trip (Automatic)} (UC7). \\
                                   & The application has the complete recorded data (geometry, stats, weather, and pending \texttt{sensor\_event}s). \\
         \hline
-        \textbf{Event Flow}       & 1 - (Triggered by UC7) BBP Application displays the "Summary \& Save" screen, showing the map, final statistics (R28), and weather (R29). \\
+        \textbf{Event Flow}       & 1 - (Triggered by UC7) BBP Application displays the "Summary \& Save" screen, showing the map, final statistics (R31)). \\
                                   & 2 - \textbf{Extension Point `Review Detections` (UC8):} \textbf{If} pending \texttt{sensor\_event}s exist (R25), the flow is extended by UC8, prompting the user to confirm/ignore detections . \\
                                   & 3 - The User enters a name for the activity. \\
                                   & 4 - \textbf{`<<include>>` `set visibility` (UC12):} The User selects the visibility for the \textbf{`Trip` (Public/Private for stats} and for the \textbf{`Path` (Public/Private for search) [R39]} \\
                                   & 5 - The User taps "Save" or "Discard". \\
                                   & 6 - \textbf{If} "Save" is pressed: \\
-                                  & \hspace{1em} a. BBP Application sends all finalised data (geometry, stats, weather, confirmed reports, name, visibilities) to the Server. \\
-                                  & \hspace{1em} b. The Server saves the \texttt{Trip} to the user's private archive (R31). \\
+                                  & \hspace{1em} a. BBP Application sends all finalised data (geometry, stats, weather, confirmed reports, name, visibilities) to the Server. (R40)\\
+                                  & \hspace{1em} b. The Server saves the \texttt{Trip} to the user's private archive (R31,R32). \\
                                   & \hspace{1em} c. The Server saves the \texttt{Path} with its chosen visibility (R39). \\
-                                  & \hspace{1em} d. \textbf{If} the \texttt{Trip} visibility was "Public", the Server updates the \texttt{Path}'s average statistics (R8, R9). \\
+                                  & \hspace{1em} d. \textbf{If} the \texttt{Trip} visibility was "Public", the Server updates the \texttt{Path}'s average statistics (R9, R10). \\
                                   & 7 - \textbf{If} "Discard" is pressed, the flow terminates and data is deleted. \\
         \hline
         \textbf{Exit condition}   & The new \texttt{Trip} is saved. The new/updated \texttt{Path} is saved. Or all data is discarded. \\
@@ -536,7 +536,7 @@ This section lists the specific functional requirements that the Best Bike Paths
         \textbf{Event Flow}       & 1 - (Triggered by UC9 or UC12) The system presents the User with the relevant visibility options [R39]. \\
                                   & 2 - \textbf{If} called by UC9 (\texttt{Save trip and path}), the User selects visibility for both the \texttt{Trip} (stats aggregation) and the \texttt{Path} (search). \\
                                   & 3 - \textbf{If} called by UC12 (\texttt{Save path}), the User selects visibility only for the \texttt{Path} (search). \\
-                                  & 4 - The User confirms the selection. \\
+                                  & 4 - The User confirms the selection.(R40) \\
         \hline
         \textbf{Exit condition}   & The visibility preference(s) are set and returned to the calling use case. \\
         \hline
@@ -631,12 +631,12 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Event Flow}       & 1 - The User navigates to their profile and taps the "My Trips" option. \\
                                   & 2 - BBP Application requests the list of saved trips for the user from the Server. \\
-                                  & 3 - The Server retrieves all \texttt{Trip} objects associated with that user (R32). \\
+                                  & 3 - The Server retrieves all \texttt{Trip} objects associated with that user (R34). \\
                                   & 4 - The Server returns a summary list (e.g., name, date, distance) of the trips. \\
                                   & 5 - BBP Application displays the list of saved trips. \\
                                   & 6 - The User taps on a specific \texttt{Trip} in the list. \\
                                   & 7 - BBP Application requests the full details for the selected \texttt{tripID}. \\
-                                  & 8 - The Server retrieves the full \texttt{Trip} object, including its \texttt{GPS\_points}, \texttt{Statistic}, \texttt{Weather\_info}, and any associated \texttt{Obstacle\_report}s (R33). \\
+                                  & 8 - The Server retrieves the full \texttt{Trip} object, including its \texttt{GPS\_points}, \texttt{Statistic}, \texttt{Weather\_info}, and any associated \texttt{Obstacle\_report}s (R35). \\
                                   & 9 - BBP Application displays the detailed trip summary. \\
         \hline
         \textbf{Exit condition}   & The user has viewed their list of trips or the details of a specific trip. \\
@@ -667,9 +667,9 @@ This section lists the specific functional requirements that the Best Bike Paths
         \textbf{Event Flow}       & 1 - The User taps the "Report status" button. \\
                                   & 2 - The app displays the status options (e.g., "Optimal", "Requires Maintenance"). \\
                                   & 3 - The User selects a status and taps "Submit". \\
-                                  & 4 - BBP Application sends the new \texttt{Status\_report} to the Server, associated with the current \texttt{Path}. \\
+                                  & 4 - BBP Application sends the new \texttt{Status\_report} to the Server, associated with the current \texttt{Path}. (R37)\\
                                   & 5 - The Server saves the new \texttt{Status\_report}. \\
-                                  & 6 - The Server triggers a recalculation of the \texttt{Path}'s `derivedStatus` and `derivedScore` (R8, R9). \\
+                                  & 6 - The Server triggers a recalculation of the \texttt{Path}'s `derivedStatus` and `derivedScore` (R10, R11). \\
         \hline
         \textbf{Exit condition}   & The new \texttt{Status\_report} is saved. The \texttt{Path}'s score is updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
         \hline
@@ -702,7 +702,7 @@ This section lists the specific functional requirements that the Best Bike Paths
                                   & 3 - The User selects an obstacle \texttt{type} (e.g., "Pothole"), places a pin on the map to indicate the location, and taps "Submit". \\
                                   & 4 - BBP Application sends the new \texttt{Obstacle\_report} to the Server, associated with the current \texttt{Path}. \\
                                   & 5 - The Server saves the new \texttt{Obstacle\_report}. \\
-                                  & 6 - The Server may trigger a recalculation of the \texttt{Path}'s `derivedScore` (R10), as obstacles affect the score. \\
+                                  & 6 - The Server may trigger a recalculation of the \texttt{Path}'s `derivedScore`, as obstacles affect the score.(R10, R11) \\
         \hline
         \textbf{Exit condition}   & The new \texttt{Obstacle\_report} is saved. The \texttt{Path}'s score may be updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
         \hline
