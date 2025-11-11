@@ -4,7 +4,7 @@ This section details the interfaces between the Best Bike Paths (BBP) system and
 
 \subsection{User interfaces}
 \label{subsec:User_interfaces}%
-The primary user interface for the BBP system will be a native mobile application designed for smartphones (IOS and Android platforms). The interface must prioritize clarity, usability, and robustness, particularly for outdoor use under varying light conditions. It will adopt a map-centric design, prominently displaying geographical data and route information. Key interaction elements will include a clear search bar for origin/destination input, interactive map elements for manual route creation and viewing details, easily accessible buttons for critical functions like starting/stopping automatic recording, and a dedicated Heads-Up Display (HUD) during active recording sessions showing real-time statistics (speed, distance, time) with high legibility. The interface will also incorporate clear feedback mechanisms and prompts for user input, such as the review and confirmation of automatically detected sensor events presented at the conclusion of a trip . Navigation between different sections (e.g., Map, Search Results, My Trips, User Profile) must be intuitive and consistent throughout the application.
+The primary user interface for the BBP system will be a native mobile application designed for smartphones (IOS and Android platforms). The interface must prioritize clarity, usability, and robustness, particularly for outdoor use under varying light conditions. It will adopt a map-centric design, prominently displaying geographical data and path information. Key interaction elements will include a clear search bar for origin/destination input, interactive map elements for manual path creation and viewing details, easily accessible buttons for critical functions like starting/stopping automatic recording, and a dedicated Heads-Up Display (HUD) during active recording sessions showing real-time statistics (speed, distance, time) with high legibility. The interface will also incorporate clear feedback mechanisms and prompts for user input, such as the review and confirmation of automatically detected sensor events presented at the conclusion of a trip . Navigation between different sections (e.g., Map, Search Results, My Trips, User Profile) must be intuitive and consistent throughout the application.
 \subsection{Hardware interfaces}
 \label{subsec:hardware_interfaces}%
 The BBP system requires direct interaction with specific hardware components integral to the user's mobile device. Foremost is the Global Positioning System (GPS) receiver, from which the application must continuously acquire accurate location data (latitude, longitude, timestamp) to track the user's position during navigation and automatic trip recording. Secondly, BBP must interface with the device's inertial measurement unit (IMU) sensors, specifically the accelerometer and gyroscope. Access to the raw data streams from these sensors is mandatory for the implementation of the automatic obstacle detection feature, enabling BBP to identify significant motion events that may correspond to real-world path anomalies, such as potholes. Furthermore, the application relies on standard smartphone hardware, including the touchscreen display for all user input and output, and potentially the device's vibration motor for non-visual notifications (e.g., indicating a potential obstacle has been logged). BBP assumes these hardware components are functional and accessible via the device's operating system APIs.
@@ -85,7 +85,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \hline
  \stepcounter{reqcounter} \thereqcounter & BBP shall retrieve and display current weather forecast information for the selected path's location. \\
 \hline
- \stepcounter{reqcounter} \thereqcounter & BBP shall allow any user to initiate a navigation mode ("Follow Route") for a selected path. \\
+ \stepcounter{reqcounter} \thereqcounter & BBP shall allow any user to initiate a navigation mode ("Follow Path") for a selected path. \\
 \hline
  \stepcounter{reqcounter} \thereqcounter & Upon completion of navigation by a user, BBP shall show the summary of the trip (example: avg. speed, distance,...). \\
 \hline
@@ -319,7 +319,7 @@ This section lists the specific functional requirements that the Best Bike Paths
                                   & 7 - The Server applies the scoring logic to calculate the `derivedScore` for each path .(R10) \\
                                   & 8 - The Server queries the \texttt{External Weather Service} for forecast data for the relevant locations . \\
                                   & 9 - The Server returns the list of paths, ordered by score, including their status and weather info. \\
-                                  & 10 - BBP displays the ordered list of routes to the User. (R11)\\
+                                  & 10 - BBP displays the ordered list of paths to the User. (R11)\\
         \hline
         \textbf{Exit condition}   & The user is presented with a list of matching paths ordered by score, or a "No results" message. \\
         \hline
@@ -381,10 +381,10 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Entry conditions} & The user is viewing the \texttt{Path Details} screen (from UC5). \\
         \hline
-        \textbf{Event Flow}       & 1 - The User taps the "Follow Route" button.(R15) \\
+        \textbf{Event Flow}       & 1 - The User taps the "Follow Path" button.(R15) \\
                                   & 2 - BBP Application loads the path geometry (from the existing \texttt{Path}) onto the navigation screen. \\
                                   & 3 - BBP Application requests continuous location updates from the \texttt{Device Sensors} (GPS) . \\
-                                  & 4 - The application displays the user's current location on the path route and calculates session statistics (time, distance, speed) . \\
+                                  & 4 - The application displays the user's current location on the path path and calculates session statistics (time, distance, speed) . \\
                                   & 5 - \textbf{Note:} The app does not record the full geometry (it's already known). \\
                                   & 6 - The User arrives at the destination (or manually taps "Stop Navigation"). \\
                                   & 7 - BBP Application stops the location updates and finalizes the session statistics. \\
@@ -563,7 +563,7 @@ This section lists the specific functional requirements that the Best Bike Paths
         \hline
         \textbf{Entry conditions} & The user is registered, logged in, and has selected the "Create Path Manually" option. \\
         \hline
-        \textbf{Event Flow}       & 1 - BBP Application displays the manual route editor screen, showing a map. \\
+        \textbf{Event Flow}       & 1 - BBP Application displays the manual path editor screen, showing a map. \\
                                   & 2 - The User iteratively draws the path geometry by placing points on the map (R36). \\
                                   & 3 - The User taps "Done" or "Finish" when the path geometry is complete. \\
                                   & 4 - The registred user can now add a path status or report a Obstacle report (UC14,UC15). \\
@@ -732,157 +732,79 @@ This section lists the specific functional requirements that the Best Bike Paths
 \newpage
 \subsection{Mapping on goals}
 
-\textbf{[G1] Support personal cycling activity tracking}
-\usepackage{longtable, tabularx}
-
-\begin{longtable}{|X|X|}
-\caption{Requisiti e Assunzioni} \\
+\subsection*{[G1] Support personal cycling activity tracking}
+\begin{longtable}{|L{0.47\textwidth}|L{0.47\textwidth}|}
 \hline
-\textbf{Requisiti} & \textbf{Assunzioni} \\ \hline
-\endfirsthead
-
-\hline
-\textbf{Requisiti} & \textbf{Assunzioni} \\ \hline
-\endhead
-
-\begin{itemize}
-   \item [\textbf{R1-R6:}] Authentication and Profile Management requirements (Signup, Login, View Personal Page, Logout).
-   \item [\textbf{R15:}] BBP shall allow any user to initiate a navigation mode ("Follow Route") for a selected path.
-   \item [\textbf{R16:}] Upon completion of navigation by a user, BBP shall show the summary of the trip (example: avg. speed, distance,...).
-   \item [\textbf{R19:}] BBP shall allow an anonymous user who accepts registration to save the navigated session as a \texttt{Trip}.
-   \item [\textbf{R20:}] BBP shall allow an RCY to start an automatic trip recording session.
-   \item [\textbf{R21:}] During automatic recording, BBP shall record the user's GPS coordinates sequence.
-   \item [\textbf{R22:}] During automatic recording, BBP shall display real-time statistics (speed, distance, time).
-   \item [\textbf{R25:}] BBP shall automatically pause the GPS coordinate recording if speed is below threshold.
-   \item [\textbf{R26:}] BBP shall automatically resume the GPS coordinate recording if speed is above threshold.
-   \item [\textbf{R27:}] BBP shall allow an RCY to stop the automatic trip recording.
-   \item [\textbf{R31:}] BBP shall calculate final trip statistics ('Elapsed Time', 'Average Speed').
-   \item [\textbf{R32:}] BBP shall retrieve and associate weather information with the trip.
-   \item [\textbf{R33:}] BBP shall allow the user to save the completed \texttt{Trip} to their private archive.
-   \item [\textbf{R34:}] BBP shall allow an RCY to view their list of saved trips.
-   \item [\textbf{R35:}] BBP shall allow an RCY to view the details of a saved trip.
-   \item [\textbf{R40:}] BBP shall display feedback messages (confirmations, errors).
-\end{itemize}
-&
-\begin{itemize}
-    \item [DA1] Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors.
-    \item [DA2] The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken.
-    \item [DA3] Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations).
-    \item [DA4] A data threshold exists to reliably distinguish significant movements (potholes) from normal biking vibrations.
-    \item [DA5] The mobile device remains physically attached (e.g., in a pocket or on a mount) to the user or bike during recording.
-    \item [DA7] Users act in good faith when providing manual data or confirming automatic detections.
-    \item [DA11] The external weather service API is available, stable, and provides accurate data.
-    \item [DA12] The user, while cycling, will not change the track or get lost.
-\end{itemize}
-\\ \hline
-
+\textbf{Requirements} & \textbf{Domain Assumptions} \\ \hline
+R1-R6: Authentication and Profile Management requirements (Signup, Login, View Personal Page, Logout). & DA1: Users must have a mobile device with GPS, accelerometer, and gyroscope sensors. \\ \hline
+R15: BBP shall allow any user to initiate a navigation mode (“Follow Path”) for a selected path. & DA2: The GPS provides location data accurate enough to reconstruct the path. \\ \hline
+R16: Upon completion of navigation, BBP shall show trip summary (avg. speed, distance, …). & DA3: Accelerometer and gyroscope data correlate with real-world events. \\ \hline
+R19: BBP shall allow anonymous users who accept registration to save the navigated session as a Trip. & DA4: A threshold exists to distinguish potholes from vibrations. \\ \hline
+R20: BBP shall allow an RCY to start an automatic path recording session. & DA5: The device remains physically attached to the user or bike. \\ \hline
+R21: During automatic recording, BBP shall record the user’s GPS coordinates. & DA7: Users act in good faith when providing or confirming data. \\ \hline
+R22: During automatic recording, BBP shall display real-time statistics. & DA11: The external weather API is stable and accurate. \\ \hline
+R25: BBP shall automatically pause GPS recording if speed is below threshold. & DA12: The user will not change the track or get lost. \\ \hline
+R26: BBP shall automatically resume GPS recording if speed is above threshold. & \\ \hline
+R27: BBP shall allow an RCY to stop the automatic trip recording. & \\ \hline
+R31: BBP shall calculate final trip statistics (Elapsed Time, Average Speed). & \\ \hline
+R32: BBP shall associate weather data with the trip. & \\ \hline
+R33: BBP shall allow the user to save the completed Trip to their archive. & \\ \hline
+R40: BBP shall display feedback messages (confirmations, errors). & \\ \hline
 \end{longtable}
 
-\newpage
-\textbf{[G2] Gather, aggregate, and provide actionable data regarding cycle path conditions}
-\begin{table}[h!]
-    \centering
-    \begin{tabularx}{\textwidth}{|X|X|}
-        \hline
-        \begin{itemize}
-            \item [R7] BBP shall allow any user to search for public bike paths by specifying an origin and a destination.
-            \item [R9] BBP shall calculate a merged status for each searched path based on its associated Status\_report instances, applying freshness and majority rules
-            \item [R10] BBP shall calculate a score for each searched path based on its reports/conditions and metrics.
-            \item [R11] BBP shall display search results as a list of paths ordered by the calculated score.
-            \item [R12] BBP shall allow any user to select a path from the search results to view its details.
-            \item [R13] BBP shall display the details of a selected path, including its geometry (map), distance, elevation, calculated merged status, and reported obstacles.
-            \item [R14] BBP shall retrieve and display current weather forecast information for the selected path’s location.
-            \item [R15] BBP shall allow any user to initiate a navigation mode ("Follow Route") for a selected path.
-            \item [R16] Upon completion of navigation by a user, BBP shall show the summary of the trip (example: avg. speed, distance,...).
-            \item [R19] If an anonymous user accepts registration after navigation, BBP shall allow them to complete registration and then save the navigated session as a Trip.
-            \item [R20] BBP shall allow an RCY to start an automatic trip recording session.
-            \item [R21] During automatic recording, BBP shall record the user’s GPS coordinates sequence.
-            \item [R22] During automatic recording, BBP shall display real-time statistics (speed, distance, time).
-        \end{itemize} 
-        &
-        \begin{itemize}
-            \item [DA1] Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors.
-            \item [DA2] The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken.
-            \item [DA3] Accelerometer and gyroscope data correlate with real-world physical events (e.g., potholes, vibrations).
-            \item [DA4] A data threshold exists to reliably distinguish significant movements (potholes) from normal biking vibrations.
-            \item [DA5] The mobile device remains physically attached (e.g., in a pocket or on a mount) to the user or bike during recording.
-            \item [DA6] The device has sufficient resources (battery, CPU) to sustain an active recording session (GPS + sensors).
-            \item [DA7] Users act in good faith when providing manual data or confirming automatic detections.
-            \item [DA8] “Fresh” (recent) information is considered more relevant than older data when describing a path’s status.
-            \item [DA9] Users provide correct and rational evaluations during path assessments.
-            \item [DA11] The external weather service API is available, stable, and provides accurate data.
-            \item [DA12] The user, while cycling, will not change the track or get lost.
-            \item [DA13] The device has an active internet connection when searching, saving, or publishing a path.
-            \item [DA14] Paths refer to either dedicated bike tracks or roads with low traffic and cycling-compatible speeds (as per the problem statement).
-        \end{itemize}
-        \\ \hline
-    \end{tabularx}
-\end{table}
+\subsection*{[G2] Gather and provide actionable data on cycle path conditions}
+\begin{longtable}{|L{0.47\textwidth}|L{0.47\textwidth}|}
+\hline
+\textbf{Requirements} & \textbf{Domain Assumptions} \\ \hline
+R7: BBP shall allow users to search for public bike paths by origin/destination. & DA1: Users must have a mobile device with GPS, accelerometer, and gyroscope. \\ \hline
+R8: BBP shall retrieve all relevant reports for found paths. & DA2: GPS accuracy sufficient to reconstruct the path. \\ \hline
+R9: BBP shall calculate merged status using freshness and majority rules. & DA3: Sensor data correlate with real-world events. \\ \hline
+R10: BBP shall calculate a score for each path. & DA4: Threshold distinguishes potholes from normal vibrations. \\ \hline
+R11: BBP shall display search results ordered by score. & DA5: Device physically attached to user or bike. \\ \hline
+R12: BBP shall display path details (geometry, distance, elevation, status, obstacles). & DA6: Device has enough resources (battery, CPU). \\ \hline
+R13: BBP shall retrieve and display weather for the selected path. & DA7: Users act in good faith when providing data. \\ \hline
+R15: BBP shall allow navigation for selected paths. & DA8: Recent data are considered more relevant. \\ \hline
+R16: BBP shall show navigation summary. & DA9: Users provide rational path evaluations. \\ \hline
+R19: BBP shall allow registered users to save trips. & DA11: External weather API stable and accurate. \\ \hline
+R20: BBP shall allow recording sessions. & DA12: User will not change the path. \\ \hline
+R21: BBP shall record GPS coordinates. & DA13: Active internet connection when searching/saving. \\ \hline
+R22: BBP shall display real-time statistics. & DA14: Paths correspond to safe cycling paths. \\ \hline
+R34:BBP shall allow an RCY to view their list of saved trips.& \\ \hline
+R35: BBP shall allow an RCY to view the details of a saved trip.& \\ \hline
+\end{longtable}
 
-\newpage
-\textbf{[G3] Facilitate the discovery and navigation of suitable cycling routes}
-\begin{table}[h!]
-    \centering
-    \begin{tabularx}{\textwidth}{|X|X|}
-        \hline
-        \begin{itemize}
-            \item [R14] BBP shall retrieve and display current weather forecast information for the selected path’s location.
-            \item [R15] BBP shall allow any user to initiate a navigation mode ("Follow Route") for a selected path.
-            \item [R16] Upon completion of navigation by a user, BBP shall show the summary of the trip (e.g., avg. speed, distance,...).
-            \item [R17] Upon completion of navigation by an anonymous user, BBP shall offer the option to register.
-            \item [R18] If an anonymous user refuses registration after navigation, BBP shall discard the navigation session data.
-            \item [R19] If an anonymous user accepts registration after navigation, BBP shall allow them to complete registration and then save the navigated session as a Trip.
-        \end{itemize} 
-        & 
-        \begin{itemize}
-            \item [DA2] The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken.
-            \item [DA12] The user, while cycling, will not change the track or get lost.
-        \end{itemize} 
-        \\ \hline
-    \end{tabularx}
-\end{table}
+\subsection*{[G3] Facilitate the discovery and navigation of suitable cycling paths}
+\begin{longtable}{|L{0.47\textwidth}|L{0.47\textwidth}|}
+\hline
+\textbf{Requirements} & \textbf{Domain Assumptions} \\ \hline
+R14: BBP shall retrieve and display weather for selected path. & DA2: GPS accuracy sufficient to reconstruct the path. \\ \hline
+R15: BBP shall allow navigation for selected path. & DA12: The user will not change the track or get lost. \\ \hline
+R16: BBP shall show trip summary. & \\ \hline
+R17: BBP shall offer registration to anonymous users after navigation. & \\ \hline
+R18: If registration refused, data are discarded. & \\ \hline
+R19: If accepted, session is saved as Trip. & \\ \hline
+\end{longtable}
 
-\textbf{[G4] Enhance trip analysis by enriching recorded user trips with relevant meteorological and physical data}
-\begin{table}[h!]
-    \centering
-    \begin{tabularx}{\textwidth}{|X|X|}
-        \hline
-        \begin{itemize}
-            \item [R31] After recording (and review), BBP shall calculate final trip statistics. The ’Average Speed’ (avg\_speed) shall be calculated using ’Elapsed Time’ and ’Total Distance’.
-            \item[R32] After recording, BBP shall retrieve and associate weather information with the trip.
-            \item[R33] BBP shall allow the user to save the completed Trip (path, stats, weather, confirmed reports) to their private archive
-        \end{itemize} 
-        & 
-        \begin{itemize}
-            \item [DA11] The external weather service API is available, stable, and provides accurate data.
-        \end{itemize} 
-        \\ \hline
-    \end{tabularx}
-\end{table}
+\subsection*{[G4] Enhance trip analysis with meteorological and physical data}
+\begin{longtable}{|L{0.47\textwidth}|L{0.47\textwidth}|}
+\hline
+\textbf{Requirements} & \textbf{Domain Assumptions} \\ \hline
+R31: BBP shall calculate final trip statistics (Average Speed, Elapsed Time). & DA11: The external weather API is stable and accurate. \\ \hline
+R32: BBP shall retrieve and associate weather data with the trip. & \\ \hline
+R33: BBP shall allow the user to save the completed Trip. & \\ \hline
+\end{longtable}
 
-\newpage
-\textbf{[G5] Establish a community-based path evaluation system}
-\begin{table}[h!]
-    \centering
-    \begin{tabularx}{\textwidth}{|X|X|}
-        \hline
-        \begin{itemize}
-            \item [R36] BBP shall provide an editor for RCY to manually create a path geometry on a map.
-            \item [R37] BBP shall allow RCY to submit Status\_reports manually for paths.
-            \item [R38] BBP shall allow RCY to submit Obstacle\_reports manually for paths.
-            \item [R39] BBP shall allow an RCY, during the save process (UC9, UC12), to specify: (1) The visibility of the Path (Public/Private for search), and (2) The visibility of the Trip (Public/Private for statistics aggregation).
-            \item [R40] BBP shall display feedback messages (confirmations, errors) to the user.
-        \end{itemize} 
-        & 
-        \begin{itemize}
-            \item [DA1] Users must have a mobile device (smartphone) equipped with GPS, accelerometer, and gyroscope sensors.
-            \item [DA2] The device’s GPS sensor provides location data accurate enough to faithfully reconstruct the path taken.
-            \item [DA9] Users provide correct and rational evaluations during path assessments.
-            \item [DA10] Users can correctly understand and distinguish the provided status levels (e.g., "Optimal", "Requires Maintenance").
-        \end{itemize} 
-        \\ \hline
-    \end{tabularx}
-\end{table}
+\subsection*{[G5] Establish a community-based path evaluation system}
+\begin{longtable}{|L{0.47\textwidth}|L{0.47\textwidth}|}
+\hline
+\textbf{Requisiti} & \textbf{Assunzioni} \\ \hline
+R36: BBP shall provide a map editor for RCY to create paths. & DA1: Users must have a mobile device with sensors (GPS, accelerometer, gyroscope). \\ \hline
+R37: BBP shall allow RCY to submit Status reports. & DA2: GPS accuracy sufficient to reconstruct the path. \\ \hline
+R38: BBP shall allow RCY to submit Obstacle reports. & DA9: Users provide correct and rational evaluations. \\ \hline
+R39: BBP shall allow RCY to set visibility options for Path and Trip. & DA10: Users can correctly interpret path status levels (“Optimal”, “Requires Maintenance”). \\ \hline
+R40: BBP shall display confirmations or errors. & \\ \hline
+
+\end{longtable}
 
 \vspace{1.5cm}
 \newcounter{rtt}
@@ -895,43 +817,43 @@ This section lists the specific functional requirements that the Best Bike Paths
         R\crt & \checkmark & & & &  \\ \hline
         R\crt & \checkmark & & & &  \\ \hline
         R\crt & \checkmark & & & &  \\ \hline
-        R\crt & & & & &  \\ \hline
-        R\crt & & & & &  \\ \hline
+        R\crt & \checkmark& & & &  \\ \hline
+        R\crt & \checkmark& & & &  \\ \hline
         R\crt & \checkmark & & & &  \\ \hline
         R\crt & \checkmark & \checkmark & & &  \\ \hline
-        R\crt & & & & &  \\ \hline
+        R\crt & & \checkmark& & &  \\ \hline
         R\crt & & \checkmark & & & \\ \hline
         R\crt & & \checkmark & & & \\ \hline
         R\crt & & \checkmark  & & &  \\ \hline
         R\crt & & \checkmark  & & &  \\ \hline
         R\crt & & \checkmark  & & &  \\ \hline
-        R\crt & \checkmark & \checkmark  & \checkmark & &  \\ \hline
+        R\crt &  & \checkmark  & \checkmark & &  \\ \hline
         R\crt & \checkmark & \checkmark  &  \checkmark & &  \\ \hline
-        R\crt & & \checkmark  & \checkmark & & \\ \hline
+        R\crt & \checkmark& \checkmark  & \checkmark & & \\ \hline
         R\crt & & & \checkmark & &  \\ \hline
         R\crt & & & \checkmark & &  \\ \hline
         R\crt & \checkmark & \checkmark  & \checkmark & &  \\ \hline
+        R\crt & \checkmark& \checkmark  & & &  \\ \hline
+        R\crt &\checkmark & \checkmark  & & &  \\ \hline
+        R\crt & \checkmark& \checkmark  & & &  \\ \hline
         R\crt & & \checkmark  & & &  \\ \hline
         R\crt & & \checkmark  & & &  \\ \hline
-        R\crt & & \checkmark  & & &  \\ \hline
-        R\crt & & \checkmark  & & &  \\ \hline
-        R\crt & & \checkmark  & & &  \\ \hline
-        R\crt & & \checkmark  & & &  \\ \hline
-        R\crt & & \checkmark  & & &  \\ \hline
-        R\crt & & \checkmark  & & &  \\ \hline
+        R\crt & \checkmark& \checkmark  & & &  \\ \hline
+        R\crt & \checkmark& \checkmark  & & &  \\ \hline
+        R\crt & \checkmark& \checkmark  & & &  \\ \hline
         R\crt & & \checkmark  & & &  \\ \hline
         R\crt & & \checkmark  & & \checkmark & \\ \hline
         R\crt & & \checkmark  & & \checkmark & \\ \hline
-        R\crt & & \checkmark  & & \checkmark & \\ \hline
-        R\crt & & & & & \\ \hline
-        R\crt & & & & & \\ \hline
-        R\crt & & & & & \\ \hline
-        R\crt & & & & & \\ \hline
+        R\crt &\checkmark & \checkmark  & & \checkmark & \\ \hline
+        R\crt & \checkmark& & & & \\ \hline
+        R\crt &\checkmark & & & & \\ \hline
+        R\crt & &\checkmark & & & \\ \hline
+        R\crt & & \checkmark& & & \\ \hline
         R\crt & & & & & \checkmark  \\ \hline
         R\crt & & & & & \checkmark  \\ \hline
         R\crt & & & & & \checkmark  \\ \hline
         R\crt & & & & & \checkmark  \\ \hline
-        R\crt & & & & & \checkmark  \\ \hline
+        R\crt &\checkmark & & & & \checkmark  \\ \hline
 \caption{Traceability Matrix for Goals and Requirements}
 \label{tab:traceability}
 \end{longtable}
@@ -959,13 +881,13 @@ concurrent user load, data storage capacity, and data acquisition timing constra
     
     \item \textbf{(Time response: Start Recording):} The \texttt{Record trip (automatic)} session (R20) must initialize and begin active monitoring of sensors (R21, R23) within \textbf{1.5 seconds} of the user tapping "Start".
     
-    \item \textbf{(Time response: Sensor Frequency):} During an automatic recording session (R20):
+    \item \textbf{(Time response: Sensor Frequency):} During an \textbf{active, non-paused} recording state (R20, R26):
     \begin{itemize}[leftmargin=*, noitemsep, nolistsep]
         \item The GPS (R21) must be sampled at a minimum frequency of \textbf{1 Hz} (one sample per second) to ensure accurate geometry.
         \item The Accelerometer and Gyroscope (R23) must be sampled at a minimum frequency of \textbf{10 Hz} (ten samples per second) to reliably capture data for pothole detection (R24).
     \end{itemize}
     
-    \item \textbf{(Time response: Save):} The system shall complete the server-side save operation for a \texttt{Trip} (R31) or \texttt{Path} (R37) and return a confirmation message (R38) within \textbf{4.0 seconds} of the user tapping "Save".
+    \item \textbf{(Time response: Save):} The system shall complete the server-side save operation for a \texttt{Trip} (R31) or \texttt{Path} (R39) and return a confirmation message (R40) within \textbf{4.0 seconds} of the user tapping "Save".
     
     \item \textbf{(Number of concurrent users: General):} The BBP backend shall support a minimum of \textbf{1,000 concurrent users} (ACY and RCY) performing searches (R7) or navigation (R15) without degrading the response times defined in PR-2 and PR-3.
     
@@ -973,8 +895,9 @@ concurrent user load, data storage capacity, and data acquisition timing constra
     
     \item \textbf{(Data storage: Scalability):} The system architecture must be scalable to support the storage and processing (R8, R9) of an average of \textbf{10,000 new \texttt{Trip}s} and \textbf{50,000 new \texttt{Report}s} per day.
     
-    \item \textbf{(Data storage: Retention):} All user-generated \texttt{Trip} data (R31), \texttt{Path} data (R34), and \texttt{Report} data (R35, R36) shall be retained indefinitely.
+    \item \textbf{(Data storage: Retention):} All user-generated \texttt{Trip} data (R31), \texttt{Path} data (R33), and \texttt{Report} data (R37, R38) shall be retained indefinitely.
 
+    \item \textbf{(Time response: Auto-Pause/Resume):} The system must detect and trigger an Auto-Pause (R25) or Auto-Resume (R26) state within \textbf{15 seconds} of the speed condition being continuously met (i.e., 15 seconds after the 2-minute stop, or 15 seconds after resuming movement).
 \end{enumerate}
 
 
@@ -1018,7 +941,7 @@ The system must demonstrate high reliability during its core operations.
 \begin{itemize}[leftmargin=*, itemsep=2pt]
     \item \textbf{Recording Stability:} The \texttt{Record trip (automatic)} session (R20) must be robust. The application must be able to handle continuous background data streams from GPS (R21) and IMU sensors (R23) for extended periods (e.g., up to 3 hours) without crashing or corrupting data.
     \item \textbf{Data Integrity (Sensors):} The system must reliably process sensor data (R23) to ensure that \texttt{sensor\_event} logs (R24) are correctly generated based on the defined thresholds (DA4) and are not lost, even if the application is temporarily suspended.
-    \item \textbf{Data Integrity (Save):} The system must ensure that a "Save" operation (R31, R37) is atomic. A failure during saving (e.g., network loss) must not result in partially saved or corrupted \texttt{Trip} or \texttt{Path} data.
+    \item \textbf{Data Integrity (Save):} The system must ensure that a "Save" operation (R31, R39) is atomic. A failure during saving (e.g., network loss) must not result in partially saved or corrupted \texttt{Trip} or \texttt{Path} data.
 \end{itemize}
 
 \subsection{Availability}
@@ -1026,7 +949,7 @@ The system must demonstrate high reliability during its core operations.
 The server-side components of the BBP system must be highly available.
 \begin{itemize}[leftmargin=*, itemsep=2pt]
     \item \textbf{Core Service Uptime:} All backend services responsible for user authentication (R3), path searching (R7), and data aggregation (R8, R9, R10) shall maintain an availability of \textbf{99.5\%} (Tier 3 equivalent).
-    \item \textbf{Graceful Degradation:} In the event of an \texttt{External Weather Service} (R14, R30) outage, the system shall remain available, displaying path and trip details without weather data and notifying the user of the temporary unavailability.
+    \item \textbf{Graceful Degradation:} In the event of an \texttt{External Weather Service} (R14, R32) outage, the system shall remain available, displaying path and trip details without weather data and notifying the user of the temporary unavailability.
 \end{itemize}
 
 \subsection{Security}
