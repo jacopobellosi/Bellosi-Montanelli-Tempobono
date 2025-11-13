@@ -108,10 +108,10 @@ This section lists the specific functional requirements that the Best Bike Paths
  \stepcounter{reqcounter} \thereqcounter & BBP shall internally log a \texttt{sensor\_event} when sensor data exceeds a predefined threshold. \\
 \hline
 
-% --- INSERITI NUOVI REQUISITI PER OPZIONE A ---
-\stepcounter{reqcounter} \thereqcounter & BBP shall automatically pause the GPS coordinate recording (R21) if the user's speed remains below a defined threshold (e.g., 2 km/h) for a specified duration (e.g., 2 minutes). \\
+% --- REQUISITI RICHIESTI DALLA PROF ---
+\stepcounter{reqcounter} \thereqcounter & BBP shall store the visibility setting of a saved Path as specified by the Registered User, ensuring that Public paths are retrievable via the search function (R7), while Private paths remain strictly accessible only within the creator’s personal archive. \\
 \hline
-\stepcounter{reqcounter} \thereqcounter & BBP shall automatically resume the GPS coordinate recording (R21) if the user's speed exceeds the defined threshold after an auto-pause. \\
+\stepcounter{reqcounter} \thereqcounter & BBP shall store the visibility setting of a saved Trip as specified by the Registered User, ensuring that data from Public trips are included in the aggregated Path statistics and scoring algorithms (R9, R10), while data from Private trips are excluded from all community calculations. \\
 \hline
 % --- --------------------------------------- ---
 
@@ -743,9 +743,7 @@ R19: BBP shall allow anonymous users who accept registration to save the navigat
 R20: BBP shall allow an RCY to start an automatic path recording session. & DA5: The device remains physically attached to the user or bike. \\ \hline
 R21: During automatic recording, BBP shall record the user’s GPS coordinates. & DA7: Users act in good faith when providing or confirming data. \\ \hline
 R22: During automatic recording, BBP shall display real-time statistics. & DA11: The external weather API is stable and accurate. \\ \hline
-R25: BBP shall automatically pause GPS recording if speed is below threshold. & DA12: The user will not change the track or get lost. \\ \hline
-R26: BBP shall automatically resume GPS recording if speed is above threshold. & \\ \hline
-R27: BBP shall allow an RCY to stop the automatic trip recording. & \\ \hline
+R27: BBP shall allow an RCY to stop the automatic trip recording. & DA12: The user will not change the track or get lost. \\ \hline
 R31: BBP shall calculate final trip statistics (Elapsed Time, Average Speed). & \\ \hline
 R32: BBP shall associate weather data with the trip. & \\ \hline
 R33: BBP shall allow the user to save the completed Trip to their archive. & \\ \hline
@@ -798,10 +796,12 @@ R33: BBP shall allow the user to save the completed Trip. & \\ \hline
 \begin{longtable}{|L{0.47\textwidth}|L{0.47\textwidth}|}
 \hline
 \textbf{Requisiti} & \textbf{Assunzioni} \\ \hline
-R36: BBP shall provide a map editor for RCY to create paths. & DA1: Users must have a mobile device with sensors (GPS, accelerometer, gyroscope). \\ \hline
-R37: BBP shall allow RCY to submit Status reports. & DA2: GPS accuracy sufficient to reconstruct the path. \\ \hline
-R38: BBP shall allow RCY to submit Obstacle reports. & DA9: Users provide correct and rational evaluations. \\ \hline
-R39: BBP shall allow RCY to set visibility options for Path and Trip. & DA10: Users can correctly interpret path status levels (“Optimal”, “Requires Maintenance”). \\ \hline
+R25: BBP shall store the visibility setting of a saved Path as specified by the Registered User, ensuring that Public paths are retrievable via the search function (R7), while Private paths remain strictly accessible only within the creator’s personal archive. & DA1: Users must have a mobile device with sensors (GPS, accelerometer, gyroscope). \\ \hline
+R26: BBP shall store the visibility setting of a saved Trip as specified by the Registered User, ensuring that data from Public trips are included in the aggregated Path statistics and scoring algorithms (R9, R10), while data from Private trips are excluded from all community calculations. & DA2: GPS accuracy sufficient to reconstruct the path. \\ \hline
+R36: BBP shall provide a map editor for RCY to create paths. & DA9: Users provide correct and rational evaluations. \\ \hline
+R37: BBP shall allow RCY to submit Status reports. & DA10: Users can correctly interpret path status levels (“Optimal”, “Requires Maintenance”). \\ \hline
+R38: BBP shall allow RCY to submit Obstacle reports. 
+R39: BBP shall allow RCY to set visibility options for Path and Trip. 
 R40: BBP shall display confirmations or errors. & \\ \hline
 
 \end{longtable}
@@ -838,8 +838,8 @@ R40: BBP shall display confirmations or errors. & \\ \hline
         R\crt & \checkmark& \checkmark  & & &  \\ \hline
         R\crt & & \checkmark  & & &  \\ \hline
         R\crt & & \checkmark  & & &  \\ \hline
-        R\crt & \checkmark& \checkmark  & & &  \\ \hline
-        R\crt & \checkmark& \checkmark  & & &  \\ \hline
+        R\crt & & & & & \checkmark  \\ \hline
+        R\crt & & & & & \checkmark  \\ \hline
         R\crt & \checkmark& \checkmark  & & &  \\ \hline
         R\crt & & \checkmark  & & &  \\ \hline
         R\crt & & \checkmark  & & \checkmark & \\ \hline
