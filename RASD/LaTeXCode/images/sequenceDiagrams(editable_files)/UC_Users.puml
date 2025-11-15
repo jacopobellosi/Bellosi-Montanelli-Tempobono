@@ -1,0 +1,54 @@
+@startuml
+' === Layout ===
+left to right direction
+
+' === Style ===
+skinparam actor {
+    BackgroundColor White
+    BorderColor Black
+}
+skinparam usecase {
+    BackgroundColor White
+    BorderColor Black
+}
+
+' 2. BBP Box Style
+' Body: White, Border: Green
+skinparam package {
+    BackgroundColor White
+    BorderColor Green
+}
+
+skinparam packageHeader {
+    BackgroundColor Green
+    BorderColor Green
+    FontColor White
+}
+
+' 3. Arrows: Red and Fixed
+skinparam ArrowColor Red
+skinparam DefaultLineColor Red
+
+' === Definitions ===
+' 1. Actors
+actor User
+actor "Registered User"
+
+' 2. System Boundary
+package BBP {
+  ' 3. Use Cases
+  usecase "Registers account" as UC1
+  usecase "Log In" as UC2
+  usecase "Log Out" as UC3
+}
+
+' 4. Relationships
+' Inheritance
+User <|-- "Registered User"
+
+' Associations
+User --> UC1
+User --> UC2
+"Registered User" --> UC3
+
+@enduml

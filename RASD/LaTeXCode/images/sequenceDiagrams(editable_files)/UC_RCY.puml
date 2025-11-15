@@ -1,0 +1,87 @@
+@startuml
+/' === Style === '/
+/' 1. Actors and Use Cases: Black & White '/
+skinparam actor {
+    BackgroundColor White
+    BorderColor Black
+}
+skinparam usecase {
+    BackgroundColor White
+    BorderColor Black
+}
+
+/' 2. BBP Box Style: Purple Banner '/
+skinparam package {
+    BackgroundColor White
+    BorderColor Purple
+}
+skinparam packageHeader {
+    BackgroundColor Purple
+    BorderColor Purple
+    FontColor White
+}
+
+/' 3. Arrows: Red and Fixed '/
+skinparam ArrowColor Red
+skinparam DefaultLineColor Red
+
+/' === Definitions === '/
+/' 1. Actor on the Left '/
+actor "Registered user" as RCY
+
+/' 2. System in the Middle '/
+package BBP {
+  /' --- FIX: Removed \n to avoid linter "typo" --- '/
+  usecase "Record path (automatic)" as UC_Record
+  usecase "Review detections" as UC_Review
+  usecase "Save trip and path" as UC_SaveTrip
+  usecase "Create path manually" as UC_Create
+  usecase "Save path" as UC_SavePath
+  usecase "set visibility" as UC_Vis
+  usecase "Submit report" as UC_Submit
+  /' --- FIX: Corrected syntax error on this line --- '/
+  usecase "Submit status report" as UC_Status
+  usecase "Submit Obstacle report" as UC_Obstacle
+  usecase "View \"My trips\"" as UC_View
+}
+
+/' 3. System Actors on the Right '/
+rectangle "Device sensors" <<actor>> as Sensors
+rectangle "External weather service" <<actor>> as Weather
+
+/' === Layout Forcing (This forces the position) === '/
+' This invisible link forces RCY to the left of BBP
+RCY -[hidden]- BBP
+
+' This invisible link forces BBP to the left of Weather
+BBP -[hidden]- Weather
+
+' This invisible link stacks Sensors below Weather
+Weather -[hidden]down- Sensors
+
+
+/' === Relationships === '/
+/' User Associations '/
+RCY --> UC_Record
+RCY --> UC_Create
+RCY --> UC_Submit
+RCY --> UC_View
+
+/' System Actor Associations '/
+Sensors --> UC_Review
+Weather --> UC_SaveTrip
+
+/' Internal Use Case Flows '/
+UC_Record --> UC_SaveTrip
+UC_Create --> UC_SavePath
+
+/' Include & Extend Arrows '/
+UC_Review .l.> UC_SaveTrip : "<<extends>>"
+UC_SaveTrip .l.> UC_Vis : "<<include>>"
+UC_SavePath .r.> UC_Vis : "<<include>>"
+
+/' Generalization Arrows (point to parent) '/
+UC_Status --|> UC_Submit
+UC_Obstacle --|> UC_Submit
+
+@enduml

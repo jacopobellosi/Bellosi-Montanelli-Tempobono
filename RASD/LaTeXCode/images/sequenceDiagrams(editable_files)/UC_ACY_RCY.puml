@@ -1,0 +1,66 @@
+@startuml
+/' === Style === '/
+/' 1. Actors and Use Cases: Black & White '/
+skinparam actor {
+    BackgroundColor White
+    BorderColor Black
+}
+skinparam usecase {
+    BackgroundColor White
+    BorderColor Black
+}
+
+/' 2. BBP Box Style: Orange Banner '/
+skinparam package {
+    BackgroundColor White
+    BorderColor Orange
+}
+skinparam packageHeader {
+    BackgroundColor Orange
+    BorderColor Orange
+    FontColor Black ' Black text on orange
+}
+
+/' 3. Arrows: Red and Fixed '/
+skinparam ArrowColor Red
+skinparam DefaultLineColor Red
+
+/' --- Force L-R Layout --- '/
+left to right direction
+
+/' === Definitions === '/
+/' 1. Actor on the Left '/
+actor User
+
+/' 2. System in the Middle '/
+package BBP {
+  usecase "Search paths" as UC_Search
+  usecase "View path details" as UC_View
+  usecase "Follow path" as UC_Follow
+}
+
+/' 3. System Actors on the Right '/
+/' --- Using 'together' to group them --- '/
+together {
+  rectangle "External weather service" <<actor>> as Weather
+  rectangle "Device sensors" <<actor>> as Sensors
+  /' --- ADDED EXTERNAL NAVIGATION SERVICE --- '/
+  rectangle "External navigation service" <<actor>> as NavService
+}
+
+/' === Relationships (Fixed Arrows) === '/
+/' User Associations '/
+User --> UC_Search
+User --> UC_Follow
+
+/' Use Case Flow '/
+UC_Search --> UC_View
+
+/' System Actor Associations '/
+Weather --> UC_Search
+Weather --> UC_Follow
+Sensors --> UC_Follow
+/' --- ADDED NAVIGATION ASSOCIATION --- '/
+NavService --> UC_Follow
+
+@enduml
