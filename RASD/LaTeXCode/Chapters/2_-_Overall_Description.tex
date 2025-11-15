@@ -249,19 +249,20 @@ The \texttt{sensor\_event} class models the raw detection triggered by device se
 
 Overall, the diagram establishes a clear architecture separating \textbf{user management}, private \textbf{trip recording} with detailed metrics, public \textbf{Path representation}, and a structured \textbf{reporting system} capable of handling community feedback and sensor-based obstacle detection through inheritance.
 
-
-
 \subsection{State diagrams}
 \label{subsec:state_diagrams}%
-In this section, the State Diagrams of the BBP system are presented representing all the possible operation that a User can perform.
+
+\subsection{Activity diagrams}
+\label{subsec:activity_diagrams}%
+In this section, the Activity Diagrams of the BBP system are presented representing all the possible activity that a User can perform.
 \paragraph{Signup.}
 When a user opts to register for BBP, they are initially presented with the registration option on the interface. Upon tapping the registration button, the system displays the dedicated registration screen. The user then enters the required credentials, such as username, email, and password. Subsequently, BBP performs a check to validate the provided information. If the credentials are deemed valid, the registration is successful, and the user is navigated to the main screen. However, if the validation fails (due to invalid format or existing username/email), the flow loops back, presumably returning the user to the registration screen to correct their input and try again.
 
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/Registration.drawio.png}
-        \caption{Registration state diagram.}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/ActivityDiagrams/Registration.drawio.png}
+        \caption{Registration activity diagram.}
         \label{fig:signup_sd}%
     \end{center}
 \end{figure}
@@ -273,8 +274,8 @@ The process begins when the system presents the user with the option to log in, 
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/Login.drawio.png}
-        \caption{Login state diagram.}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/ActivityDiagrams/Login.drawio.png}
+        \caption{Login activity diagram.}
         \label{fig:login_sd}%
     \end{center}
 \end{figure}
@@ -286,8 +287,8 @@ Following this, a check determines if any Paths were found. If no results are av
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/SearchAndDisplay.drawio.png}
-        \caption{Search and Display state diagram.}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/ActivityDiagrams/SearchAndDisplay.drawio.png}
+        \caption{Search and Display activity diagram.}
         \label{fig:Search_And_Display_sd}%
     \end{center}
 \end{figure}
@@ -302,8 +303,8 @@ Once a definitive, merged status is established (either directly or after resolv
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/Scoring&MergingLogic.drawio.png}
-        \caption{Scoring \& Merging logic state diagram.}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/ActivityDiagrams/Scoring&MergingLogic.drawio.png}
+        \caption{Scoring \& Merging logic activity diagram.}
         \label{fig:Scoring_Merging_sd}%
     \end{center}
 \end{figure}
@@ -317,8 +318,8 @@ Conversely, if the User navigating is already Registered, upon arrival at the de
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/Navigation.drawio.png}
-        \caption{Navigation state diagram.}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/ActivityDiagrams/Navigation.drawio.png}
+        \caption{Navigation activity diagram.}
         \label{fig:Navigation_sd}%
     \end{center}
 \end{figure}
@@ -332,8 +333,8 @@ Finally, the User initiates the save action, triggering a system validation chec
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/ManualPathCreation.drawio.png}
-        \caption{Manual Path Creation state diagram.}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/ActivityDiagrams/ManualPathCreation.drawio.png}
+        \caption{Manual Path Creation activity diagram.}
         \label{fig:Manual_Path_Creation_sd}%
     \end{center}
 \end{figure}
@@ -350,8 +351,8 @@ After the review step is completed (or if no review was needed), the system disp
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/StateDiagrams/AutomaticRecording.drawio.png}
-        \caption{Automatic Recording state diagram.}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/ActivityDiagrams/AutomaticRecording.drawio.png}
+        \caption{Automatic Recording activity diagram.}
         \label{fig:Automatic_Recording_sd}%
     \end{center}
 \end{figure}
