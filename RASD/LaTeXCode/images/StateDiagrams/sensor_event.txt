@@ -1,0 +1,18 @@
+@startuml
+title Sensor Event State Diagram
+
+state "Awaiting Confirmation" as Awaiting
+state "Confirmed (-> Obstacle_report)" as Confirmed
+state "Ignored" as Ignored
+
+[*] --> Logged
+
+Logged --> Awaiting : userStopsRecording() [R28]
+
+Awaiting --> Confirmed : userConfirms() [R29]
+Awaiting --> Ignored : userIgnores() [R29]
+
+Confirmed --> [*]
+Ignored --> [*]
+
+@enduml

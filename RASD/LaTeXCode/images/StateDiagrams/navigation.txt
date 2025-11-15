@@ -1,0 +1,17 @@
+@startuml
+title Trip State Diagram
+
+state "Stopped (Pending Save)" as Stopped
+
+[*] --> Idle
+
+Idle --> Recording : tapsStartRecording()
+Recording --> Stopped : tapsStopRecording()
+
+Stopped --> Saved : tapsSave() 
+Stopped --> Discarded : tapsDiscard()
+
+Saved --> [*]
+Discarded --> [*]
+
+@enduml
