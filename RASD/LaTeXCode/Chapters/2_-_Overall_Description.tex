@@ -224,7 +224,7 @@
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{images/classDiagram/classDiagram.drawio.png}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/classDiagram/ClassDiagram.drawio.png}
         \caption{High level Class Diagram.}
         \label{fig:UML}%
     \end{center}
@@ -237,17 +237,23 @@
 
 The system's structure revolves around the base \textbf{User} entity. The \texttt{Registered\_user} class extends \texttt{User}, incorporating attributes like \texttt{username}, \texttt{email}, and \texttt{passwordHash} necessary for authentication and user identification. Each registered user is associated with their recorded activities and contributions.
 
-A core distinction is made between a \texttt{Trip} and a \texttt{Path}. A \texttt{Trip} represents a specific, private cycling session recorded by a \texttt{Registered\_user}. It is fundamentally defined as a composition of multiple \texttt{GPS\_points}, each containing latitude, longitude, and a timestamp, thus capturing the entire journey. Furthermore, each \texttt{Trip} is linked via composition to exactly one \texttt{Statistic} object (holding calculated data like \texttt{avg\_speed}, \texttt{distance}, \texttt{duration}) and associated with one \texttt{Weather\_info} object (containing \texttt{temperature}, \texttt{wind\_speed}, \texttt{conditions}) obtained from external sources.
+A core distinction is made between a \texttt{Path} (the "model" of a route) and a \texttt{Trip} (a user's "performance" on that route).
 
-Conversely, the \texttt{Path} class represents a public, discoverable Path, potentially derived from a user's \texttt{Trip} or created manually. Like a \texttt{Trip}, it is composed of \texttt{GPS\_points} defining its geometry. Crucially, a \texttt{Path} serves as an aggregation point for community feedback, being associated with multiple \texttt{Report} instances. The \texttt{<<Abstract>> Report} class acts as the base for all user-submitted information regarding a \texttt{Path}, containing a vital \texttt{timestamp} attribute used for the merging algorithm's "freshness" logic. It has two concrete specializations:
+The \texttt{Path} class represents the route's definition. It is composed of \texttt{GPS\_points} that define its geometry (R36). A \texttt{Path} has a \texttt{pathVisibility} (Public/Private), which determines if it is discoverable via search (R39).
+
+A \texttt{Trip} represents a specific, private cycling session recorded by a \texttt{Registered\_user}. It is also fundamentally defined by its own sequence of \texttt{GPS\_points} (the "trace") recorded during the session (R21), as described in the requirements. Furthermore, each \texttt{Trip} is linked via composition to exactly one \texttt{Statistic} object. This object holds calculated data like \texttt{avg\_speed}, \texttt{distance}, and \texttt{duration} (which represents the total 'Elapsed Time', per R22). The \texttt{avg\_speed} is calculated using this total duration (R31), reflecting the "Opzione A" Auto-Pause logic. Each \texttt{Trip} is also associated with one \texttt{Weather\_info} object (R32).
+
+Crucially, the diagram models the core business logic: a \texttt{Path} is associated with all the \texttt{Trip}s performed on it (a 1-to-N "performances" or "Is connected to" relation). A \texttt{Trip} has its own \texttt{tripVisibility} (Public/Private), which dictates whether its statistics are used to update the aggregate average statistics of the parent \texttt{Path} (R9, R39).
+
+A \texttt{Path} also serves as an aggregation point for community feedback, being associated with multiple \texttt{Report} instances. The \texttt{<<Abstract>> Report} class acts as the base for all user-submitted information regarding a \texttt{Path}, containing a vital \texttt{timestamp} attribute used for the merging algorithm's "freshness" logic (R9). It has two concrete specializations:
 \begin{itemize}[noitemsep, topsep=0pt]
-    \item \texttt{Status\_report}: Captures user assessments of the Path's condition via the \texttt{<<Enum>> status} attribute (e.g., ``Optimal'', ``Requires Maintenance'').
-    \item \texttt{Obstacle\_report}: Represents specific issues like potholes, categorized by an \texttt{<<Enum>> type}. Importantly, it maintains a \texttt{[0..1]} association with a \texttt{sensor\_event}, linking a confirmed report back to the raw sensor data that potentially triggered its detection.
+    \item \texttt{Status\_report}: Captures user assessments of the Path's condition via the \texttt{<<Enum>> status} attribute (R37).
+    \item \texttt{Obstacle\_report}: Represents specific issues like potholes (R38), categorized by an \texttt{<<Enum>> type}. Importantly, it maintains a \texttt{[0..1]} association with a \texttt{sensor\_event}, linking a confirmed report (R30) back to the raw sensor data that potentially triggered its detection (R24).
 \end{itemize}
 
-The \texttt{sensor\_event} class models the raw detection triggered by device sensors (accelerometer/gyroscope) during a \texttt{Trip}, storing its location and timestamp before user confirmation. The interaction with external systems (conceptually noted, though not modeled as domain classes) like device sensors and weather services is fundamental for data acquisition.
+The \texttt{sensor\_event} class models the raw detection triggered by device sensors (accelerometer/gyroscope) during a \texttt{Trip} (R23), storing its location and timestamp before user confirmation (R28). The interaction with external systems (conceptually noted, e.g., \texttt{External tools}) like device sensors and weather services is fundamental for data acquisition.
 
-Overall, the diagram establishes a clear architecture separating \textbf{user management}, private \textbf{trip recording} with detailed metrics, public \textbf{Path representation}, and a structured \textbf{reporting system} capable of handling community feedback and sensor-based obstacle detection through inheritance.
+The diagram effectively delineates a structure that distinguishes \textbf{user management} from the fundamental elements: the \textbf{\texttt{Path}}, which acts as the public-facing and searchable model, and the \textbf{\texttt{Trip}}, representing the user's private performance that may optionally share its statistics with the \texttt{Path}. Additionally, it illustrates the organized \textbf{reporting system} through the use of \texttt{Report} inheritance and outlines the \textbf{automatic detection} process via \texttt{sensor\_event}.
 
 \subsection{State diagrams}
 \label{subsec:state_diagrams}%

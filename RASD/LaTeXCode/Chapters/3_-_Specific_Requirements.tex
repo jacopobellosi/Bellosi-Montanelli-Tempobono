@@ -171,7 +171,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/useCaseDiagrams/Use_Case_2.drawio.png}
-        \caption{Use Cases Diagram for bot ACY and RCY (general user).}
+        \caption{Use Cases Diagram for both ACY and RCY (general user).}
         \label{fig:}%
     \end{center}
 \end{figure}
@@ -376,34 +376,34 @@ This section lists the specific functional requirements that the Best Bike Paths
 \subsubsection*{UC6. Follow Path (Navigation)}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & User (Anonymous or Registered), Device Sensors (GPS) \\
-        \hline
-        \textbf{Entry conditions} & The user is viewing the \texttt{Path Details} screen (from UC5). \\
-        \hline
-        \textbf{Event Flow}       & 1 - The User taps the "Follow Path" button.(R15) \\
-                                  & 2 - BBP Application loads the path geometry (from the existing \texttt{Path}) onto the navigation screen. \\
-                                  & 3 - BBP Application requests continuous location updates from the \texttt{Device Sensors} (GPS) . \\
-                                  & 4 - The application displays the user's current location on the path path and calculates session statistics (time, distance, speed) . \\
-                                  & 5 - \textbf{Note:} The app does not record the full geometry (it's already known). \\
-                                  & 6 - The User arrives at the destination (or manually taps "Stop Navigation"). \\
-                                  & 7 - BBP Application stops the location updates and finalizes the session statistics. \\
-                                  & 8 - BBP Application displays a "Summary" screen showing the session statistics (time, distance, avg speed).(R16) \\
-                                  & 9 - \textbf{If User is Anonymous:} The Summary screen includes a "Register to Save" button (R17)(R18). \\
-                                  & 10 - The Anonymous User taps "Register to Save", completes registration (UC1), selects a visibility (Public/Private), and the activity (stats-only) is saved (R19). \\
-                                  & 11 - \textbf{If User is Registered:} The Summary screen includes a "Save Activity" button. \\
-                                  & 12 - The Registered User taps "Save Activity", selects a visibility (Public/Private) , and the activity (stats-only) is saved to their archive.(R33) \\
-                                  & 13 - If the user (Anonymous or Registered) exits the summary screen without saving/registering, the session data is discarded (R18). \\
-        \hline
-        \textbf{Exit condition}   & The user has completed navigation. The session activity (stats-only) is either saved with a visibility setting or discarded. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The user cancels navigation mid-way. The flow stops, stats are discarded, and the user is returned to the \texttt{Path Details} screen.
-                                  \end{itemize}\\
-        \hline
-        \caption{Follow Path (Navigation) use case.}
-        \label{tab:uc_follow_path}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & User (Anonymous or Registered), \textbf{External navigation service}, Device Sensors (GPS) \\
+    \hline
+    \textbf{Entry conditions} & The user is viewing the \texttt{Path Details} screen (from UC5). \\
+    \hline
+    \textbf{Event Flow}     & 1 - The User taps the "Follow Path" button.(R15) \\
+                            & 2 - \textbf{BBP Application sends the path geometry to the device's External navigation service (SP22) and simultaneously activates its background statistics tracking (R15).} \\
+                            & 3 - \textbf{The External navigation service displays the turn-by-turn route to the User.} \\
+                            & 4 - \textbf{Concurrently, the BBP Application requests continuous location updates from the Device Sensors (GPS) in the background} to calculate session statistics (time, distance, speed). \\
+                            & 5 - \textbf{Note:} The BBP app does not record the full geometry (it's already known) \textbf{and does not display a map}, as the user is viewing the external app. \\
+                            & 6 - The User arrives at the destination (or manually \textbf{closes the external navigator and returns to the BBP Application to tap "Stop Navigation")} (SP23). \\
+                            & 7 - BBP Application stops the location updates and finalizes the session statistics. \\
+                            & 8 - BBP Application displays a "Summary" screen showing the session statistics (time, distance, avg speed).(R16) \\
+                            & 9 - \textbf{If User is Anonymous:} The Summary screen includes a "Register to Save" button (R17)(R18). \\
+                            & 10 - The Anonymous User taps "Register to Save", completes registration (UC1), selects a visibility (Public/Private), and the activity (stats-only) is saved (R19). \\
+                            & 11 - \textbf{If User is Registered:} The Summary screen includes a "Save Activity" button. \\
+                            & 12 - The Registered User taps "Save Activity", selects a visibility (Public/Private) , and the activity (stats-only) is saved to their archive.(R33) \\
+                            & 13 - If the user (Anonymous or Registered) exits the summary screen without saving/registering, the session data is discarded (R18). \\
+    \hline
+    \textbf{Exit condition}   & The user has completed navigation. The session activity (stats-only) is either saved with a visibility setting or discarded. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item The user cancels navigation mid-way \textbf(by returning to BBP and pressing "Stop"). The flow stops, stats are discarded, and the user is returned to the \texttt{Path Details} screen.
+                            \end{itemize}\\
+    \hline
+    \caption{Follow Path (Navigation) use case.}
+    \label{tab:uc_follow_path}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
