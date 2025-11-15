@@ -252,6 +252,36 @@ Overall, the diagram establishes a clear architecture separating \textbf{user ma
 \subsection{State diagrams}
 \label{subsec:state_diagrams}%
 
+Unlike Activity Diagrams, which model process flows, the following State Machine Diagrams model the dynamic lifecycle of specific objects within the domain in response to events. For the BBP system, two objects were identified as having complex, requirement-relevant lifecycles: \texttt{Trip} and \texttt{sensor\_event}.
+
+\paragraph{Trip State Diagram.}
+This diagram (Figure \ref{fig:sd_trip}) models the lifecycle of a \texttt{Trip} recording session (UC7). The object begins in the \texttt{Idle} (or Ready) state. When the \texttt{RCY} initiates the recording (R20, \texttt{tapsStartRecording()}), the object transitions to the \texttt{Recording} state. In this state, it actively records GPS (R21) and sensor (R23) data, and the 'Elapsed Time' (R22) runs continuously.
+
+Since all auto-pause logic has been removed, the object remains in the \texttt{Recording} state without interruption until the \texttt{RCY} explicitly triggers the \texttt{tapsStopRecording()} event (R27). At this point, the object transitions to the \texttt{Stopped (Pending Save)} state, where the collected data is passed to the \texttt{Save trip and path} (UC9) use case. Depending on the user's final choice, the object transitions to one of two final states: \texttt{Saved} (R33) or \texttt{Discarded}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{RASD/images/state}
+    \caption{State Diagram for the \texttt{Trip} (UC7) lifecycle.}
+    \label{fig:sd_trip}
+\end{figure}
+
+\paragraph{sensor\_event State Diagram.}
+This diagram (Figure \ref{fig:sd_sensor_event}) models the lifecycle of a single \texttt{sensor\_event} object. An event is created and transitions to the \texttt{Logged} state the moment the device sensors (R23) exceed the predefined detection threshold (R24).
+
+It remains in this state for the entire duration of the recording (UC7). When the \texttt{RCY} stops the recording (R27) and the \texttt{Save trip and path} (UC9) summary screen is displayed, the event transitions to the \texttt{AwaitingConfirmation} state (R28). At this point, based on the user's decision (R29) during the \texttt{Review Detections} (UC8), the event transitions to one of two final states: \texttt{Confirmed} (which triggers the creation of an \texttt{Obstacle\_report}, R30) or \texttt{Ignored}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/SD_SensorEvent.png}
+    \caption{State Diagram for the \texttt{sensor\_event} (UC8) lifecycle.}
+    \label{fig:sd_sensor_event}
+\end{figure}
+
+
+
+
+%fine state diagrams
 \subsection{Activity diagrams}
 \label{subsec:activity_diagrams}%
 In this section, the Activity Diagrams of the BBP system are presented representing all the possible activity that a User can perform.
