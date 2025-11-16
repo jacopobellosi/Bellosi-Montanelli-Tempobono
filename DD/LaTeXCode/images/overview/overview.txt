@@ -1,0 +1,55 @@
+@startuml
+!theme materia-outline
+skinparam componentStyle uml2
+skinparam shadowing false
+skinparam package {
+    BackgroundColor AliceBlue
+}
+skinparam component {
+    BackgroundColor White
+    BorderColor #333
+}
+skinparam database {
+    BackgroundColor White
+    BorderColor #333
+}
+skinparam actor {
+    BackgroundColor White
+    BorderColor #333
+}
+
+package "Best Bike Paths (BBP) System" {
+    [Mobile Client\n(iOS/Android)] as Client
+    [Backend Server\n(API & Core Logic)] as Server
+    database "BBP Database\n(PostgreSQL + PostGIS)" as DB
+}
+
+package "Third-Party Services" #LightGray {
+    [External Weather Service] as Weather
+    [External Navigation Service] as Nav
+}
+
+package "Hardware Actors" #LightGray {
+    actor [Device Sensors\n(GPS, Accelerometer, Gyroscope)] as Sensors
+}
+
+' --- System Interactions ---
+
+' Client <-> Server (Primary API)
+Client .right.> Server : **REST API** (HTTPS)\n(Search, Save, Auth, Reports)
+
+' Server <-> Database
+Server .right.> DB : Reads/Writes Data\n(JDBC/ORM)
+
+' --- External Hardware Interactions (Client) ---
+Sensors .right.> Client : Provides hardware data\n
+
+' --- External Software Interactions ---
+
+' Server -> Weather Service
+Server .up.> Weather : Fetches Weather Data
+
+' Client -> Navigation Service
+Client .down.> Nav : Triggers Navigation
+
+@enduml
