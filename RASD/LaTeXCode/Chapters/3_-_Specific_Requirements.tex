@@ -203,29 +203,29 @@ This section lists the specific functional requirements that the Best Bike Paths
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
         \hline
-        \textbf{Actor}            & Anonymous User \\
+        \textbf{Actor}          & \textbf{User} \\
         \hline
-        \textbf{Entry conditions} & The user is anonymous and is on a screen with a "Register" option. \\
+        \textbf{Entry conditions} & \textbf{The User is unauthenticated} and is on a screen with a "Register" option. \\
         \hline
-        \textbf{Event Flow}       & 1 - BBP shows the main screen with a "Register" button. (R1)\\
-                                  & 2 - The User taps the "Register" button. \\
-                                  & 3 - BBP shows the registration form. \\
-                                  & 4 - The User inserts their username, email, and password in the form. \\
-                                  & 5 - The User taps the "Submit" button. \\
-                                  & 6 - BBP checks all credentials (e.g., uniqueness, password matching).(R2) \\
-                                  & 7 - BBP creates the new Registered User account in the system. \\
-                                  & 8 - BBP automatically logs in the user and redirects to the main map screen. \\
+        \textbf{Event Flow}     & 1- BBP shows the main screen with a "Register" button. (R1) \\
+                            & 2- The User taps the "Register" button. \\
+                            & 3- BBP shows the registration form. \\
+                            & 4- The User inserts their username, email, and password in the form. \\
+                            & 5- The User taps the "Submit" button. \\
+                            & 6- BBP checks all credentials (e.g., uniqueness, password matching).(R2) \\
+                            & 7- BBP creates the new Registered User account in the system. \\
+                            & 8- BBP automatically logs in the user and redirects to the main map screen. \\
         \hline
         \textbf{Exit condition}   & The user is authenticated as a Registered User and is on the main map screen. \\
         \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The email address is already linked to an account. An error message is shown, and the user remains on the registration form.
-                                    \item The username is already taken. An error message is shown, and the user remains on the registration form.
-                                    \item Invalid password (e.g., does not meet complexity requirements). An error message is shown, and the user remains on the registration form.
-                                  \end{itemize}\\
+        \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item The email address is already linked to an account. An error message is shown, and the user remains on the registration form.
+                                \item The username is already taken. An error message is shown, and the user remains on the registration form.
+                                \item Invalid password (e.g., does not meet complexity requirements). An error message is shown, and the user remains on the registration form.
+                            \end{itemize} \\
         \hline
         \caption{Register Account use case.}
-        \label{tab:uc_register_account}
+        \label{tab:uc_register}
     \end{longtable}
 \end{center}
 
@@ -241,21 +241,21 @@ This section lists the specific functional requirements that the Best Bike Paths
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
         \hline
-        \textbf{Actor}            & Anonymous User \\
+        \textbf{Actor}          & \textbf{User} \\
         \hline
-        \textbf{Entry conditions} & The user is anonymous and is on a screen with a "Log In" option. \\
+        \textbf{Entry conditions} & \textbf{The User is unauthenticated} and is on a screen with a "Log In" option. \\
         \hline
-        \textbf{Event Flow}       & 1 - BBP shows the login form.(R3) \\
-                                  & 2 - The User inserts their username (or email) and password. \\
-                                  & 3 - The User taps the "Log In" button. \\
-                                  & 4 - BBP checks the credentials against the database.(R4) \\
-                                  & 5 - BBP authenticates the user and creates an access session. \\
+        \textbf{Event Flow}     & 1 - BBP shows the login form.(R3) \\
+                            & 2 - The User inserts their username (or email) and password. \\
+                            & 3 - The User taps the "Log In" button. \\
+                            & 4 - BBP checks the credentials against the database.(R4) \\
+                            & 5 - BBP authenticates the user and creates an access session. \\
         \hline
         \textbf{Exit condition}   & The user is authenticated as a Registered User and is redirected to the main map screen. \\
         \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The provided credentials (username/password) are incorrect. An error message is shown, and the user remains on the login page.
-                                  \end{itemize}\\
+        \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item The provided credentials (username/password) are incorrect. An error message is shown, and the user remains on the login page.
+                            \end{itemize}\\
         \hline
         \caption{Log In use case.}
         \label{tab:uc_login}
@@ -271,100 +271,97 @@ This section lists the specific functional requirements that the Best Bike Paths
 \end{figure}
 
 
-\subsubsection*{UC3. Log Out}
+\subsubsection*{[UC\cuc]. Log Out}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & Registered User \\
-        \hline
-        \textbf{Entry conditions} & The user is currently authenticated (logged in) in the BBP system. \\
-        \hline
-        \textbf{Event Flow}       & 1 - The User navigates to their profile or settings menu. \\
-                                  & 2 - The User taps the "Log Out" button.(R6) \\
-                                  & 3 - BBP invalidates and terminates the user's session. \\
-                                  & 4 - BBP redirects the user to the main map screen (now as an Anonymous User). \\
-        \hline
-        \textbf{Exit condition}   & The user's session is terminated, and they are now an Anonymous User. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item None.
-                                  \end{itemize}\\
-        \hline
-        \caption{Log Out use case.}
-        \label{tab:uc_logout}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & Registered User \\
+    \hline
+    \textbf{Entry conditions} & The user is currently authenticated (logged in) in the BBP system. \\
+    \hline
+    \textbf{Event Flow}     & 1 - The User navigates to their profile or settings menu. \\
+                            & 2 - The User taps the "Log Out" button.(R6) \\
+                            & 3 - BBP invalidates and terminates the user's session. \\
+                            & 4 - BBP redirects the user to the main map screen (now as a \textbf{User}). \\
+    \hline
+    \textbf{Exit condition}   & The user's session is terminated, and they are now a \textbf{User}. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item None.
+                            \end{itemize}\\
+    \hline
+    \caption{Log Out use case.}
+    \label{tab:uc_logout}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_3.png}
-        \caption{UC1.}
+        \caption{UC3.}
         \label{fig:UC3: Log Out - Sequence Diagram}%
     \end{center}
 \end{figure}
 %Use Cases Diagram for RCY
-\subsubsection*{UC4. Search Paths}
+\subsubsection*{[UC\cuc]. Search Paths}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & User (Anonymous or Registered), External Weather Service \\
-        \hline
-        \textbf{Entry conditions} & The user is on the main screen of the application. \\
-        \hline
-        \textbf{Event Flow}       & 1 - The User enters an origin and a destination in the search bar. \\
-                                  & 2 - The User taps the "Search" button.(R7) \\
-                                  & 3 - BBP sends the query to the Server. \\
-                                  & 4 - The Server identifies all relevant public \texttt{Path}s. \\
-                                  & 5 - For each path, the Server retrieves all associated \texttt{Status\_report} and \texttt{Obstacle\_report} instances. \\
-                                  & 6 - The Server applies the merging logic (freshness, majority) to calculate the `derivedStatus` for each path . (R9)(R8)\\
-                                  & 7 - The Server applies the scoring logic to calculate the `derivedScore` for each path .(R10) \\
-                                  & 8 - The Server queries the \texttt{External Weather Service} for forecast data for the relevant locations . \\
-                                  & 9 - The Server returns the list of paths, ordered by score, including their status and weather info. \\
-                                  & 10 - BBP displays the ordered list of paths to the User. (R11)\\
-        \hline
-        \textbf{Exit condition}   & The user is presented with a list of matching paths ordered by score, or a "No results" message. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item No paths are found matching the query. The system displays a "No results found" message.
-                                    \item The \texttt{External Weather Service} is unavailable. Paths are shown without weather data, and a "Weather unavailable" message is displayed.
-                                  \end{itemize}\\
-        \hline
-        \caption{Search Paths use case.}
-        \label{tab:uc_search_paths}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & \textbf{User}, External Weather Service \\
+    \hline
+    \textbf{Entry conditions} & The user is on the main screen of the application. \\
+    \hline
+    \textbf{Event Flow}     & 1 - The User enters an origin and a destination in the search bar. \\
+                            & 2 - The User taps the "Search" button.(R7) \\
+                            & 3 - \textbf{BBP processes the query by:} \\
+                            & \textbf{a. Identifying all relevant public \texttt{Path}s.} \\
+                            & \textbf{b. Retrieving all associated \texttt{Status\_report} and \texttt{Obstacle\_report} instances (R8).} \\
+                            & \textbf{c. Applying the merging (R9) and scoring (R10) logic to calculate the `derivedStatus` and `derivedScore` for each path.} \\
+                            & \textbf{d. Querying the \texttt{External Weather Service} for forecast data for the relevant locations.} \\
+                            & 4 - BBP displays the ordered list of paths to the User, including their status and weather info. (R11)\\
+    \hline
+    \textbf{Exit condition}   & The user is presented with a list of matching paths ordered by score, or a "No results" message. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item No paths are found matching the query. The system displays a "No results found" message.
+                                \item The \texttt{External Weather Service} is unavailable. Paths are shown without weather data, and a "Weather unavailable" message is displayed.
+                            \end{itemize}\\
+    \hline
+    \caption{Search Paths use case.}
+    \label{tab:uc_search_paths}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_4.png}
-        \caption{UC1.}
+        \caption{UC4.}
         \label{fig:UC4- Search Paths}%
     \end{center}
 \end{figure}
-\subsubsection*{UC5. View Path Details}
+\subsubsection*{[UC\cuc]. View Path Details}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & User (Anonymous or Registered), External Weather Service \\
-        \hline
-        \textbf{Entry conditions} & The user is viewing a list of search results (\texttt{pathList}) from UC4. \\
-        \hline
-        \textbf{Event Flow}       & 1 - The User taps on a specific path from the results list. (R12)\\
-                                  & 2 - BBP Application sends the selected \texttt{pathID} to the Server. \\
-                                  & 3 - The Server retrieves the full details for the path, including its complete list of \texttt{GPS\_points}, all associated \texttt{Status\_report}s, and all \texttt{Obstacle\_report}s. \\
-                                  & 4 - The Server applies the merging logic (R9) using the reports to calculate the definitive \texttt{derivedStatus}. \\
-                                  & 5 - The Server queries the \texttt{External Weather Service} for an updated forecast (R14) . \\
-                                  & 6 - The Server returns all path details (geometry, inclination, merged status, obstacles, weather) to the Application. (R13)\\
-                                  & 7 - BBP Application displays the \texttt{Path Details} screen to the User. \\
-        \hline
-        \textbf{Exit condition}   & The user is viewing the detailed information for the selected path. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The selected \texttt{pathID} is invalid or no longer available. The system shows an error message.
-                                    \item The \texttt{External Weather Service} is unavailable. Path details are shown without weather data.
-                                  \end{itemize}\\
-        \hline
-        \caption{View Path Details use case.}
-        \label{tab:uc_view_path_details}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & \textbf{User}, External Weather Service \\
+    \hline
+    \textbf{Entry conditions} & The user is viewing a list of search results (\texttt{pathList}) from UC4. \\
+    \hline
+    \textbf{Event Flow}     & 1 - The User taps on a specific path from the results list. (R12)\\
+                            & 2 - \textbf{BBP retrieves the full details for the selected path by:} \\
+                            & \textbf{a. Retrieving its complete list of \texttt{GPS\_points}, all associated \texttt{Status\_report}s, and all \texttt{Obstacle\_report}s.} \\
+                            & \textbf{b. Applying the merging logic (R9) using the reports to calculate the definitive \texttt{derivedStatus}.} \\
+                            & \textbf{c. Querying the \texttt{External Weather Service} for an updated forecast (R14).} \\
+                            & 3 - \textbf{BBP Application displays the \texttt{Path Details} screen to the User}, showing all path details (geometry, inclination, merged status, obstacles, weather). (R13) \\
+    \hline
+    \textbf{Exit condition}   & The user is viewing the detailed information for the selected path. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item The selected \texttt{pathID} is invalid or no longer available. The system shows an error message.
+                                \item The \texttt{External Weather Service} is unavailable. Path details are shown without weather data.
+                            \end{itemize}\\
+    \hline
+    \caption{View Path Details use case.}
+    \label{tab:uc_view_path_details}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
@@ -373,32 +370,32 @@ This section lists the specific functional requirements that the Best Bike Paths
         \label{fig:UC5: View Path Details}%
     \end{center}
 \end{figure}
-\subsubsection*{UC6. Follow Path (Navigation)}
+\subsubsection*{[UC\cuc]. Follow Path (Navigation)}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
     \hline
-    \textbf{Actor}          & User (Anonymous or Registered), \textbf{External navigation service}, Device Sensors (GPS) \\
+    \textbf{Actor}          & \textbf{User}, External navigation service, Device Sensors (GPS) \\
     \hline
     \textbf{Entry conditions} & The user is viewing the \texttt{Path Details} screen (from UC5). \\
     \hline
     \textbf{Event Flow}     & 1 - The User taps the "Follow Path" button.(R15) \\
-                            & 2 - \textbf{BBP Application sends the path geometry to the device's External navigation service (SP22) and simultaneously activates its background statistics tracking (R15).} \\
-                            & 3 - \textbf{The External navigation service displays the turn-by-turn route to the User.} \\
-                            & 4 - \textbf{Concurrently, the BBP Application requests continuous location updates from the Device Sensors (GPS) in the background} to calculate session statistics (time, distance, speed). \\
-                            & 5 - \textbf{Note:} The BBP app does not record the full geometry (it's already known) \textbf{and does not display a map}, as the user is viewing the external app. \\
-                            & 6 - The User arrives at the destination (or manually \textbf{closes the external navigator and returns to the BBP Application to tap "Stop Navigation")} (SP23). \\
+                            & 2 - BBP Application sends the path geometry to the device's External navigation service (SP22) and simultaneously activates its background statistics tracking (R15). \\
+                            & 3 - The External navigation service displays the turn-by-turn route to the User. \\
+                            & 4 - Concurrently, the BBP Application requests continuous location updates from the Device Sensors (GPS) in the background to calculate session statistics (time, distance, speed). \\
+                            & 5 - \textbf{Note:} The BBP app does not record the full geometry (it's already known) and does not display a map, as the user is viewing the external app. \\
+                            & 6 - The User arrives at the destination (or manually closes the external navigator and returns to the BBP Application to tap "Stop Navigation") (SP23). \\
                             & 7 - BBP Application stops the location updates and finalizes the session statistics. \\
                             & 8 - BBP Application displays a "Summary" screen showing the session statistics (time, distance, avg speed).(R16) \\
-                            & 9 - \textbf{If User is Anonymous:} The Summary screen includes a "Register to Save" button (R17)(R18). \\
-                            & 10 - The Anonymous User taps "Register to Save", completes registration (UC1), selects a visibility (Public/Private), and the activity (stats-only) is saved (R19). \\
+                            & 9 - \textbf{If User is unauthenticated:} The Summary screen includes a "Register to Save" button (R17)(R18). \\
+                            & 10 - The \textbf{unauthenticated User} taps "Register to Save", completes registration (UC1), selects a visibility (Public/Private), and the activity (stats-only) is saved (R19). \\
                             & 11 - \textbf{If User is Registered:} The Summary screen includes a "Save Activity" button. \\
                             & 12 - The Registered User taps "Save Activity", selects a visibility (Public/Private) , and the activity (stats-only) is saved to their archive.(R33) \\
-                            & 13 - If the user (Anonymous or Registered) exits the summary screen without saving/registering, the session data is discarded (R18). \\
+                            & 13 - If the user (\textbf{unauthenticated} or Registered) exits the summary screen without saving/registering, the session data is discarded (R18). \\
     \hline
     \textbf{Exit condition}   & The user has completed navigation. The session activity (stats-only) is either saved with a visibility setting or discarded. \\
     \hline
     \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
-                                \item The user cancels navigation mid-way \textbf(by returning to BBP and pressing "Stop"). The flow stops, stats are discarded, and the user is returned to the \texttt{Path Details} screen.
+                                \item The user cancels navigation mid-way (by returning to BBP and pressing "Stop"). The flow stops, stats are discarded, and the user is returned to the \texttt{Path Details} screen.
                             \end{itemize}\\
     \hline
     \caption{Follow Path (Navigation) use case.}
