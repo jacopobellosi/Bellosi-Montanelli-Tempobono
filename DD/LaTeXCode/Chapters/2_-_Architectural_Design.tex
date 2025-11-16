@@ -1,0 +1,65 @@
+\section{Overview}
+\label{sec:Overview}
+Here we represents an overview of how the entire BBP architecture is composed of:
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{CD_DD/Overview.png}
+        \caption{CKB Overview.}
+        \label{fig:CKB_overview}%
+    \end{center}
+\end{figure}
+
+\subsection{Mobile Client (iOS/Android)}
+\begin{itemize}
+    \item \textbf{What it does:} The Mobile Client is the primary interface for the user and the main tool for real-time data collection.
+    
+    \item \textbf{How it does it:} It provides the native UI for all user interactions, from searching paths to viewing the recording HUD. It runs a persistent foreground service during recording to continuously capture data from the device sensors (GPS, accelerometer, gyroscope). It also manages the post-ride summary screen, where users review sensor-detected events and set visibility preferences before uploading the final data package to the server.
+    
+    \item \textbf{Why it does it:} This component is designed for a responsive user experience and reliable, high-fidelity data acquisition. By handling sensor monitoring and UI logic directly on the device, it can function continuously during a ride and ensure all raw data is captured accurately for later processing.
+\end{itemize}
+
+\subsection{Backend Server (API \& Core Logic)}
+\begin{itemize}
+    \item \textbf{What it does:} The Backend Server is the central authority for all business logic, data integrity, and system security.
+    
+    \item \textbf{How it does it:} It exposes a secure REST API that the Mobile Client consumes. It handles user authentication, processes all incoming data (like new trips and reports), and executes complex logic such as aggregating trip statistics into path averages and merging community-submitted path status reports. It also enforces the system's data-model constraints (e.g., ensuring public trips only exist on public paths).
+    
+    \item \textbf{Why it does it:} To act as the system's single source of truth. Centralizing business logic on the server ensures that data is consistent, secure, and processed uniformly, regardless of the client. This prevents data corruption and allows for scalable, resource-intensive calculations.
+\end{itemize}
+
+\subsection{BBP Database (PostgreSQL + PostGIS)}
+\begin{itemize}
+    \item \textbf{What it does:} This component is responsible for the persistent, long-term storage of all user, path, trip, and report data.
+    
+    \item \textbf{How it does it:} It uses a standard PostgreSQL relational database to store structured data like user accounts and the metadata for paths and trips. Critically, it employs the \textbf{PostGIS} extension to efficiently store and query geospatial data, such as the GPS-point geometries that define a path or the specific location of a reported obstacle.
+    
+    \item \textbf{Why it does it:} To provide a single, robust, and transactional storage solution. Using PostGIS is essential for enabling the core "search path" functionality, allowing the system to perform complex and fast geospatial queries (e.g., "find all paths that start near point A and end near point B").
+\end{itemize}
+
+\subsection{Device Sensors (GPS, Accelerometer, Gyroscope)}
+\begin{itemize}
+    \item \textbf{What it does:} These are the hardware actors that provide the raw, real-world data streams used by the Mobile Client.
+    
+    \item \textbf{How it does it:} The GPS provides a continuous stream of geographic coordinates to build the trip's geometry. The accelerometer and gyroscope provide high-frequency motion and orientation data, which the client analyzes to detect significant events (like sharp jolts) that correlate to potential potholes.
+    
+    \item \textbf{Why it does it:} These sensors are the physical source of truth for the recording features. They provide the objective data needed to create a user's trip trace and to power the automatic obstacle detection feature.
+\end{itemize}
+
+\subsection{External Weather Service}
+\begin{itemize}
+    \item \textbf{What it does:} This is a third-party system that provides meteorological data associated with a user's trip.
+    
+    \item \textbf{How it does it:} The \textbf{Backend Server} (not the client) will query this service's API during the save process. It sends the location and time of the trip and receives back formatted data like temperature, wind speed, and conditions.
+    
+    \item \textbf{Why it does it:} To enrich the user's personal trip log. This adds valuable context to their saved trips without requiring the BBP system to maintain its own complex weather-forecasting infrastructure.
+\end{itemize}
+
+\subsection{External Navigation Service}
+\begin{itemize}
+    \item \textbf{What it does:} This third-party system (e.g., Google Maps, Apple Maps) provides turn-by-turn directions to the user.
+    
+    \item \textbf{How it does it:} The \textbf{Mobile Client} initiates this service. When a user elects to "Follow Path," the client sends the path's geometry or destination to the device's default mapping application using a standard operating system \texttt{Intent} or \texttt{URL Scheme}.
+    
+    \item \textbf{Why it does it:} To provide users with a high-quality navigation experience without having to build and maintain a complex navigation engine. This allows BBP to focus on its core features of path recording and community evaluation.
+\end{itemize}
