@@ -1,0 +1,76 @@
+
+\section{Purpose}
+\label{sec:purpose}%
+The purpose of this Design Document (DD) is to serve as the primary technical blueprint for the "Best Bike Paths" (BBP) system. It directly translates the functional and non-functional requirements detailed in the Requirements Analysis and Specification Document (RASD) into a concrete implementation strategy. This document defines the high-level system architecture, its key software components, and the specific responsibilities of each. It further specifies the critical interactions between components, the API designs, and the detailed database schema required for data persistence. Its ultimate goal is to guide the development team in constructing a robust, scalable, and maintainable system that adheres strictly to the established business logic.
+
+\section{Scope}
+\label{sec:scope}%
+This document details the technical design for all components of the BBP system, including the mobile Client application and the backend Server. It provides a complete architectural breakdown, definitions of component interfaces, and the design of the PostgreSQL database with PostGIS for geospatial data. The scope includes detailed design specifications for core business logic, such as the Path and Trip data model and the Auto-Pause recording logic . Key use case interactions, specifically "Record Path" and "Save trip and path", are defined using detailed design sequence diagrams. Excluded from this scope are project management plans, detailed test cases (reserved for the I\&T deliverable), and implementation-level code.
+
+
+\section{Definition, Acronyms, Abbreviations}
+\label{sec:definition_acronyms_abbreviations}%
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{ |l|l| }
+            \hline
+            \textbf{Acronyms} & \textbf{Definition}                              \\
+            \hline
+            DD             & Design document                     \\
+            \hline
+            RCY             & Registred Cyclist                         \\
+            \hline
+            ACY              & Anonymous Cyclist                         \\
+            \hline
+            BBP             & BestBikePaths                   \\
+            \hline
+            User            & All RCYs and ACYs                           \\
+            \hline
+            API             & Application Programming Interface                           \\
+            \hline
+            CMP             & Component                          \\
+            \hline
+            RX              & Requirement X                           \\
+            \hline
+         \end{tabular}
+        \caption{Acronyms used in the document.}
+        \label{tab:acronyms}%
+    \end{center}
+\end{table}
+
+
+
+
+\section{Revision history}
+\label{sec:revision_history}%
+\begin{itemize}
+    \item \textbf{Version 1.0} - 12/11/2025
+\end{itemize}
+
+
+\section{Reference Documents}
+\label{sec:reference_documents}%
+\begin{itemize}
+    \item Specification Document Assignment
+\end{itemize}
+
+\newpage
+
+\section{Document Structure}
+\label{sec:doc_structure}%
+The document is organised into seven distinct sections, detailed below.
+
+\textbf{Introduction}. This initial section outlines the importance of the Design 
+Document, offering in-depth definitions and clarifications of acronyms and abbreviations. It also revisits the scope of the CodeKateBattle system.
+
+\textbf{Architectural Design}. The second section presents the primary components of the system and their interconnections. It delves into design selections and explores architectural styles, patterns, and paradigms.
+
+\textbf{User Interface Design}. The third section covers the user interface of the system, supplying mockups and explanations for the key pages.
+
+\textbf{Requirements Traceability}. The fourth section details the system's requirements, illustrating how these are met by the design decisions.
+
+\textbf{Implementation, Integration, and Test Plan}. This fifth section offers an overview of the system's component implementation, demonstrates their integration, and provides a comprehensive testing plan.
+
+\textbf{Effort Spent}. The sixth section includes details on the number of hours each group member devoted to this document.
+
+\textbf{References}. The final section lists the documents referenced in preparing this Design Document.
