@@ -35,39 +35,115 @@ Here we represents an overview of how the entire BBP architecture is composed of
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{CD_DD/HighLevel.png}
+        \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-High_level_diagram.drawio.png}
         \caption{High Level Diagram.}
         \label{fig:high_level_diagram}%
     \end{center}
 \end{figure}
 
-\noindent In the figure above is the high level component diagram of CKB where it’s represented the external components of CKB and how they communicate with the CKB server, in particular:
-\begin{itemize}
-    \item \textbf{WebApp}: serves as the external access point for Users, allowing communication with the CKB Server through the Dashboard Interface—the sole means for Client-Server interaction from the User side. The CKB Server can relay notifications, such as Tournament or Battle creation, to Users through the Notification Interface.
-    \item \textbf{DBMS:} is the storage repository for all User, Tournament, and Battle data. It communicates with the CKB Server via the DBMS API, which is connected to the Model component.
-    \item \textbf{Mail Server:} responsible for sending registration confirmation eMails, the Mail Server communicates with the CKB Server using the Mail API interface. This interface is linked to the Registration Manager component, which oversees the User registration process..
-    \item \textbf{External Tools:} external application used for testing the code submitted by STGs on GitHub. It communicates with the CKB Server through the External Tools API, connecting to the Evaluation Manager component. The Evaluation Manager handles the evaluation process for STG-submitted code.
-    \item \textbf{GitHub:}  external website used to create repositories for the code katas of Battles. Each STG, after forking the main repository, pushes their code for evaluation. GitHub communicates with the CKB Server through the GitHub API, linked to the Evaluation Manager.
-\end{itemize}
-\section{Component View}
-\label{sec:component_view}%
 
-\subsection{High Level Diagram}
-\label{subsec:high_level_diagram}%
 
+This diagram defines the high-level system boundaries and the primary components of the Best Bike Paths (BBP) system. It illustrates a classic client-server architecture, clearly separating the client-side data collection components from the server-side business logic and persistence components.
+
+
+
+\noindent \textbf{Mobile App} \\
+Serves as the external access point for users and the primary data collection tool. It allows communication with the \texttt{BBP backend server} through the \texttt{BBP API}, which is the sole interface for all server-side business logic (like searching paths and saving trips). The \texttt{Mobile App} also requires raw data from the \texttt{Device sensor} component via the \texttt{Device info} interface for live recording and triggers the \texttt{External navigation service} using the \texttt{Navigation service} interface.
+
+\vspace{0.5em} % Aggiunge un po' di spazio tra i paragrafi
+
+\noindent \textbf{BBP backend server} \\
+Serves as the central authority for all business logic, security, and persistence. It \textit{provides} the \texttt{BBP API} to handle all incoming requests from the \texttt{Mobile App}. To fulfill these requests, it requires access to the \texttt{BBP Database} through the \texttt{DBMS API} for all data storage, and also queries the \texttt{External weather service} via the \texttt{Weather info API} to enrich trip data.
+
+\vspace{0.5em}
+
+\noindent \textbf{Device sensor} \\
+Acts as the hardware-level data provider, representing the phone's GPS, accelerometer, and gyroscope. It \textit{provides} the \texttt{Device info} interface, which is consumed exclusively by the \texttt{Mobile App} to stream the raw location and motion data necessary for trip recording.
+
+\vspace{0.5em}
+
+\noindent \textbf{External navigation service} \\
+A third-party mapping application (e.g., Google Maps) that \textit{provides} the \texttt{Navigation service} interface (e.g., an OS-level Intent or URL scheme). It is triggered by the \texttt{Mobile App} to launch and provide the user with turn-by-turn directions.
+
+\vspace{0.5em}
+
+\noindent \textbf{BBP Database} \\
+The system's core persistence component, utilizing PostgreSQL and PostGIS. It \textit{provides} the \texttt{DBMS API}, which is consumed exclusively by the \texttt{BBP backend server} to store and retrieve all application data, including user accounts, paths, trips, and geospatial tracks.
+
+\vspace{0.5em}
+
+\noindent \textbf{External weather service} \\
+A third-party data provider that \textit{provides} the \texttt{Weather info API}. This interface is consumed by the \texttt{BBP backend server} (and \textit{not} the client) to fetch meteorological data, such as temperature and wind conditions, when a new trip is saved.
+
+
+\section{Low-Level Component View}
+\label{sec:low_level_view}
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{CD_DD/HighLevel.png}
+        \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-High_level_diagram.drawio.png}
         \caption{High Level Diagram.}
         \label{fig:high_level_diagram}%
     \end{center}
 \end{figure}
 
-\noindent In the figure above is the high level component diagram of CKB where it’s represented the external components of CKB and how they communicate with the CKB server, in particular:
-\begin{itemize}
-    \item \textbf{WebApp}: serves as the external access point for Users, allowing communication with the CKB Server through the Dashboard Interface—the sole means for Client-Server interaction from the User side. The CKB Server can relay notifications, such as Tournament or Battle creation, to Users through the Notification Interface.
-    \item \textbf{DBMS:} is the storage repository for all User, Tournament, and Battle data. It communicates with the CKB Server via the DBMS API, which is connected to the Model component.
-    \item \textbf{Mail Server:} responsible for sending registration confirmation eMails, the Mail Server communicates with the CKB Server using the Mail API interface. This interface is linked to the Registration Manager component, which oversees the User registration process..
-    \item \textbf{External Tools:} external application used for testing the code submitted by STGs on GitHub. It communicates with the CKB Server through the External Tools API, connecting to the Evaluation Manager component. The Evaluation Manager handles the evaluation process for STG-submitted code.
-    \item \textbf{GitHub:}  external website used to create repositories for the code katas of Battles. Each STG, after forking the main repository, pushes their code for evaluation. GitHub communicates with the CKB Server through the GitHub API, linked to the Evaluation Manager.
-\end{itemize}
+This section details the internal components of the primary system packages: the \texttt{Mobile App} and the \texttt{BBP backend server}. This view illustrates the internal logic and sub-component responsibilities required to implement the system's functionalities.
+
+\subsection*{Mobile App (Client) Component Descriptions}
+
+\vspace{0.5em}
+\noindent \textbf{UI layer} \\
+Serves as the central orchestrator for all user interactions. It \textit{consumes} (requires) interfaces from multiple services to function: it \textit{consumes} the \texttt{HUD interface} (from \texttt{recording service}) to display live stats, the \texttt{Saved data interface} (from \texttt{Local storage}) to retrieve tokens/cache, and the \texttt{connection interface} (from \texttt{Network layer}) to display network status. It \textit{provides} (controls) interfaces to command other components: \texttt{Start recording interface} (for \texttt{recording service}), \texttt{Navigation interface} (for \texttt{navigation manager}), and \texttt{Saving interface} (for \texttt{Local storage}).
+
+\vspace{0.5em}
+\noindent \textbf{sensor manager} \\
+This component abstracts the physical hardware. It \textit{consumes} (requires) the \texttt{sensor info} interface provided by the external \texttt{Device sensor} and \textit{provides} a clean data stream interface that is consumed by the \texttt{recording service}.
+
+\vspace{0.5em}
+\noindent \textbf{recording service} \\
+The core of the trip recording functionality (UC7). It \textit{consumes} (requires) the \texttt{Start recording interface} (from \texttt{UI layer}) and the data interface (from \texttt{sensor manager}). It \textit{provides} two interfaces: the \texttt{HUD interface} (consumed by \texttt{UI layer}) and a \texttt{Saving interface} (consumed by \texttt{Network layer} and \texttt{Local storage}) to pass on the completed trip data.
+
+\vspace{0.5em}
+\noindent \textbf{navigation manager} \\
+Manages the external navigation functionality (UC6). It \textit{consumes} (requires) the \texttt{Navigation interface} (from \texttt{UI layer}) and the \texttt{connection interface} (from \texttt{Network layer}). It then \textit{consumes} (requires) the external \texttt{Navigation service} interface (from the external app).
+
+\vspace{0.5em}
+\noindent \textbf{Network layer} \\
+Handles all communication with the backend. It \textit{consumes} (requires) the \texttt{BBP API} (provided by the \texttt{Controller layer}). It also \textit{consumes} \texttt{Saving interfaces} (from \texttt{recording service} and \texttt{Local storage}) to get the data to send. It \textit{provides} the \texttt{connection interface} to the \texttt{UI layer} and \texttt{navigation manager}.
+
+\vspace{0.5em}
+\noindent \textbf{Local storage} \\
+Manages on-device persistence. It \textit{consumes} (requires) \texttt{Saving interfaces} (from \texttt{UI layer} and \texttt{recording service}). It \textit{provides} the \texttt{Saved data interface} consumed by the \texttt{UI layer} and \texttt{Network layer}.
+
+\subsection*{BBP backend server Component Descriptions}
+
+\vspace{0.5em}
+\noindent \textbf{Controller layer} \\
+The single entry point for all client requests. It \textit{provides} the \texttt{BBP API} that the client's \texttt{Network layer} consumes. It \textit{consumes} (requires) the \texttt{Security interface} (to validate requests) and the \texttt{authentication interface} (for public login/register routes).
+
+\vspace{0.5em}
+\noindent \textbf{Security module} \\
+Acts as the central authorization gate. It \textit{provides} the \texttt{Security interface} (consumed by the \texttt{Controller layer}). It \textit{consumes} (requires) interfaces from \texttt{Auth service} (to validate tokens), \texttt{Path service}, \texttt{Trip service}, and \texttt{Profile manager} to forward authorized requests.
+
+\vspace{0.5em}
+\noindent \textbf{Auth service} \\
+Manages user identity (UC1, UC2). It \textit{provides} the \texttt{authentication interface} (consumed by the \texttt{Controller layer}). It \textit{consumes} (requires) the \texttt{Model interface} to find/create users in the database.
+
+\vspace{0.5em}
+\noindent \textbf{Profile manager} \\
+Manages user-specific data (e.g., name, email). It \textit{consumes} (requires) an interface from the \texttt{Security module} and also \textit{consumes} (requires) the \texttt{Model interface} to update or fetch profile data.
+
+\vspace{0.5em}
+\noindent \textbf{Path service} \\
+Handles all logic related to paths (UC4, UC5). It \textit{consumes} (requires) an interface from the \texttt{Security module}. It \textit{consumes} (requires) the \texttt{Model interface} for all path-related database queries, and it also \textit{consumes} (requires) the \texttt{Weather interface} (provided by the \texttt{Weather API client}) to fetch *forecast* data (R14).
+
+\vspace{0.5em}
+\noindent \textbf{Trip service} \\
+Handles all logic related to individual trips (UC9, UC13). It \textit{consumes} (requires) an interface from the \texttt{Security module}. It \textit{consumes} (requires) the \texttt{Model interface} to save or retrieve trip data. It also \textit{consumes} (requires) the \texttt{Weather interface} (red line) to fetch a *historical snapshot* of the weather (R32).
+
+\vspace{0.5em}
+\noindent \textbf{Model} \\
+The data access façade (Repository Pattern). It \textit{provides} the central \texttt{Model interface} that all services (\texttt{Auth}, \texttt{Profile}, \texttt{Path}, \texttt{Trip}) consume. It, in turn, \textit{consumes} (requires) the \texttt{DBMS API} provided by the \texttt{BBP Database}.
+
+\vspace{0.5em}
+\noindent \textbf{Weather API client} \\
+A specialized wrapper for the external weather service. It \textit{provides} the \texttt{Weather interface} that is consumed by both the \texttt{Path service} and \texttt{Trip service}. It translates these internal requests by \textit{consuming} (requiring) the external \texttt{Weather info API}.
