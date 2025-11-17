@@ -153,9 +153,9 @@ A specialized wrapper for the external weather service. It \textit{provides} the
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{}
-        \caption{Evaluation Manager.}
-        \label{fig:evaluation_manager}%
+        \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-path_detailed_view.drawio.png}
+        \caption{Path service}
+        \label{fig:Path service}%
     \end{center}
 \end{figure}
 
@@ -185,3 +185,20 @@ Handles the logic for fetching a single, detailed \texttt{Path} (UC5). It \texti
 \vspace{0.5em}
 \noindent \textbf{Path merger} \\
 This is an internal "worker" module that implements the \textit{On-Read} logic for calculating the path status (R9). It \textit{provides} the \texttt{Path merger interface} (consumed by \texttt{Path searcher} and \texttt{Detailed path view}). To perform its calculation, it \textit{consumes} (requires) the \texttt{Model interface} to retrieve the necessary \texttt{Status\_reports}.
+
+\subsubsection{CMP: Trip service}
+\label{sec:cmp_trip_service}
+
+This component is responsible for all business logic related to individual \texttt{Trips}, including their creation (UC9) and retrieval (UC13). It exposes a single facade interface (the \texttt{Trip interface}) to the \texttt{Security module}, which internally routes requests to two specialized modules.
+
+\vspace{0.5em}
+\noindent \textbf{trip adding} \\
+This module handles the complex orchestration of saving a new \texttt{Trip} (UC9). After being triggered by the facade, it \textit{consumes} (requires) two critical interfaces:
+\begin{itemize}
+    \item The \texttt{Weather interface} (from the \texttt{Weather API client}) to fetch a historical snapshot of the weather conditions for the trip (R32).
+    \item The \texttt{Model interface} (from the \texttt{Model}) to atomically save the new \texttt{Trip}, its \texttt{Path}, and any confirmed \texttt{Reports} to the database (R33).
+\end{itemize}
+
+\vspace{0.5em}
+\noindent \textbf{trip searcher} \\
+This module handles the retrieval of a user's personal trip history (UC13). It is a simple read operation that, once triggered by the facade, \textit{consumes} (requires) the \texttt{Model interface} to fetch the list of \texttt{Trips} associated with the user's ID.
