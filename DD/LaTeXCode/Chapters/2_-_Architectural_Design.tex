@@ -111,7 +111,7 @@ Handles all communication with the backend. It \textit{consumes} (requires) the 
 
 \vspace{0.5em}
 \noindent \textbf{Local storage} \\
-Manages on-device persistence. It \textit{consumes} (requires) \texttt{Saving interfaces} (from \texttt{UI layer} and \texttt{recording service}). It \textit{provides} the \texttt{Saved data interface} consumed by the \texttt{UI layer} and \texttt{Network layer}.
+Manages on-device persistence. It \textit{provides} the \texttt{Saved data interface} consumed by the \texttt{UI layer}, \texttt{Network layer} and \textit{recording service}.
 
 \subsection*{BBP backend server Component Descriptions}
 
@@ -202,7 +202,7 @@ This component is responsible for all business logic related to individual \text
 \noindent \textbf{trip adding} \\
 This module handles the complex orchestration of saving a new \texttt{Trip}. After being triggered by the facade, it \textit{consumes} (requires) two critical interfaces:
 \begin{itemize}
-    \item The \texttt{Weather interface} (from the \texttt{Weather API client}) to fetch a historical snapshot of the weather conditions for the trip (R32).
+    \item The \texttt{Weather interface} (from the \texttt{Weather API client}) to fetch a the  snapshot of the weather conditions of the trip (R32).
     \item The \texttt{Model interface} (from the \texttt{Model}) to atomically save the new \texttt{Trip}, its \texttt{Path}, and any confirmed \texttt{Reports} to the database (R33).
 \end{itemize}
 
@@ -214,34 +214,39 @@ This module handles the retrieval of a user's personal trip history (UC13). It i
 \label{sec:cmp_auth_service}
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-Trip_detailed_view.drawio.png}
-        \caption{Trip service}
-        \label{fig:Trip service}%
+        \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-Auth_detailed_view.drawio.png}
+        \caption{Auth service}
+        \label{fig:Auth service}%
     \end{center}
 \end{figure}
-This component manages all logic for user identity (UC1, UC2). It provides the core services for user registration and login, which are triggered by the \texttt{Controller layer} (bypassing the \texttt{Security module}). It also provides the critical token validation interface consumed by the \texttt{Security module} for all authenticated requests.
-
-\vspace{0.5em}
-\noindent \textbf{Auth handler} \\
-Serves as the internal entry point for the service. It \textit{consumes} (requires) the \texttt{authentication interface} provided by the \texttt{Controller layer} and routes the incoming request (e.g., login, register) to the \texttt{user service}.
+This component manages all logic for user identity (UC1, UC2). It provides the core services for user registration and login, which are triggered by the \texttt{Controller layer} (bypassing the \texttt{Security module} for public routes). It also provides the critical token validation interface consumed by the \texttt{Security module} for all authenticated requests.
 
 \vspace{0.5em}
 \noindent \textbf{user service} \\
-This is the central orchestrator for authentication logic. It \textit{consumes} (requires) interfaces from three specialized "worker" modules to execute its tasks:
+This is the central orchestrator for authentication logic, containing the business logic for both registration and login. It \textit{consumes} (requires) interfaces from three specialized "worker" modules to execute its tasks:
 \begin{itemize}
-    \item The interface from \textbf{Hash password} (to hash new passwords and verify existing ones).
-    \item The interface from \textbf{token manager} (to generate new session tokens upon successful login).
-    \item The \texttt{Model interface} (provided by the external \textbf{Model}) to find, create, and save user data in the database.
+    \item The interface \textit{provided} by \textbf{Hash password} (to hash new passwords and verify existing ones).
+    \item The interface \textit{provided} by \textbf{token manager} (to generate new session tokens upon successful login).
+    \item The \texttt{Model interface} \textit{provided} by the external \textbf{Model} (to find, create, and save user data in the database).
 \end{itemize}
 
-\vspace{0.5em}
-\noindent \textbf{Hash password} \\
-A specialized utility module that \textit{provides} a secure hashing and verification interface, which is consumed by the \texttt{user service}.
+\subsubsection{CMP: Recording service}
+\label{sec:cmp_recording_service}
+
+This component package contains the core client-side logic for the trip recording functionality (UC7). It is managed by an internal \texttt{Recording state manager} that orchestrates several sub-modules. It receives commands from the \texttt{UI layer} and raw data from the \texttt{sensor manager}.
 
 \vspace{0.5em}
-\noindent \textbf{token manager} \\
-This module \textit{provides} two distinct interfaces:
-\begin{itemize}
-    \item An interface (consumed by \texttt{user service}) to \textit{generate} new session tokens.
-    \item The \texttt{authentication interface} (consumed by the external \texttt{Security module}) to \textit{validate} existing tokens for all secured API requests.
-\end{itemize}
+\noindent \textbf{Recording state manager} \\
+This is the central orchestrator of the service. It \textit{consumes} (requires) two interfaces: one from the \texttt{UI layer} (to receive commands like start/stop) and one from the \texttt{sensor manager} (to receive the raw data stream). It \textit{provides} (controls) three interfaces: one back to the \texttt{UI layer} (to send HUD updates), one to the \texttt{GPS tracker}, and one to the \texttt{Sensor processor} (likely to command them to start/stop processing).
+
+\vspace{0.5em}
+\noindent \textbf{Stats tracker} \\
+This module is responsible for calculating real-time statistics (R22). It \textit{consumes} (requires) two interfaces: one from the \texttt{UI layer} (e.g., to receive reset/start commands) and one from the \texttt{GPS tracker} (to receive the position data needed to calculate distance and speed).
+
+\vspace{0.5em}
+\noindent \textbf{GPS tracker} \\
+This module's sole responsibility is managing the GPS data. It \textit{consumes} (requires) a command interface from the \texttt{Recording state manager} and \textit{provides} a data interface (the stream of \texttt{GPS\_points}) that is consumed by the \texttt{Stats tracker}.
+
+\vspace{0.5em}
+\noindent \textbf{Sensor processor} \\
+This module is responsible for analyzing the motion sensor data (R24). It \textit{consumes} (requires) a command interface from the \texttt{Recording state manager}. It \textit{provides} an interface (likely with the detected \texttt{sensor\_events}) that is consumed directly by the \texttt{Local storage} component for caching.
