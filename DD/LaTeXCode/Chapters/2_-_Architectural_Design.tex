@@ -26,3 +26,48 @@ Here we represents an overview of how the entire BBP architecture is composed of
     
     \item \textbf{External Navigation Service:} Invoked by the Mobile Client to provide turn-by-turn directions. When a user "Follows Path," the client sends the route's destination or geometry to the device's default mapping application, allowing BBP to focus on its core recording and evaluation features.
 \end{itemize}
+
+\section{Component View}
+\label{sec:component_view}%
+
+\subsection{High Level Diagram}
+\label{subsec:high_level_diagram}%
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{CD_DD/HighLevel.png}
+        \caption{High Level Diagram.}
+        \label{fig:high_level_diagram}%
+    \end{center}
+\end{figure}
+
+\noindent In the figure above is the high level component diagram of CKB where it’s represented the external components of CKB and how they communicate with the CKB server, in particular:
+\begin{itemize}
+    \item \textbf{WebApp}: serves as the external access point for Users, allowing communication with the CKB Server through the Dashboard Interface—the sole means for Client-Server interaction from the User side. The CKB Server can relay notifications, such as Tournament or Battle creation, to Users through the Notification Interface.
+    \item \textbf{DBMS:} is the storage repository for all User, Tournament, and Battle data. It communicates with the CKB Server via the DBMS API, which is connected to the Model component.
+    \item \textbf{Mail Server:} responsible for sending registration confirmation eMails, the Mail Server communicates with the CKB Server using the Mail API interface. This interface is linked to the Registration Manager component, which oversees the User registration process..
+    \item \textbf{External Tools:} external application used for testing the code submitted by STGs on GitHub. It communicates with the CKB Server through the External Tools API, connecting to the Evaluation Manager component. The Evaluation Manager handles the evaluation process for STG-submitted code.
+    \item \textbf{GitHub:}  external website used to create repositories for the code katas of Battles. Each STG, after forking the main repository, pushes their code for evaluation. GitHub communicates with the CKB Server through the GitHub API, linked to the Evaluation Manager.
+\end{itemize}
+\section{Component View}
+\label{sec:component_view}%
+
+\subsection{High Level Diagram}
+\label{subsec:high_level_diagram}%
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{CD_DD/HighLevel.png}
+        \caption{High Level Diagram.}
+        \label{fig:high_level_diagram}%
+    \end{center}
+\end{figure}
+
+\noindent In the figure above is the high level component diagram of CKB where it’s represented the external components of CKB and how they communicate with the CKB server, in particular:
+\begin{itemize}
+    \item \textbf{WebApp}: serves as the external access point for Users, allowing communication with the CKB Server through the Dashboard Interface—the sole means for Client-Server interaction from the User side. The CKB Server can relay notifications, such as Tournament or Battle creation, to Users through the Notification Interface.
+    \item \textbf{DBMS:} is the storage repository for all User, Tournament, and Battle data. It communicates with the CKB Server via the DBMS API, which is connected to the Model component.
+    \item \textbf{Mail Server:} responsible for sending registration confirmation eMails, the Mail Server communicates with the CKB Server using the Mail API interface. This interface is linked to the Registration Manager component, which oversees the User registration process..
+    \item \textbf{External Tools:} external application used for testing the code submitted by STGs on GitHub. It communicates with the CKB Server through the External Tools API, connecting to the Evaluation Manager component. The Evaluation Manager handles the evaluation process for STG-submitted code.
+    \item \textbf{GitHub:}  external website used to create repositories for the code katas of Battles. Each STG, after forking the main repository, pushes their code for evaluation. GitHub communicates with the CKB Server through the GitHub API, linked to the Evaluation Manager.
+\end{itemize}
