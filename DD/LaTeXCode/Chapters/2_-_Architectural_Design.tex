@@ -85,10 +85,12 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
         \label{fig:high_level_diagram}%
     \end{center}
 \end{figure}
-
 This section details the internal components of the primary system packages: the \texttt{Mobile App} and the \texttt{BBP backend server}. This view illustrates the internal logic and sub-component responsibilities required to implement the system's functionalities.
 
 \subsection*{Mobile App (Client) Component Descriptions}
+
+The \texttt{Mobile App} package contains the core logic for user interaction and data acquisition.
+
 \vspace{0.5em}
 \noindent \textbf{UI layer} \\
 Serves as the central orchestrator for all user interactions. It \textit{consumes} (requires) interfaces from multiple services to function: it \textit{consumes} the \texttt{HUD interface} (from \texttt{recording service}) to display live stats, the \texttt{Saved data interface} (from \texttt{Local storage}) to retrieve tokens/cache, and the \texttt{connection interface} (from \texttt{Network layer}) to display network status. It \textit{provides} (controls) interfaces to command other components: \texttt{Start recording interface} (for \texttt{recording service}), \texttt{Navigation interface} (for \texttt{navigation manager}), and \texttt{Saving interface} (for \texttt{Local storage}).
@@ -99,7 +101,7 @@ This component abstracts the physical hardware. It \textit{consumes} (requires) 
 
 \vspace{0.5em}
 \noindent \textbf{recording service} \\
-The core of the trip/path recording functionality. It \textit{consumes} (requires) the \texttt{Start recording interface} (from \texttt{UI layer}) and the data interface (from \texttt{sensor manager}). It \textit{provides} two interfaces: the \texttt{HUD interface} (consumed by \texttt{UI layer}) and a \texttt{Saving interface} (consumed by \texttt{Network layer} and \texttt{Local storage}) to pass on the completed trip/path data.
+The core of the trip recording functionality (UC7). It \textit{consumes} (requires) the \texttt{Start recording interface} (from \texttt{UI layer}) and the data interface (from \texttt{sensor manager}). It \textit{provides} two interfaces: the \texttt{HUD interface} (consumed by \texttt{UI layer}) and a \texttt{Saving interface} (consumed by \texttt{Network layer} and \texttt{Local storage}) to pass on the completed trip data.
 
 \vspace{0.5em}
 \noindent \textbf{navigation manager} \\
@@ -111,9 +113,11 @@ Handles all communication with the backend. It \textit{consumes} (requires) the 
 
 \vspace{0.5em}
 \noindent \textbf{Local storage} \\
-Manages on-device persistence. It \textit{provides} the \texttt{Saved data interface} consumed by the \texttt{UI layer}, \texttt{Network layer} and \textit{recording service}.
+Manages on-device persistence. It \textit{consumes} (requires) \texttt{Saving interfaces} from the \texttt{UI layer} (e.g., for user tokens) and \texttt{recording service} (to cache trips). It \textit{provides} the \texttt{Saved data interface} which is consumed by both the \texttt{UI layer} and the \texttt{Network layer}.
 
 \subsection*{BBP backend server Component Descriptions}
+
+The \texttt{BBP backend server} package contains the layered architecture for all business logic and data processing.
 
 \vspace{0.5em}
 \noindent \textbf{Controller layer} \\
@@ -125,19 +129,19 @@ Acts as the central authorization gate. It \textit{provides} the \texttt{Securit
 
 \vspace{0.5em}
 \noindent \textbf{Auth service} \\
-Manages user identity (UC1, UC2). It \textit{provides} the \texttt{authentication interface} (consumed by the \texttt{Controller layer}). It \textit{consumes} (requires) the \texttt{Model interface} to find/create users in the database, also provide the token verification in case of logged user.
+Manages user identity (UC1, UC2). It \textit{provides} the \texttt{authentication interface} (consumed by \texttt{Controller layer} and \texttt{Security module}). It \textit{consumes} (requires) the \texttt{Model interface} to find/create users in the database.
 
 \vspace{0.5em}
 \noindent \textbf{Profile manager} \\
-Manages user-specific data (e.g., name, email). It \textit{consumes} (requires) an interface from the \texttt{Security module} and also \textit{consumes} (requires) the \texttt{Model interface} to update or fetch profile data.
+Manages user-specific data (e.g., name, email). It \textit{consumes} (requires) the \texttt{Profile interface} from the \texttt{Security module} and also \textit{consumes} (requires) the \texttt{Model interface} to update or fetch profile data.
 
 \vspace{0.5em}
 \noindent \textbf{Path service} \\
-Handles all logic related to paths (UC4, UC5). It \textit{consumes} (requires) an interface from the \texttt{Security module}. It \textit{consumes} (requires) the \texttt{Model interface} for all path-related database queries, and it also \textit{consumes} (requires) the \texttt{Weather interface} (provided by the \texttt{Weather API client}) to fetch *forecast* data (R14).
+Handles all logic related to paths (UC4, UC5). It \textit{consumes} (requires) the \texttt{Path interface} from the \texttt{Security module}. It \textit{consumes} (requires) the \texttt{Model interface} for all path-related database queries, and it also \textit{consumes} (requires) the \texttt{Weather interface} (provided by the \texttt{Weather API client}) to fetch *forecast* data (R14).
 
 \vspace{0.5em}
 \noindent \textbf{Trip service} \\
-Handles all logic related to individual trips (UC9, UC13). It \textit{consumes} (requires) an interface from the \texttt{Security module}. It \textit{consumes} (requires) the \texttt{Model interface} to save or retrieve trip data. It also \textit{consumes} (requires) the \texttt{Weather interface} (red line) to fetch a *historical snapshot* of the weather (R32).
+Handles all logic related to individual trips (UC9, UC13). It \textit{consumes} (requires) the \texttt{Trip interface} from the \texttt{Security module}. It \textit{consumes} (requires) the \texttt{Model interface} to save or retrieve trip data. It also \textit{consumes} (requires) the \texttt{Weather interface} (red line) to fetch a *historical snapshot* of the weather (R32).
 
 \vspace{0.5em}
 \noindent \textbf{Model} \\
@@ -146,8 +150,6 @@ The data access façade (Repository Pattern). It \textit{provides} the central \
 \vspace{0.5em}
 \noindent \textbf{Weather API client} \\
 A specialized wrapper for the external weather service. It \textit{provides} the \texttt{Weather interface} that is consumed by both the \texttt{Path service} and \texttt{Trip service}. It translates these internal requests by \textit{consuming} (requiring) the external \texttt{Weather info API}.
-
-
 \subsubsection{CMP: Path service}
 \label{sec:cmp_path_service}
 
@@ -232,7 +234,14 @@ This is the central orchestrator for authentication logic, containing the busine
 
 \subsubsection{CMP: Recording service}
 \label{sec:cmp_recording_service}
-
+\label{sec:cmp_auth_service}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-Recording_detailed_view.drawio.png}
+        \caption{Recording service}
+        \label{fig:Recording service}%
+    \end{center}
+\end{figure}
 This component package contains the core client-side logic for the trip recording functionality (UC7). It is managed by an internal \texttt{Recording state manager} that orchestrates several sub-modules. It receives commands from the \texttt{UI layer} and raw data from the \texttt{sensor manager}.
 
 \vspace{0.5em}
