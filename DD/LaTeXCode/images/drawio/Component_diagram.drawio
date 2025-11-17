@@ -485,7 +485,7 @@
         <mxCell id="gwl0VJ4TtGmVXSO2l037-22" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;" parent="1" vertex="1">
           <mxGeometry x="1415" y="350" width="10" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="gwl0VJ4TtGmVXSO2l037-23" value="DBMS API" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
+        <mxCell id="gwl0VJ4TtGmVXSO2l037-23" value="DBMS API&lt;br&gt;(SQL/ORM)" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1370" y="495" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="gwl0VJ4TtGmVXSO2l037-24" value="Weather&amp;nbsp;&lt;div&gt;API&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
@@ -1470,7 +1470,7 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="yWN_UDFOirIkaLAWaH18" name="Recording service">
+  <diagram id="yWN_UDFOirIkaLAWaH18" name="Recording_detailed_view">
     <mxGraphModel dx="1826" dy="1183" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
