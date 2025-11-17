@@ -1407,7 +1407,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="yWN_UDFOirIkaLAWaH18" name="Recording_detailed_view">
-    <mxGraphModel dx="625" dy="544" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1829" dy="1315" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1483,30 +1483,28 @@
           <mxGeometry x="50" y="260" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="YLSbnyIp3IrOxiVPSeSX-2" value="GPS tracker" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="260" y="210" width="100" height="50" as="geometry" />
+          <mxGeometry x="350" y="220" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="YLSbnyIp3IrOxiVPSeSX-3" value="Sensor processor" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="270" y="310" width="100" height="50" as="geometry" />
         </mxCell>
         <mxCell id="YLSbnyIp3IrOxiVPSeSX-4" value="Stats tracker" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="450" y="130" width="100" height="50" as="geometry" />
+          <mxGeometry x="240" y="140" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="YLSbnyIp3IrOxiVPSeSX-5" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;" parent="1" source="YLSbnyIp3IrOxiVPSeSX-4" target="YLSbnyIp3IrOxiVPSeSX-7" edge="1">
+        <mxCell id="YLSbnyIp3IrOxiVPSeSX-5" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;entryX=0.472;entryY=0.07;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="YLSbnyIp3IrOxiVPSeSX-4" target="YLSbnyIp3IrOxiVPSeSX-10" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="450" y="215" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="180" y="220" />
+            </Array>
           </mxGeometry>
-        </mxCell>
-        <mxCell id="YLSbnyIp3IrOxiVPSeSX-6" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="YLSbnyIp3IrOxiVPSeSX-2" target="YLSbnyIp3IrOxiVPSeSX-7" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="410" y="215" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="YLSbnyIp3IrOxiVPSeSX-7" value="" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;" parent="1" vertex="1">
-          <mxGeometry x="425" y="210" width="10" height="10" as="geometry" />
         </mxCell>
         <mxCell id="YLSbnyIp3IrOxiVPSeSX-8" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;" parent="1" source="YLSbnyIp3IrOxiVPSeSX-1" target="YLSbnyIp3IrOxiVPSeSX-10" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="235" y="275" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="180" y="220" />
+            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="YLSbnyIp3IrOxiVPSeSX-9" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;" parent="1" source="YLSbnyIp3IrOxiVPSeSX-2" target="YLSbnyIp3IrOxiVPSeSX-10" edge="1">
@@ -1556,6 +1554,9 @@
         </mxCell>
         <mxCell id="AWLKHXz2wLs1cTe5gP55-4" value="Saving&lt;br&gt;interface" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="680" y="380" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="xFDtHinWoL9ZuHbWT7Q_-2" value="GPS point&amp;nbsp;&lt;br&gt;interface" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;" vertex="1" parent="1">
+          <mxGeometry x="210" y="220" width="100" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
