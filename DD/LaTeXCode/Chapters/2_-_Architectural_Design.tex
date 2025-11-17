@@ -80,7 +80,7 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
 \label{sec:low_level_view}
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-High_level_diagram.drawio.png}
+        \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-Complete_low_level_diagram.drawio.png}
         \caption{High Level Diagram.}
         \label{fig:high_level_diagram}%
     \end{center}
@@ -89,7 +89,6 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
 This section details the internal components of the primary system packages: the \texttt{Mobile App} and the \texttt{BBP backend server}. This view illustrates the internal logic and sub-component responsibilities required to implement the system's functionalities.
 
 \subsection*{Mobile App (Client) Component Descriptions}
-
 \vspace{0.5em}
 \noindent \textbf{UI layer} \\
 Serves as the central orchestrator for all user interactions. It \textit{consumes} (requires) interfaces from multiple services to function: it \textit{consumes} the \texttt{HUD interface} (from \texttt{recording service}) to display live stats, the \texttt{Saved data interface} (from \texttt{Local storage}) to retrieve tokens/cache, and the \texttt{connection interface} (from \texttt{Network layer}) to display network status. It \textit{provides} (controls) interfaces to command other components: \texttt{Start recording interface} (for \texttt{recording service}), \texttt{Navigation interface} (for \texttt{navigation manager}), and \texttt{Saving interface} (for \texttt{Local storage}).
@@ -100,7 +99,7 @@ This component abstracts the physical hardware. It \textit{consumes} (requires) 
 
 \vspace{0.5em}
 \noindent \textbf{recording service} \\
-The core of the trip recording functionality (UC7). It \textit{consumes} (requires) the \texttt{Start recording interface} (from \texttt{UI layer}) and the data interface (from \texttt{sensor manager}). It \textit{provides} two interfaces: the \texttt{HUD interface} (consumed by \texttt{UI layer}) and a \texttt{Saving interface} (consumed by \texttt{Network layer} and \texttt{Local storage}) to pass on the completed trip data.
+The core of the trip/path recording functionality. It \textit{consumes} (requires) the \texttt{Start recording interface} (from \texttt{UI layer}) and the data interface (from \texttt{sensor manager}). It \textit{provides} two interfaces: the \texttt{HUD interface} (consumed by \texttt{UI layer}) and a \texttt{Saving interface} (consumed by \texttt{Network layer} and \texttt{Local storage}) to pass on the completed trip/path data.
 
 \vspace{0.5em}
 \noindent \textbf{navigation manager} \\
@@ -126,7 +125,7 @@ Acts as the central authorization gate. It \textit{provides} the \texttt{Securit
 
 \vspace{0.5em}
 \noindent \textbf{Auth service} \\
-Manages user identity (UC1, UC2). It \textit{provides} the \texttt{authentication interface} (consumed by the \texttt{Controller layer}). It \textit{consumes} (requires) the \texttt{Model interface} to find/create users in the database.
+Manages user identity (UC1, UC2). It \textit{provides} the \texttt{authentication interface} (consumed by the \texttt{Controller layer}). It \textit{consumes} (requires) the \texttt{Model interface} to find/create users in the database, also provide the token verification in case of logged user.
 
 \vspace{0.5em}
 \noindent \textbf{Profile manager} \\
@@ -147,3 +146,42 @@ The data access façade (Repository Pattern). It \textit{provides} the central \
 \vspace{0.5em}
 \noindent \textbf{Weather API client} \\
 A specialized wrapper for the external weather service. It \textit{provides} the \texttt{Weather interface} that is consumed by both the \texttt{Path service} and \texttt{Trip service}. It translates these internal requests by \textit{consuming} (requiring) the external \texttt{Weather info API}.
+
+
+\subsubsection{CMP: Path service}
+\label{sec:cmp_path_service}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{}
+        \caption{Evaluation Manager.}
+        \label{fig:evaluation_manager}%
+    \end{center}
+\end{figure}
+
+This component manages all business logic related to the creation, searching, and viewing of \texttt{Paths}. It consumes the \texttt{Model interface} for all database operations and the \texttt{Weather interface} for forecasts. The component exposes a single \texttt{Path interface} port to the \texttt{Security module}, which internally routes to three specialized interfaces.
+
+\vspace{0.5em}
+\noindent \textbf{path adding} \\
+Handles the logic for manually creating a new \texttt{Path} (UC11). It \textit{consumes} (requires) the \texttt{Path adding interface} to receive data. To persist the new \texttt{Path} entity, it \textit{consumes} (requires) the \texttt{Model interface}.
+
+\vspace{0.5em}
+\noindent \textbf{Path searcher} \\
+Handles the primary search functionality (UC4). It \textit{consumes} (requires) the \texttt{Search path interface}. It implements the \textit{On-Read} (lazy) aggregation logic by consuming two interfaces:
+\begin{itemize}
+    \item The \texttt{Model interface}: to retrieve \texttt{Paths}, associated \texttt{Trips} (for live statistics calculation), and \texttt{Reports}.
+    \item The \texttt{Path merger interface}: to calculate the "fresh" status from the retrieved reports.
+\end{itemize}
+
+\vspace{0.5em}
+\noindent \textbf{Detailed path view} \\
+Handles the logic for fetching a single, detailed \texttt{Path} (UC5). It \textit{consumes} (requires) the \texttt{Detailed path interface}. This is the most complex read operation, as it \textit{consumes} (requires) three distinct interfaces to build the final view:
+\begin{itemize}
+    \item The \texttt{Model interface}: for all core path, trip, and report data.
+    \item The \texttt{Path merger interface}: for the "fresh" status.
+    \item The \texttt{Weather interface}: to fetch the current weather forecast for the path's location (R14).
+\end{itemize}
+
+\vspace{0.5em}
+\noindent \textbf{Path merger} \\
+This is an internal "worker" module that implements the \textit{On-Read} logic for calculating the path status (R9). It \textit{provides} the \texttt{Path merger interface} (consumed by \texttt{Path searcher} and \texttt{Detailed path view}). To perform its calculation, it \textit{consumes} (requires) the \texttt{Model interface} to retrieve the necessary \texttt{Status\_reports}.
