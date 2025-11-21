@@ -1,0 +1,167 @@
+@startuml
+!theme materia-outline
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 100
+skinparam ranksep 80
+skinparam ArrowColor Black
+
+' --- Stili Generali ---
+skinparam package {
+    Style rectangle
+    RoundCorner 15
+    FontSize 14
+    FontStyle Bold
+}
+
+' --- Stili Specifici per Tier ---
+' Presentation (BLU)
+skinparam package<<Presentation>> {
+    BackgroundColor #E3F2FD
+    BorderColor #2196F3
+}
+skinparam node<<PresentationDevice>> {
+    BackgroundColor #BBDEFB
+    BorderColor #1976D2
+}
+skinparam node<<PresentationOS>> {
+    BackgroundColor #2196F3
+    BorderColor #0D47A1
+    FontColor White
+}
+
+' Application (ARANCIONE)
+skinparam package<<Application>> {
+    BackgroundColor #FFF3E0
+    BorderColor #FF9800
+}
+skinparam node<<AppDevice>> {
+    BackgroundColor #FFE0B2
+    BorderColor #F57C00
+}
+skinparam node<<AppOS>> {
+    BackgroundColor #FF9800
+    BorderColor #E65100
+    FontColor White
+}
+skinparam node<<AppEnv>> {
+    BackgroundColor #FFCCBC
+    BorderColor #BF360C
+}
+
+' Data (VERDE)
+skinparam package<<Data>> {
+    BackgroundColor #E8F5E9
+    BorderColor #4CAF50
+}
+skinparam node<<DataDevice>> {
+    BackgroundColor #C8E6C9
+    BorderColor #388E3C
+}
+skinparam node<<DataOS>> {
+    BackgroundColor #4CAF50
+    BorderColor #1B5E20
+    FontColor White
+}
+' Stile specifico per l'ambiente Data
+skinparam node<<DataEnv>> {
+    BackgroundColor #A5D6A7
+    BorderColor #1B5E20
+}
+
+' External (GIALLO)
+skinparam node<<ExternalDevice>> {
+    BackgroundColor #FFF9C4
+    BorderColor #FBC02D
+}
+skinparam node<<ExternalOS>> {
+    BackgroundColor #FFF176
+    BorderColor #F57F17
+}
+
+skinparam artifact {
+    BackgroundColor White
+    BorderColor Black
+    FontColor Black
+}
+
+' ==========================================
+'               DIAGRAMMA
+' ==========================================
+
+left to right direction
+
+' --- 1. Presentation Tier (Client) ---
+package "Presentation Tier" <<Presentation>> {
+    node "User Smartphone" as Phone <<PresentationDevice>> {
+        node "iOS / Android" as PhoneOS <<PresentationOS>> {
+            artifact "Mobile App" <<Artifact>> as ClientApp
+            artifact "Maps App" <<Artifact>> as MapsApp
+        }
+    }
+}
+
+' --- 2. Application Tier (Server Infrastructure) ---
+package "Application Tier" <<Application>> {
+    
+    node "Firewall" as FW <<AppDevice>>
+    
+    node "Web Server" as WebSrv <<AppDevice>> {
+        node "Linux (OS)" as WebOS <<AppOS>> {
+            node "Nginx" as WebEnv <<AppEnv>> {
+                artifact "Load Balancer" <<Artifact>> as LB
+            }
+        }
+    }
+
+    node "Application Server" as AppSrv <<AppDevice>> {
+        node "Linux (OS)" as AppOS <<AppOS>> {
+            node "JVM / Docker" as AppEnv <<AppEnv>> {
+                artifact "BBP Backend Server" <<Artifact>> as Backend
+            }
+        }
+    }
+}
+
+' --- 3. Data Tier (Database - FIX DEFINITIVO) ---
+package "Data Tier" <<Data>> {
+    ' Sintassi semplificata per evitare nodi fantasma
+    node "Database Server" as DBSrv <<DataDevice>> {
+        node "Linux (OS)" as DBOS <<DataOS>> {
+            node "PostgreSQL Engine" as DBEnv <<DataEnv>> {
+                artifact "BBP Schema\n(PostGIS)" <<Artifact>> as DB
+            }
+        }
+    }
+}
+
+' --- 4. External Services (Remote) ---
+node "Weather Server" as WeatherSrv <<ExternalDevice>> {
+    node "Server OS" as WeatherOS <<ExternalOS>> {
+        artifact "Weather API" <<Artifact>> as Weather
+    }
+}
+
+' ==========================================
+'               CONNESSIONI
+' ==========================================
+
+' 1. Client -> Navigazione Locale
+ClientApp --> MapsApp : OS Intent
+
+' 2. Client -> Firewall
+ClientApp --> FW : HTTPS
+
+' 3. Firewall -> Web Server
+FW --> LB : HTTPS
+
+' 4. Web Server -> App Server
+LB --> Backend : HTTP
+
+' 5. App Server -> Database
+Backend --> DB : JDBC/SQL (Port 5432)
+
+' 6. App Server -> Meteo Esterno
+Backend --> Weather : HTTPS (REST)
+
+@enduml
