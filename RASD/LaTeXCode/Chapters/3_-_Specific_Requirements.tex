@@ -405,318 +405,307 @@ This section lists the specific functional requirements that the Best Bike Paths
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=0.65\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_6.png}
-        \caption{UC6: Follow Path (Navigation)}
+        \caption{UC6 Follow Path (Navigation)}
         \label{fig:UC6: Follow Path}%
     \end{center}
 \end{figure}
 %Registred user activity
-\subsubsection*{UC7. Record Path (Automatic)}
+\subsubsection*{[UC\cuc]. Record Path (Automatic)}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & Registered User, Device Sensors (GPS, IMU), External Weather Service \\
-        \hline
-        \textbf{Entry conditions} & The user is registered, logged in. (L'utente potrebbe aver selezionato un \texttt{Path} da seguire). \\
-        \hline
-        \textbf{Event Flow}       & 1 - The User taps the "Start Recording" button (R20). \\
-                                  & 2 - BBP Application activates \texttt{Device Sensors} (R23). \\
-                                  & 3 - The app displays the recording HUD, showing real-time statistics (R22). \\
-                                  & 4 - \textbf{In parallel:} The app records the user's \texttt{GPS\_points} sequence (R21) and monitors sensor data (R23). \\
-                                  
-                                  % --- LOGICA AGGIUNTA QUI (Opzione A) ---
-                                  & 5 - \textbf{Auto-Pause Logic:} If speed is below the threshold, GPS coordinate recording (R21) is paused (R25). The 'Elapsed Time' timer (R22) continues to run. \\
-                                  & 6 - \textbf{Auto-Resume Logic:} If speed exceeds the threshold after a pause, GPS coordinate recording (R21) resumes (R26). \\
-                                  % --- FINE LOGICA AGGIUNTA ---
-
-                                  & 7 - \textbf{If} sensor data exceeds the threshold, the app internally logs a new \texttt{sensor\_event} (R24). \\
-                                  & 8 - The User taps the "Stop Recording" button (R27). \\
-                                  & 9 - BBP Application stops all sensors and finalizes the \texttt{Path} geometry. \\
-                                  & 10 - BBP Application calculates the final \texttt{Statistics} (R31). \\
-                                  & 11 - BBP show the summary of the new path with the trip information, and in case the \textit{ReviewDetections}. \textbf{`Save Trip and Path`} (UC9)\\
-        \hline
-        \textbf{Exit condition}   & The user has completed the recording. The system proceeds to the save flow (UC9). \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The user discards the trip instead of saving. The recorded data is discarded.
-                                  \end{itemize}\\
-        \hline
-        \caption{Record Trip (Automatic) use case.}
-        \label{tab:uc_record_trip}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & Registered User, Device Sensors (GPS, IMU) \\
+    \hline
+    \textbf{Entry conditions} & The user is registered and logged in. (Optionally, the user may have selected a \texttt{Path} to follow). \\
+    \hline
+    \textbf{Event Flow}     & 1 - The User taps the "Start Recording" button (R20). \\
+                            & 2 - BBP activates \texttt{Device Sensors} (R23). \\
+                            & 3 - BBP displays the recording HUD, showing real-time statistics (R22). \\
+                            & 4 - \textbf{In parallel:} BBP records the user's \texttt{GPS\_points} sequence (R21) and monitors sensor data (R23). \\
+                            & 5 - \textbf{Auto-Pause Logic:} If speed is below the threshold, GPS coordinate recording (R21) is paused (R25). The 'Elapsed Time' timer (R22) continues to run. \\
+                            & 6 - \textbf{Auto-Resume Logic:} If speed exceeds the threshold after a pause, GPS coordinate recording (R21) resumes (R26). \\
+                            & 7 - \textbf{If} sensor data exceeds the threshold, BBP internally logs a new \texttt{sensor\_event} (R24). \\
+                            & 8 - The User taps the "Stop Recording" button (R27). \\
+                            & 9 - BBP stops all sensors and finalizes the \texttt{Path} geometry. \\
+                            & 10 - BBP calculates the final \texttt{Statistics} (R31). \\
+                            & 11 - BBP triggers the \textbf{`Save Trip and Path`} use case (UC9), optionally displaying \textit{ReviewDetections} (UC8) if events were logged. \\
+    \hline
+    \textbf{Exit condition}   & The user has completed the recording. The system proceeds to the save flow (UC9). \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item The user discards the trip instead of saving. The recorded data is discarded.
+                            \end{itemize}\\
+    \hline
+    \caption{Record Trip (Automatic) use case.}
+    \label{tab:uc_record_trip}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=0.75\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_7.png}
-        \caption{UC7: Record Trip }
+        \caption{UC7 Record Trip }
         \label{fig:UC7: Record Trip }%
     \end{center}
 \end{figure}
-\subsubsection*{UC8. Review Detections}
+\subsubsection*{[UC\cuc]. Review Detections}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & Registered User \\
-        \hline
-        \textbf{Entry conditions} & The user has just entered \texttt{Save Path and Trip} (UC9). \\
-                                  & The system has logged one or more \texttt{sensor\_event}s (R24). \\
-        \hline
-        \textbf{Event Flow}       & 1 - The BBP Application displays the summary with the \texttt{Review Detections} screen. \\
-                                  & 2 - The app shows the recorded path on a map, with pins marking the location of each logged \texttt{sensor\_event}.(R28) \\
-                                  & 3 - The user reviews each detection (e.g., by tapping the pin). \\
-                                  & 4 - For each event, the User chooses "Confirm" or "Ignore" (R29). \\
-                                  & 5 - \textbf{If} "Confirm" is pressed, the system flags the \texttt{sensor\_event} as confirmed, ready to become an \texttt{Obstacle\_report} (R30). \\
-                                  & 6 - \textbf{If} "Ignore" is pressed, the system flags the \texttt{sensor\_event} as rejected. \\
-        \hline
-        \textbf{Exit condition}   & All pending \texttt{sensor\_event}s have been processed. The system proceeds to the \texttt{Save Path and Trip} (UC9) decision. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The user exits the review screen prematurely. The system may treat all pending detections as "Ignored".
-                                  \end{itemize}\\
-        \hline
-        \caption{Review Detections use case.}
-        \label{tab:uc_review_detections}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & Registered User \\
+    \hline
+    \textbf{Entry conditions} & The user has just entered \texttt{Save Path and Trip} (UC9). \\
+                              & BBP has logged one or more \texttt{sensor\_event}s during the trip (R24). \\
+    \hline
+    \textbf{Event Flow}     & 1 - BBP displays the trip summary with the \texttt{Review Detections} screen. \\
+                            & 2 - BBP shows the recorded path on a map, with pins marking the location of each logged \texttt{sensor\_event}. (R28) \\
+                            & 3 - The User reviews each detection (e.g., by tapping the pin). \\
+                            & 4 - For each event, the User chooses "Confirm" or "Ignore" (R29). \\
+                            & 5 - \textbf{If} "Confirm" is pressed, BBP flags the \texttt{sensor\_event} as confirmed, ready to become an \texttt{Obstacle\_report} (R30). \\
+                            & 6 - \textbf{If} "Ignore" is pressed, BBP flags the \texttt{sensor\_event} as rejected. \\
+    \hline
+    \textbf{Exit condition}   & All pending \texttt{sensor\_event}s have been processed. The system proceeds to the \texttt{Save Path and Trip} (UC9) decision. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item The user exits the review screen prematurely. BBP treats all pending detections as "Ignored".
+                            \end{itemize}\\
+    \hline
+    \caption{Review Detections use case.}
+    \label{tab:uc_review_detections}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_8.png}
-        \caption{UC8: Review Detections}
-        \label{fig:UC8: Review Detections}%
+        \caption{UC8 Review Detections}
+        \label{fig:UC8 Review Detections}%
     \end{center}
 \end{figure}
-\subsubsection*{UC9. Save trip and path}
+\subsubsection*{[UC\cuc]. Save trip and path}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & Registered User \\
-        \hline
-        \textbf{Entry conditions} & The user has just completed \texttt{Record Trip (Automatic)} (UC7). \\
-                                  & The application has the complete recorded data (geometry, stats, weather, and pending \texttt{sensor\_event}s). \\
-        \hline
-        \textbf{Event Flow}       & 1 - (Triggered by UC7) BBP Application displays the "Summary \& Save" screen, showing the map, final statistics (R31)). \\
-                                  & 2 - \textbf{Extension Point `Review Detections` (UC8):} \textbf{If} pending \texttt{sensor\_event}s exist (R25), the flow is extended by UC8, prompting the user to confirm/ignore detections . \\
-                                  & 3 - The User enters a name for the activity. \\
-                                  & 4 - \textbf{`<<include>>` `set visibility` (UC12):} The User selects the visibility for the \textbf{`Trip` (Public/Private for stats} and for the \textbf{`Path` (Public/Private for search) [R39]} \\
-                                  & 5 - The User taps "Save" or "Discard". \\
-                                  & 6 - \textbf{If} "Save" is pressed: \\
-                                  & \hspace{1em} a. BBP Application sends all finalised data (geometry, stats, weather, confirmed reports, name, visibilities) to the Server. (R40)\\
-                                  & \hspace{1em} b. The Server saves the \texttt{Trip} to the user's private archive (R31,R32). \\
-                                  & \hspace{1em} c. The Server saves the \texttt{Path} with its chosen visibility (R39). \\
-                                  & \hspace{1em} d. \textbf{If} the \texttt{Trip} visibility was "Public", the Server updates the \texttt{Path}'s average statistics (R9, R10). \\
-                                  & 7 - \textbf{If} "Discard" is pressed, the flow terminates and data is deleted. \\
-        \hline
-        \textbf{Exit condition}   & The new \texttt{Trip} is saved. The new/updated \texttt{Path} is saved. Or all data is discarded. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item Invalid data (e.g., missing name). The system shows an error and remains on the save screen.
-                                  \end{itemize}\\
-        \hline
-        \caption{Save trip and path use case.}
-        \label{tab:uc_save_trip_path}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & Registered User, External Weather Service \\
+    \hline
+    \textbf{Entry conditions} & The user has just completed \texttt{Record Trip (Automatic)} (UC7). \\
+                              & BBP has the complete recorded data (geometry, stats, and pending \texttt{sensor\_event}s). \\
+    \hline
+    \textbf{Event Flow}     & 1 - (Triggered by UC7) BBP retrieves weather data (R32) and displays the "Summary \& Save" screen, showing the map and final statistics (R31). \\
+                            & 2 - \textbf{Extension Point `Review Detections` (UC8):} \textbf{If} pending \texttt{sensor\_event}s exist (R28), the flow is extended by UC8 to confirm/ignore detections. \\
+                            & 3 - The User enters a name for the activity. \\
+                            & 4 - \textbf{`<<include>>` `set visibility` (UC10):} The User selects the visibility for the \textbf{`Trip` (Public/Private for stats [R39.2])} and for the \textbf{`Path` (Public/Private for search [R39.1])}. \\
+                            & 5 - The User taps "Save" or "Discard". \\
+                            & 6 - \textbf{If} "Save" is pressed: \\
+                            & \hspace{1em} a. BBP saves the \texttt{Trip} to the user's private archive (R33). \\
+                            & \hspace{1em} b. BBP saves the \texttt{Path} with its chosen visibility (R39.1). \\
+                            & \hspace{1em} c. \textbf{If} the \texttt{Trip} visibility was "Public", BBP updates the \texttt{Path}'s average statistics (R9, R39.2). \\
+                            & \hspace{1em} d. BBP displays a success message (R40). \\
+                            & 7 - \textbf{If} "Discard" is pressed, the flow terminates and data is deleted. \\
+    \hline
+    \textbf{Exit condition}   & The new \texttt{Trip} is saved. The new/updated \texttt{Path} is saved. Or all data is discarded. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item Invalid data (e.g., missing name). The system shows an error and remains on the save screen.
+                            \end{itemize}\\
+    \hline
+    \caption{Save trip and path use case.}
+    \label{tab:uc_save_trip_path}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_9.png}
-        \caption{UC9: Save Path and Trip}
-        \label{fig:UC9: Save Path and Trip}%
+        \caption{UC9 Save Path and Trip}
+        \label{fig:UC9 Save Path and Trip}%
     \end{center}
 \end{figure}
-\subsubsection*{UC10. set visibility (Included)}
+\subsubsection*{[UC\cuc]. set visibility (Included)}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & Registered User \\
-        \hline
-        \textbf{Entry conditions} & The user is in the process of saving an activity (called by UC9 or UC12). \\
-        \hline
-        \textbf{Event Flow}       & 1 - (Triggered by UC9 or UC12) The system presents the User with the relevant visibility options [R39]. \\
-                                  & 2 - \textbf{If} called by UC9 (\texttt{Save trip and path}), the User selects visibility for both the \texttt{Trip} (stats aggregation) and the \texttt{Path} (search). \\
-                                  & 3 - \textbf{If} called by UC12 (\texttt{Save path}), the User selects visibility only for the \texttt{Path} (search). \\
-                                  & 4 - The User confirms the selection.(R40) \\
-        \hline
-        \textbf{Exit condition}   & The visibility preference(s) are set and returned to the calling use case. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item None. A default selection (e.g., "Private") is assumed.
-                                  \end{itemize}\\
-        \hline
-        \caption{set visibility (Included) use case.}
-        \label{tab:uc_set_visibility}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & Registered User \\
+    \hline
+    \textbf{Entry conditions} & The user is in the process of saving an activity (called by UC9 or UC12). \\
+    \hline
+    \textbf{Event Flow}     & 1 - (Triggered by UC9 or UC12) BBP presents the User with the relevant visibility options [R39.1, R39.2]. \\
+                            & 2 - \textbf{If} called by UC9 (\texttt{Save trip and path}), the User selects visibility for both the \texttt{Trip} (stats aggregation [R39.2]) and the \texttt{Path} (search [R39.1]). \\
+                            & 3 - \textbf{If} called by UC12 (\texttt{Save path}), the User selects visibility only for the \texttt{Path} (search [R39.1]). \\
+                            & 4 - The User confirms the selection (R40). \\
+    \hline
+    \textbf{Exit condition}   & The visibility preference(s) are set and returned to the calling use case. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item None. A default selection (e.g., "Private") is assumed.
+                            \end{itemize}\\
+    \hline
+    \caption{set visibility (Included) use case.}
+    \label{tab:uc_set_visibility}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=0.57\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_10.png}
-        \caption{UC10: set visibility}
-        \label{fig:UC10: set visibility}%
+        \caption{UC10 set visibility}
+        \label{figUC10 set visibility}%
     \end{center}
 \end{figure}
-\subsubsection*{UC11. Create path manually}
+\subsubsection*{[UC\cuc]. Create path manually}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & Registered User \\
-        \hline
-        \textbf{Entry conditions} & The user is registered, logged in, and has selected the "Create Path Manually" option. \\
-        \hline
-        \textbf{Event Flow}       & 1 - BBP Application displays the manual path editor screen, showing a map. \\
-                                  & 2 - The User iteratively draws the path geometry by placing points on the map (R36). \\
-                                  & 3 - The User taps "Done" or "Finish" when the path geometry is complete. \\
-                                  & 4 - The registred user can now add a path status or report a Obstacle report (UC14,UC15). \\
-                                  & 5 - BBP proceeds to the \textbf{`Save path`} use case (UC12), passing the new path data. \\
-        \hline
-        \textbf{Exit condition}   & The user has finished creating the path geometry. The system proceeds to the save flow (UC12). \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The user cancels creation mid-way. The unsaved path data is discarded.
-                                  \end{itemize}\\
-        \hline
-        \caption{Create path manually use case.}
-        \label{tab:uc_create_path_manually}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & Registered User \\
+    \hline
+    \textbf{Entry conditions} & The user is registered, logged in, and has selected the "Create Path Manually" option. \\
+    \hline
+    \textbf{Event Flow}     & 1 - BBP displays the manual path editor screen, showing a map. \\
+                            & 2 - The User iteratively draws the path geometry by placing points on the map (R36). \\
+                            & 3 - The User taps "Done" or "Finish" when the path geometry is complete. \\
+                            & 4 - The Registered User can now add a path status or report an Obstacle (UC14, UC15). \\
+                            & 5 - BBP proceeds to the \textbf{`Save path`} use case (UC12), passing the new path data. \\
+    \hline
+    \textbf{Exit condition}   & The user has finished creating the path geometry. The system proceeds to the save flow (UC12). \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item The user cancels creation mid-way. The unsaved path data is discarded.
+                            \end{itemize}\\
+    \hline
+    \caption{Create path manually use case.}
+    \label{tab:uc_create_path_manually}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=0.7\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_11.png}
-        \caption{UC11. Create path manually}
-        \label{fig:UC11. Create path manually}%
+        \caption{UC11 create path manually}
+        \label{fig:UC11 create path manually}%
     \end{center}
 \end{figure}
-\subsubsection*{UC12. Save path}
+\subsubsection*{[UC\cuc]. Save path}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & Registered User \\
-        \hline
-        \textbf{Entry conditions} & The user has just completed \texttt{Create path manually} (UC11). \\
-                                  & The application has the new path geometry and any manual reports. \\
-        \hline
-        \textbf{Event Flow}       & 1 - (Triggered by UC11) BBP Application displays the "Save Path" screen. \\
-                                  & 2 - The User enters a name for the \texttt{Path}. \\
-                                  & 3 - \textbf{`<<include>>` `set visibility` (UC12):} The User selects the visibility for the \textbf{`Path`} (e.g., "Public" or "Private") [R39]. \\
-                                  & 4 - The User taps "Save" or "Discard". \\
-                                  & 5 - \textbf{If} "Save" is pressed: \\
-                                  & \hspace{1em} a. BBP Application sends all finalized data (geometry, name, visibility) to the Server. \\
-                                  & \hspace{1em} b. The Server saves the new \texttt{Path} with its chosen visibility (R39). \\
-                                  & 6 - \textbf{If} "Discard" is pressed, the flow terminates and data is deleted. \\
-        \hline
-        \textbf{Exit condition}   & The new \texttt{Path} is saved with the chosen visibility, or all data is discarded. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item Invalid data (e.g., missing name). The system shows an error and remains on the save screen.
-                                  \end{itemize}\\
-        \hline
-        \caption{Save path use case.}
-        \label{tab:uc_save_path}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & Registered User \\
+    \hline
+    \textbf{Entry conditions} & The user has just completed \texttt{Create path manually} (UC11). \\
+                              & BBP has the new path geometry and any manual reports. \\
+    \hline
+    \textbf{Event Flow}     & 1 - (Triggered by UC11) BBP displays the "Save Path" screen. \\
+                            & 2 - The User enters a name for the \texttt{Path}. \\
+                            & 3 - \textbf{`<<include>>` `set visibility` (UC10):} The User selects the visibility for the \textbf{`Path`} (e.g., "Public" or "Private") [R39.1]. \\
+                            & 4 - The User taps "Save" or "Discard". \\
+                            & 5 - \textbf{If} "Save" is pressed, BBP saves the new \texttt{Path} with its chosen visibility (R39.1). \\
+                            & 6 - \textbf{If} "Discard" is pressed, the flow terminates and data is deleted. \\
+    \hline
+    \textbf{Exit condition}   & The new \texttt{Path} is saved with the chosen visibility, or all data is discarded. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item Invalid data (e.g., missing name). The system shows an error and remains on the save screen.
+                            \end{itemize}\\
+    \hline
+    \caption{Save path use case.}
+    \label{tab:uc_save_path}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_12.png}
-        \caption{UC12: Save path}
-        \label{fig:UC12: Save path}%
+        \caption{UC12 save path}
+        \label{fig:UC12 save path}%
     \end{center}
 \end{figure}
-\subsubsection*{UC13. View "My trips"}
+\subsubsection*{[UC\cuc]. View "My trips"}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & Registered User \\
-        \hline
-        \textbf{Entry conditions} & The user is registered and logged in. \\
-        \hline
-        \textbf{Event Flow}       & 1 - The User navigates to their profile and taps the "My Trips" option. \\
-                                  & 2 - BBP Application requests the list of saved trips for the user from the Server. \\
-                                  & 3 - The Server retrieves all \texttt{Trip} objects associated with that user (R34). \\
-                                  & 4 - The Server returns a summary list (e.g., name, date, distance) of the trips. \\
-                                  & 5 - BBP Application displays the list of saved trips. \\
-                                  & 6 - The User taps on a specific \texttt{Trip} in the list. \\
-                                  & 7 - BBP Application requests the full details for the selected \texttt{tripID}. \\
-                                  & 8 - The Server retrieves the full \texttt{Trip} object, including its \texttt{GPS\_points}, \texttt{Statistic}, \texttt{Weather\_info}, and any associated \texttt{Obstacle\_report}s (R35). \\
-                                  & 9 - BBP Application displays the detailed trip summary. \\
-        \hline
-        \textbf{Exit condition}   & The user has viewed their list of trips or the details of a specific trip. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The user has no saved trips. The system displays an empty list or a "No trips recorded" message.
-                                  \end{itemize}\\
-        \hline
-        \caption{View "My trips" use case.}
-        \label{tab:uc_view_my_trips}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & Registered User \\
+    \hline
+    \textbf{Entry conditions} & The user is registered and logged in. \\
+    \hline
+    \textbf{Event Flow}     & 1 - The User navigates to their profile and taps the "My Trips" option. \\
+                            & 2 - \textbf{BBP retrieves all \texttt{Trip} objects associated with that user (R34) and displays a summary list (e.g., name, date, distance).} \\
+                            & 3 - The User taps on a specific \texttt{Trip} in the list. \\
+                            & 4 - \textbf{BBP retrieves the full \texttt{Trip} object, including its \texttt{GPS\_points}, \texttt{Statistic}, \texttt{Weather\_info}, and any associated \texttt{Obstacle\_report}s (R35).} \\
+                            & 5 - BBP displays the detailed trip summary to the User. \\
+    \hline
+    \textbf{Exit condition}   & The user has viewed their list of trips or the details of a specific trip. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item The user has no saved trips. The system displays an empty list or a "No trips recorded" message.
+                            \end{itemize}\\
+    \hline
+    \caption{View "My trips" use case.}
+    \label{tab:uc_view_my_trips}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_13.png}
-        \caption{UC13. View "My trips"}
-        \label{fig:UC13. View "My trips"}%
+        \caption{UC13 view "My trips"}
+        \label{fig:UC13 view "My trips"}%
     \end{center}
 \end{figure}
-\subsubsection*{UC14. Submit status report}
+\subsubsection*{[UC\cuc]. Submit status report}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & Registered User \\
-        \hline
-        \textbf{Entry conditions} & The user is registered, logged in, and is viewing the details of a \texttt{Path} (UC5) or is adding a \texttt{Path manually}  (UC11). \\
-        \hline
-        \textbf{Event Flow}       & 1 - The User taps the "Report status" button. \\
-                                  & 2 - The app displays the status options (e.g., "Optimal", "Requires Maintenance"). \\
-                                  & 3 - The User selects a status and taps "Submit". \\
-                                  & 4 - BBP Application sends the new \texttt{Status\_report} to the Server, associated with the current \texttt{Path}. (R37)\\
-                                  & 5 - The Server saves the new \texttt{Status\_report}. \\
-                                  & 6 - The Server triggers a recalculation of the \texttt{Path}'s `derivedStatus` and `derivedScore` (R10, R11). \\
-        \hline
-        \textbf{Exit condition}   & The new \texttt{Status\_report} is saved. The \texttt{Path}'s score is updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The user cancels the submission. No report is created.
-                                  \end{itemize}\\
-        \hline
-        \caption{Submit status report use case.}
-        \label{tab:uc_submit_status_report}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & Registered User \\
+    \hline
+    \textbf{Entry conditions} & The user is registered, logged in, and is viewing the details of a \texttt{Path} (UC5) or is adding a \texttt{Path manually}  (UC11). \\
+    \hline
+    \textbf{Event Flow}     & 1 - The User taps the "Report status" button. \\
+                            & 2 - BBP displays the status options (e.g., "Optimal", "Requires Maintenance"). \\
+                            & 3 - The User selects a status and taps "Submit". \\
+                            & 4 - \textbf{BBP saves the new \texttt{Status\_report} associated with the current \texttt{Path} (R37).} \\
+                            & 5 - \textbf{BBP triggers a recalculation of the \texttt{Path}'s `derivedStatus` and `derivedScore` (R10, R11).} \\
+                            & 6 - \textbf{BBP displays a success message to the User.} \\
+    \hline
+    \textbf{Exit condition}   & The new \texttt{Status\_report} is saved. The \texttt{Path}'s score is updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item The user cancels the submission. No report is created.
+                            \end{itemize}\\
+    \hline
+    \caption{Submit status report use case.}
+    \label{tab:uc_submit_status_report}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_14.png}
-        \caption{UC14. Submit status report}
+        \caption{UC14 submit status report}
         \label{fig:UC14. Submit status report}%
     \end{center}
 \end{figure}
-\subsubsection*{UC15. Submit Obstacle report}
+\subsubsection*{[UC\cuc]. Submit Obstacle report}
 \begin{center}
     \begin{longtable}{|l|p{0.75\linewidth}|}
-        \hline
-        \textbf{Actor}            & Registered User \\
-        \hline
-        \textbf{Entry conditions} & The user is registered, logged in, and is viewing the details of a \texttt{Path} (UC5) or is adding a \texttt{Path manually}  (UC11). \\
-        \hline
-        \textbf{Event Flow}       
-                                  & 1 - The User selects "Submit Obstacle" (R38). \\
-                                  & 2 - The app displays the obstacle report form (e.g., type of obstacle, location pin). \\
-                                  & 3 - The User selects an obstacle \texttt{type} (e.g., "Pothole"), places a pin on the map to indicate the location, and taps "Submit". \\
-                                  & 4 - BBP Application sends the new \texttt{Obstacle\_report} to the Server, associated with the current \texttt{Path}. \\
-                                  & 5 - The Server saves the new \texttt{Obstacle\_report}. \\
-                                  & 6 - The Server may trigger a recalculation of the \texttt{Path}'s `derivedScore`, as obstacles affect the score.(R10, R11) \\
-        \hline
-        \textbf{Exit condition}   & The new \texttt{Obstacle\_report} is saved. The \texttt{Path}'s score may be updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
-        \hline
-        \textbf{Exceptions}       & \begin{itemize}[noitemsep, nolistsep]
-                                    \item The user cancels the submission. No report is created.
-                                    \item Invalid data (e.g., missing location). The system shows an error.
-                                  \end{itemize}\\
-        \hline
-        \caption{Submit Obstacle report use case.}
-        \label{tab:uc_submit_obstacle_report}
-    \end{longtable}
+    \hline
+    \textbf{Actor}          & Registered User \\
+    \hline
+    \textbf{Entry conditions} & The user is registered, logged in, and is viewing the details of a \texttt{Path} (UC5) or is adding a \texttt{Path manually}  (UC11). \\
+    \hline
+    \textbf{Event Flow}     & 1 - The User selects "Submit Obstacle" (R38). \\
+                            & 2 - BBP displays the obstacle report form (e.g., type of obstacle, location pin). \\
+                            & 3 - The User selects an obstacle \texttt{type} (e.g., "Pothole"), places a pin on the map to indicate the location, and taps "Submit". \\
+                            & 4 - \textbf{BBP saves the new \texttt{Obstacle\_report} associated with the current \texttt{Path}.} \\
+                            & 5 - \textbf{BBP triggers a recalculation of the \texttt{Path}'s `derivedScore`, as obstacles affect the score (R10, R11).} \\
+                            & 6 - \textbf{BBP displays a success message to the User.} \\
+    \hline
+    \textbf{Exit condition}   & The new \texttt{Obstacle\_report} is saved. The \texttt{Path}'s score may be updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
+    \hline
+    \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
+                                \item The user cancels the submission. No report is created.
+                                \item Invalid data (e.g., missing location). The system shows an error.
+                            \end{itemize}\\
+    \hline
+    \caption{Submit Obstacle report use case.}
+    \label{tab:uc_submit_obstacle_report}
+\end{longtable}
 \end{center}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/sequenceDiagrams/UC_15.png}
-        \caption{UC15. Submit Obstacle report}
-        \label{fig:UC15. Submit Obstacle report}%
+        \caption{UC15 submit Obstacle report}
+        \label{fig:UC15 submit Obstacle report}%
     \end{center}
 \end{figure}
 
