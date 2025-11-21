@@ -1443,7 +1443,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="yWN_UDFOirIkaLAWaH18" name="Recording_detailed_view">
-    <mxGraphModel dx="1273" dy="959" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1523" dy="1119" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1456,13 +1456,13 @@
         <mxCell id="h25K4QqD7NTFwmgC8EjB-3" value="Local storage" style="shape=module;align=left;spacingLeft=20;align=center;verticalAlign=top;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="720" y="310" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="h25K4QqD7NTFwmgC8EjB-4" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="h25K4QqD7NTFwmgC8EjB-1" target="h25K4QqD7NTFwmgC8EjB-6" edge="1">
+        <mxCell id="h25K4QqD7NTFwmgC8EjB-4" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;" parent="1" source="YLSbnyIp3IrOxiVPSeSX-4" target="h25K4QqD7NTFwmgC8EjB-6" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="230" y="-210" as="sourcePoint" />
             <mxPoint x="400" y="-60" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="h25K4QqD7NTFwmgC8EjB-5" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;" parent="1" source="YLSbnyIp3IrOxiVPSeSX-4" target="h25K4QqD7NTFwmgC8EjB-6" edge="1">
+        <mxCell id="h25K4QqD7NTFwmgC8EjB-5" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;" parent="1" source="h25K4QqD7NTFwmgC8EjB-1" target="h25K4QqD7NTFwmgC8EjB-6" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="190" y="30" as="sourcePoint" />
             <mxPoint x="440" y="20" as="targetPoint" />
