@@ -1,0 +1,77 @@
+title Design Sequence Diagram: UC2 Log In
+
+actor User
+participant "UI layer"
+participant "Network layer"
+participant "Local storage"
+participant "Controller layer"
+participant "User service"
+participant "Hash password"
+participant "Token manager"
+participant "Model"
+database "BBP Database"
+
+# --- Inizio Flusso ---
+User->"UI layer": Enters credentials & Taps "Login"
+activate "UI layer"
+
+"UI layer"->"Network layer": login(email, password)
+activate "Network layer"
+
+# 1. Chiamata API
+"Network layer"->"Controller layer": POST /api/auth/login
+activate "Controller layer"
+
+# 2. Validazione e Routing
+"Controller layer"->"User service": loginUser(email, password)
+activate "User service"
+
+# 3. Recupero Utente (Auth Service chiama Model)
+"User service"->"Model": findUserByEmail(email)
+activate "Model"
+"Model"->"BBP Database": SELECT * FROM users WHERE email = ?
+activate "BBP Database"
+"BBP Database"-->"Model": userEntity (with storedHash)
+deactivate "BBP Database"
+"Model"-->"User service": userEntity
+deactivate "Model"
+
+# --- Blocco Alternativo (Alt) ---
+alt Invalid Credentials (User not found OR Password mismatch)
+    "User service"-->"Controller layer": Error: InvalidCredentialsException
+    "Controller layer"-->"Network layer": 401 Unauthorized
+    "Network layer"-->"UI layer": Show Error "Invalid username or password"
+else Valid Credentials (Success Flow)
+    
+    # 4. Verifica Password (Auth Service chiama Hash)
+    "User service"->"Hash password": verify(password, storedHash)
+    activate "Hash password"
+    "Hash password"-->"User service": true
+    deactivate "Hash password"
+
+    # 5. Generazione Token (Auth Service chiama Token Mgr)
+    "User service"->"Token manager": generateToken(userId)
+    activate "Token manager"
+    "Token manager"-->"User service": jwtToken
+    deactivate "Token manager"
+
+    # 6. Risposta al Controller
+    "User service"-->"Controller layer": LoginSuccess(token)
+    deactivate "User service"
+
+    # 7. Risposta al Client
+    "Controller layer"-->"Network layer": 200 OK (JSON with JWT)
+    deactivate "Controller layer"
+
+    # 8. Salvataggio Locale
+    "Network layer"->"Local storage": saveToken(jwtToken)
+    activate "Local storage"
+    "Local storage"-->"Network layer": ok
+    deactivate "Local storage"
+
+    # 9. Redirect UI
+    "Network layer"-->"UI layer": success
+    deactivate "Network layer"
+    "UI layer"->User: Redirect to Map / Main Screen
+    deactivate "UI layer"
+end

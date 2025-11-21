@@ -1,0 +1,118 @@
+title Design Sequence Diagram: UC7 Record Path (Automatic)
+
+actor User
+participant "UI layer"
+participant "sensor manager"
+participant "Recording state manager"
+participant "GPS tracker"
+participant "Stats tracker"
+participant "Sensor processor"
+participant "Local storage"
+actor "Device sensor"
+
+# --- Inizio Flusso ---
+User->"UI layer": Taps "Start Recording"
+activate "UI layer"
+activate User
+"UI layer"->"Recording state manager": startRecording()
+activate "Recording state manager"
+
+# 1. Inizializzazione Sottocomponenti
+
+"Recording state manager"->"GPS tracker": reset()
+activate "GPS tracker"
+"GPS tracker"-->"Recording state manager":confirmReset
+deactivate "GPS tracker"
+
+
+# 2. Connessione ai Sensori
+"Recording state manager"->"sensor manager": startListening()
+activate "sensor manager"
+"sensor manager"->>"Device sensor": Request Updates
+activate "Device sensor"
+"sensor manager"-->"Recording state manager": listening_started
+deactivate "sensor manager"
+
+"Recording state manager"-->"UI layer": recording_started
+deactivate "Recording state manager"
+
+# --- Loop di Registrazione (Continuo, No Auto-Pause) ---
+loop While Recording Active
+
+    # A. Flusso GPS (Distanza e Traccia)
+    "Device sensor"->>"sensor manager": GPS Location Update
+    activate "sensor manager"
+    "sensor manager"->>"Recording state manager": onLocationChanged(loc)
+    deactivate "sensor manager"
+    activate "Recording state manager"
+    
+    "Recording state manager"->>"GPS tracker": processLocation(loc)
+    deactivate "Recording state manager"
+    activate "GPS tracker"
+    "GPS tracker"->>"GPS tracker": appendToTrack(loc)
+    
+    # Aggiornamento Statistiche per HUD
+    "GPS tracker"->>"Stats tracker": updateDistanceAndSpeed(loc)
+    deactivate "GPS tracker"
+    activate "Stats tracker"
+    "Stats tracker"->>"Stats tracker": updateStats()
+    "Stats tracker"->>"UI layer": updateHUD(time, dist, speed)
+    deactivate "Stats tracker"
+
+    # B. Flusso Sensori Movimento (Buche)
+    "Device sensor"->>"sensor manager": Accelerometer/Gyro Data
+    "sensor manager"->>"Recording state manager": onSensorChanged(data)
+    activate "Recording state manager"
+    
+    "Recording state manager"->>"Sensor processor": processMotion(data)
+    deactivate "Recording state manager"
+    activate "Sensor processor"
+    
+    # Logica Rilevamento Buche
+    alt Significant Jolt Detected (Threshold Exceeded)
+        "Sensor processor"->"Sensor processor": analyzePattern()
+        "Sensor processor"->"Sensor processor": createSensorEvent(loc, time)
+        "Sensor processor"->"Local storage": saveSensorEvent(event)
+        activate "Local storage"
+        "Local storage"-->"Sensor processor": saved
+        deactivate "Local storage"
+    end
+    deactivate "Sensor processor"
+    
+end
+
+# --- Fine Flusso ---
+User->>"UI layer": Taps "Stop Recording"
+"UI layer"->"Recording state manager": stopRecording()
+activate "Recording state manager"
+
+# 3. Stop Sensori
+"Recording state manager"->"sensor manager": stopListening()
+activate "sensor manager"
+"sensor manager"->>"Device sensor": Stop Updates
+deactivate "Device sensor"
+deactivate "sensor manager"
+
+# 4. Finalizzazione Dati
+"Recording state manager"->"GPS tracker": getFullTrack()
+activate "GPS tracker"
+"GPS tracker"-->"Recording state manager": trackPoints
+deactivate "GPS tracker"
+
+"Recording state manager"->"Sensor processor": getDetectedEvents()
+activate "Sensor processor"
+"Sensor processor"->"Local storage": retrieveTempEvents()
+activate "Local storage"
+"Local storage"-->"Sensor processor": eventsList
+deactivate "Local storage"
+"Sensor processor"-->"Recording state manager": eventsList
+deactivate "Sensor processor"
+
+# 5. Salvataggio Temporaneo & Trigger UC9
+
+"Recording state manager"-->"UI layer": recordingFinished(tripData)
+deactivate "Recording state manager"
+
+"UI layer"-->User: Show "Save Path" Screen (Triggers UC9)
+deactivate "UI layer"
+note right of User: UC9: Save Path and Trip

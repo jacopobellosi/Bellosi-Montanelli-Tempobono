@@ -1,0 +1,81 @@
+title Design Sequence Diagram: UC4 Search Paths
+
+actor User
+participant "UI layer"
+participant "Network layer"
+participant "Local storage"
+participant "Controller layer"
+participant "Token manager"
+participant "Path searcher"
+participant "Path merger"
+participant "Model"
+database "BBP Database"
+
+# --- Inizio Flusso ---
+User->"UI layer": Enters Criteria (Origin, Dest) & Search
+activate "UI layer"
+
+# Recupero Token
+"UI layer"->"Local storage": getToken()
+activate "Local storage"
+"Local storage"-->"UI layer": jwtToken
+deactivate "Local storage"
+
+"UI layer"->"Network layer": searchPaths(criteria, token)
+activate "Network layer"
+
+# 1. Chiamata API
+"Network layer"->"Controller layer": GET /api/paths/search
+activate "Controller layer"
+
+# 2. Sicurezza
+"Controller layer"->"Token manager": validateRequest(token)
+activate "Token manager"
+"Token manager"-->"Controller layer": tokenValid
+deactivate "Token manager"
+
+
+
+# 3. Routing
+"Controller layer"->"Path searcher": findPaths(criteria)
+activate "Path searcher"
+
+# 4. Recupero Dati (SINGLE BIG QUERY OPTIMIZATION)
+"Path searcher"->"Model": findAllPathDataInArea(geoBox)
+activate "Model"
+note right of "Model": Executes optimized Query:\nSelect Paths JOIN Reports JOIN PublicTrips\nWHERE ST_Intersects(...)
+"Model"->"BBP Database": SQL (Complex Join / Eager Load)
+activate "BBP Database"
+"BBP Database"-->"Model": fullDataSet (Paths + Reports + Trips)
+deactivate "BBP Database"
+"Model"-->"Path searcher": fullPathList
+deactivate "Model"
+
+# --- Loop di Calcolo in Memoria (No DB calls inside) ---
+loop For each PathData in fullPathList
+    
+    # Il Searcher ha già i dati, li passa solo al Merger per il calcolo
+    "Path searcher"->"Path merger": calculateMetrics(PathData.reports, PathData.trips)
+    activate "Path merger"
+    
+    note right of "Path merger": Pure calculation in RAM:\n1. Filter fresh reports\n2. Apply majority\n3. Average trip stats
+    
+    "Path merger"-->"Path searcher": computedMetrics (status, score, avgStats)
+    deactivate "Path merger"
+    
+    "Path searcher"->"Path searcher": attachMetricsToPath(path, computedMetrics)
+end
+
+# 5. Ordinamento e Risposta
+"Path searcher"->"Path searcher": sortPathsByScore()
+
+"Path searcher"-->"Controller layer": orderedPathListDTO
+deactivate "Path searcher"
+
+"Controller layer"-->"Network layer": 200 OK (JSON List)
+deactivate "Controller layer"
+
+"Network layer"-->"UI layer": Display Results
+deactivate "Network layer"
+"UI layer"->User: Shows List of Paths
+deactivate "UI layer"

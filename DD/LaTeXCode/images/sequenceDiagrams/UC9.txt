@@ -1,0 +1,147 @@
+title Design Sequence Diagram: UC9 Save Trip and Path (Controller Orchestration)
+
+actor User
+participant "UI layer"
+participant "Network layer"
+participant "Local storage"
+participant "Controller layer"
+participant "Token manager"
+participant "Weather API client"
+participant "Path adding"
+participant "Add obstacle to path"
+participant "Add status to path"
+participant "Trip adding"
+participant "Model"
+database "BBP Database"
+
+# --- Fase 1: Pre-Fetch Meteo (Autenticato) ---
+"UI layer"->"Local storage": getToken()
+activate "Local storage"
+"Local storage"-->"UI layer": jwtToken
+deactivate "Local storage"
+
+"UI layer"->"Network layer": fetchWeather(lat, long, token)
+activate "Network layer"
+"Network layer"->"Controller layer": GET /api/weather
+activate "Controller layer"
+"Controller layer"->"Token manager": validateToken(token)
+activate "Token manager"
+"Token manager"-->"Controller layer":Confirm
+deactivate "Token manager"
+"Controller layer"->"Weather API client": getWeather(lat, long)
+activate "Weather API client"
+"Weather API client"-->"Controller layer": weatherData
+deactivate "Weather API client"
+"Controller layer"-->"Network layer": weatherJSON
+deactivate "Controller layer"
+"Network layer"-->"UI layer": weatherInfo
+deactivate "Network layer"
+
+# --- Fase 2: Interazione Utente ---
+"UI layer"-->User: Show Summary (Map, Stats, Weather)
+note right of User: UC10: user select the visibility of the Path and Trip
+note right of User: UC8: user conferm or deny the obstacle report
+note right of User: User reviews & confirms obstacles and selects Status & Visibility.
+
+# --- Fase 3: Decisione (Salva o Scarta) ---
+alt User Discards
+    User->"UI layer": Taps "Discard"
+    "UI layer"->"Local storage": clearTempTrip()
+    activate "Local storage"
+    "Local storage"-->"UI layer": cleared
+    deactivate "Local storage"
+    "UI layer"->User: Redirect to Home
+    
+else User Saves
+    User->"UI layer": Taps "Save"
+    activate "UI layer"
+    
+    # Recupero Dati Locali (es. Ostacoli confermati)
+    "UI layer"->"Local storage": getSavedObstacles()
+    activate "Local storage"
+    "Local storage"-->"UI layer": confirmedObstacles
+    deactivate "Local storage"
+
+    # Invio Dati al Backend
+    "UI layer"->"Network layer": savePathAndTripSession(fullData, token)
+    activate "Network layer"
+    "Network layer"->"Controller layer": POST /api/sessions
+    activate "Controller layer"
+
+    # A. Sicurezza
+    "Controller layer"->"Token manager": validateToken(token)
+    activate "Token manager"
+    "Token manager"-->"Controller layer": tokenValid (userId)
+    deactivate "Token manager"
+
+    # B. Orchestrazione: Salvataggio PATH + REPORT (Step 1)
+    "Controller layer"->"Path adding": createPath(geometry, name, visibility, obstacles, status)
+    activate "Path adding"
+
+        # B1. Salva Geometria Path
+        "Path adding"->"Model": savePath(geometry, name, visibility)
+        activate "Model"
+        "Model"->"BBP Database": INSERT INTO paths...
+        activate "BBP Database"
+        "BBP Database"-->"Model": newPathId
+        deactivate "BBP Database"
+        "Model"-->"Path adding": pathId
+        deactivate "Model"
+
+        # B2. Salva Ostacoli (UC8 results)
+        loop For each confirmed obstacle
+            "Path adding"->"Add obstacle to path": saveObstacle(pathId, type, location)
+            activate "Add obstacle to path"
+            "Add obstacle to path"->"Model": createReport(obstacleData)
+            activate "Model"
+            "Model"->"BBP Database": INSERT INTO reports...
+            activate "BBP Database"
+            "BBP Database"-->"Model": Confirm
+            deactivate "BBP Database"
+            "Model"-->"Add obstacle to path": Added succesfully
+            deactivate "Model"
+            "Add obstacle to path"-->"Path adding": ok
+            deactivate "Add obstacle to path"
+        end
+
+        # B3. Salva Status
+        "Path adding"->"Add status to path": saveStatus(pathId, statusValue)
+        activate "Add status to path"
+        "Add status to path"->"Model": createReport(statusData)
+        activate "Model"
+        "Model"->"BBP Database": INSERT INTO reports...
+        activate "BBP Database"
+        "BBP Database"-->"Model": Confirm
+        deactivate "BBP Database"
+        "Model"-->"Add status to path": Added succesfully
+        deactivate "Model"
+        "Add status to path"-->"Path adding": ok
+        deactivate "Add status to path"
+
+    "Path adding"-->"Controller layer": pathId
+    deactivate "Path adding"
+
+    # C. Orchestrazione: Salvataggio TRIP (Step 2)
+    "Controller layer"->"Trip adding": createTrip(stats, weather, pathId, userId, visibility)
+    activate "Trip adding"
+    "Trip adding"->"Model": saveTrip(stats, weather, pathId, visibility)
+    activate "Model"
+    "Model"->"BBP Database": INSERT INTO trips...
+    activate "BBP Database"
+    "BBP Database"-->"Model": newTripId
+    deactivate "BBP Database"
+    "Model"-->"Trip adding": tripId
+    deactivate "Model"
+    "Trip adding"-->"Controller layer": tripId
+    deactivate "Trip adding"
+
+    # D. Risposta Finale
+    "Controller layer"-->"Network layer": 201 Created
+    deactivate "Controller layer"
+
+    "Network layer"->"Local storage": clearTempTrip()
+    "Network layer"-->"UI layer": Success
+    deactivate "Network layer"
+    "UI layer"->User: Redirect to My Trips
+    deactivate "UI layer"
+end

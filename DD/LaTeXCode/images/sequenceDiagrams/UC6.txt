@@ -1,0 +1,137 @@
+title Design Sequence Diagram: UC6 Follow Path
+
+actor User
+participant "UI layer"
+participant "Network layer"
+participant "Local storage"
+participant "Controller layer"
+participant "Token manager"
+participant "Detailed path view"
+participant "Trip adding"
+participant "Model"
+database "BBP Database"
+participant "navigation manager"
+participant "recording service"
+participant "sensor manager"
+participant "Device sensor"
+participant "External navigation service"
+participant "Weather API client"
+
+# --- Inizio Flusso ---
+User->>"UI layer": Taps "Follow Path"
+activate "UI layer"
+
+# 1. Recupero Geometria Path (Pre-Navigazione)
+"UI layer"->"navigation manager": prepareNavigation(pathId)
+activate "navigation manager"
+"navigation manager"->"Network layer": fetchPathGeometry(pathId)
+activate "Network layer"
+"Network layer"->"Controller layer": GET /api/paths/{id}/geometry
+activate "Controller layer"
+"Controller layer"->"Detailed path view": getGeometry(pathId)
+activate "Detailed path view"
+"Detailed path view"->"Model": getGPSPoints(pathId)
+activate "Model"
+"Model"-->"Detailed path view": gpsPointsList
+deactivate "Model"
+"Detailed path view"-->"Controller layer": geometryDTO
+deactivate "Detailed path view"
+"Controller layer"-->"Network layer": geometryJSON
+deactivate "Controller layer"
+"Network layer"-->"navigation manager": pathGeometry
+deactivate "Network layer"
+
+# 2. Avvio Navigazione Esterna
+"navigation manager"->"External navigation service": openWithRoute(pathGeometry)
+activate "External navigation service"
+note right of "External navigation service": OS Intent / URL Scheme
+"External navigation service"-->"navigation manager": appLaunched
+deactivate "External navigation service"
+"navigation manager"-->"UI layer": success
+deactivate "navigation manager"
+
+# 3. Avvio Tracking in Background (Stats Only)
+"UI layer"->>"recording service": startBackgroundTracking()
+activate "recording service"
+"recording service"->>"sensor manager": startGPSOnly()
+activate "sensor manager"
+"sensor manager"->>"Device sensor": Request GPS Updates
+activate "Device sensor"
+
+# --- Loop di Navigazione (Asincrono) ---
+loop Background Updates
+    "Device sensor"->>"sensor manager": Location Update (Event)
+    "sensor manager"->>"recording service": onLocationChanged(loc)
+    "recording service"->>"recording service": updateSessionStats(time, dist)
+end
+
+# 4. Fine Navigazione
+User->"UI layer": Returns to App & Taps "Stop"
+"UI layer"->"recording service": stopTracking()
+"recording service"->>"sensor manager": stopListening()
+deactivate "Device sensor"
+deactivate "sensor manager"
+
+"recording service"-->"UI layer": sessionStats (time, dist, avgSpeed)
+deactivate "recording service"
+
+"UI layer"-->User: Show Summary (Stats Only)
+
+# --- Gestione Salvataggio Unificata ---
+User->"UI layer": Taps "Save" (Selects Visibility)
+
+# A. Blocco Opzionale: Registrazione (Solo se anonimo)
+opt User is Anonymous
+    
+    User->"UI layer": Completes Registration Form
+    # Riferimento a UC1 (Sintassi corretta per sequence diagram testuale)
+    note right of "UI layer": Executes UC1: Register Account\n(Returns new Token & UserId)
+    "UI layer"->"Local storage": saveToken(newToken)
+    "Local storage"-->"UI layer": Confermation
+end
+
+# B. Flusso di Salvataggio Comune (Ora l'utente ha un token, nuovo o esistente)
+"UI layer"->"Local storage": getToken()
+activate "Local storage"
+"Local storage"-->"UI layer": token
+deactivate "Local storage"
+
+"UI layer"->"Network layer": saveTrip(tripData, visibility, token,relatedPath)
+activate "Network layer"
+"Network layer"->"Controller layer": POST /api/trips
+activate "Controller layer"
+
+# Validazione Sicurezza
+"Controller layer"->"Token manager": validateToken(token)
+activate "Token manager"
+"Token manager"-->"Controller layer": tokenValid (userId)
+deactivate "Token manager"
+
+# Orchestrazione Salvataggio (Trip Adding)
+"Controller layer"->"Trip adding": saveTrip(tripData, userId,relatedPath)
+activate "Trip adding"
+
+# Arricchimento Meteo
+"Trip adding"->"Weather API client": getWeatherSnapshot()
+activate "Weather API client"
+"Weather API client"-->"Trip adding": weather
+deactivate "Weather API client"
+
+# Transazione DB Atomica
+"Trip adding"->"Model": saveFullTripTransaction(trip, weather,relatedPath)
+activate "Model"
+"Model"->"BBP Database": INSERT INTO trips...
+activate "BBP Database"
+"BBP Database"-->"Model": ok
+deactivate "BBP Database"
+"Model"-->"Trip adding": success
+deactivate "Model"
+
+"Trip adding"-->"Controller layer": tripSavedDTO
+deactivate "Trip adding"
+
+"Controller layer"-->"Network layer": 201 Created
+deactivate "Controller layer"
+
+"Network layer"-->"UI layer": Success
+deactivate "Network layer"

@@ -1,0 +1,49 @@
+title Design Sequence Diagram: UC3 Log Out
+
+actor "User (Registered)" as User
+participant "UI layer"
+participant "Network layer"
+participant "Local storage"
+participant "Controller layer"
+participant "User service"
+participant "Token manager"
+
+# --- Inizio Flusso ---
+User->"UI layer": Taps "Logout"
+activate "UI layer"
+
+"UI layer"->"Network layer": logout()
+activate "Network layer"
+
+# 1. Chiamata API (Autenticata)
+"Network layer"->"Controller layer": POST /api/auth/logout (with Token)
+activate "Controller layer"
+
+# 2. Routing
+"Controller layer"->"User service": logoutUser(token)
+activate "User service"
+
+# 3. Invalidazione Token (Opzionale, ma buona pratica)
+"User service"->"Token manager": invalidateToken(token)
+activate "Token manager"
+"Token manager"-->"User service": void
+deactivate "Token manager"
+
+# 4. Risposta
+"User service"-->"Controller layer": LogoutSuccess
+deactivate "User service"
+
+"Controller layer"-->"Network layer": 200 OK
+deactivate "Controller layer"
+
+# 5. Pulizia Locale (Critica)
+"Network layer"->"Local storage": clearSessionData()
+activate "Local storage"
+"Local storage"-->"Network layer": ok
+deactivate "Local storage"
+
+# 6. Redirect UI
+"Network layer"-->"UI layer": loggedOut
+deactivate "Network layer"
+"UI layer"->User: Redirect to Login / Home (Anonymous)
+deactivate "UI layer"

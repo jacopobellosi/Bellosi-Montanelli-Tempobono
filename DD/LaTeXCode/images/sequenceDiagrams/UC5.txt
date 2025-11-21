@@ -1,0 +1,73 @@
+title Design Sequence Diagram: UC5 View Path Details
+
+actor User
+participant "UI layer"
+participant "Network layer"
+participant "Local storage"
+participant "Controller layer"
+participant "Token manager"
+participant "Detailed path view"
+participant "Path merger"
+participant "Weather API client"
+participant "Model"
+database "BBP Database"
+
+# --- Inizio Flusso ---
+User->"UI layer": Taps on a specific Path
+activate "UI layer"
+
+"UI layer"->"Local storage": getToken()
+activate "Local storage"
+"Local storage"-->"UI layer": jwtToken
+deactivate "Local storage"
+
+"UI layer"->"Network layer": getPathDetails(pathId, token)
+activate "Network layer"
+
+# 1. Chiamata API
+"Network layer"->"Controller layer": GET /api/paths/{id}
+activate "Controller layer"
+
+# 2. Sicurezza (Diretta su Token Manager)
+"Controller layer"->"Token manager": validateToken(token)
+activate "Token manager"
+"Token manager"-->"Controller layer": tokenValid
+deactivate "Token manager"
+
+# 3. Routing
+"Controller layer"->"Detailed path view": getPathDetails(pathId)
+activate "Detailed path view"
+
+# 4. Recupero Dati Completi dal DB
+"Detailed path view"->"Model": getFullPathData(pathId)
+activate "Model"
+"Model"->"BBP Database": SELECT * FROM paths JOIN gps_points JOIN reports...
+activate "BBP Database"
+"BBP Database"-->"Model": fullPathData (geometry, reports, etc.)
+deactivate "BBP Database"
+"Model"-->"Detailed path view": fullPathData
+deactivate "Model"
+
+# 5. Calcolo Stato (On-Read)
+"Detailed path view"->"Path merger": calculateMetrics(reports)
+activate "Path merger"
+"Path merger"-->"Detailed path view": currentStatus
+deactivate "Path merger"
+
+# 6. Recupero Meteo (Forecast) - R14
+"Detailed path view"->"Weather API client": getForecast(lat, long)
+activate "Weather API client"
+"Weather API client"-->"Detailed path view": weatherForecast
+deactivate "Weather API client"
+
+# 7. Risposta
+"Detailed path view"-->"Controller layer": pathDetailsDTO
+deactivate "Detailed path view"
+
+"Controller layer"-->"Network layer": 200 OK (JSON)
+deactivate "Controller layer"
+
+"Network layer"-->"UI layer": Display Path Details
+deactivate "Network layer"
+"UI layer"->User: Shows Map, Stats, Status, Weather
+deactivate "UI layer"

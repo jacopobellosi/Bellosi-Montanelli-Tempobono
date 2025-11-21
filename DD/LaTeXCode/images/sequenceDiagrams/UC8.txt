@@ -1,0 +1,47 @@
+title Design Sequence Diagram: UC8 Review Detections
+
+actor User
+participant "UI layer"
+participant "Local storage"
+
+# --- Precondizione ---
+# Siamo dentro la schermata di Riepilogo (UC9)
+# I sensor_events sono salvati temporaneamente nel Local storage
+
+# 1. Recupero Eventi Pendenti
+"UI layer"->"Local storage": retrieveTempEvents()
+activate "Local storage"
+"Local storage"-->"UI layer": pendingEventsList
+deactivate "Local storage"
+
+"UI layer"->>User: Show summary with the obstacle to confirm
+
+# --- Loop Revisione ---
+loop For each obstacle selected by User
+
+    
+    
+    alt User Confirms
+        User->"UI layer": Taps "Yes / Confirm"
+        activate "UI layer"
+        "UI layer"->"Local storage": updateEventStatus(eventId, CONFIRMED)
+        activate "Local storage"
+        "Local storage"-->"UI layer": updated
+        deactivate "Local storage"
+        "UI layer"-->User: Show obstacle confirmed
+        deactivate "UI layer"
+        
+    else User Rejects
+        User->"UI layer": Taps "No / Ignore"
+        activate "UI layer"
+        "UI layer"->"Local storage": deleteEvent(eventId)
+        activate "Local storage"
+        "Local storage"-->"UI layer": deleted
+        deactivate "Local storage"
+        "UI layer"-->User: Show the obstacle ignored
+        deactivate "UI layer"
+    end
+end
+
+# --- Fine Revisione ---
+note right of "UI layer": The confirmed events remain in Local Storage,\nready to be bundled in the saveTrip request (UC9).
