@@ -427,7 +427,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="SOmqAoaDd_FQONmjmvX_" name="Complete_low_level_diagram">
-    <mxGraphModel dx="1572" dy="1406" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1209" dy="1174" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -926,6 +926,17 @@
         </mxCell>
         <mxCell id="QS8fS74SMwZvr4G8Kx1o-5" value="&lt;span style=&quot;text-wrap-mode: wrap;&quot;&gt;External weather service&lt;/span&gt;" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
           <mxGeometry x="1540" y="315" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="1SIbznjl7dCg-mfLjnhJ-1" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fillColor=#dae8fc;strokeColor=#6c8ebf;entryX=0.57;entryY=0.12;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gwl0VJ4TtGmVXSO2l037-35" target="gwl0VJ4TtGmVXSO2l037-65">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="950" y="425" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="780" y="350" />
+              <mxPoint x="980" y="370" />
+              <mxPoint x="1010" y="410" />
+            </Array>
+            <mxPoint x="1055" y="380" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
