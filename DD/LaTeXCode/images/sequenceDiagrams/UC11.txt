@@ -1,0 +1,49 @@
+title Design Sequence Diagram: UC11 Create Path Manually
+
+actor User
+participant "UI layer"
+participant "Local storage"
+
+# --- Inizio Flusso ---
+User->>"UI layer": Taps "Create Manual Path"
+activate "UI layer"
+
+"UI layer"->"UI layer": showManualEditor()
+
+# --- Loop di Disegno (Interazione Locale) ---
+loop User draws path
+    User->>"UI layer": Taps on Map (add point)
+    "UI layer"->"UI layer": addPointToGeometry(lat, long)
+    "UI layer"->"UI layer": updateMapPolyline()
+    
+    opt Undo
+        User->>"UI layer": Taps "Undo"
+        "UI layer"->"UI layer": removeLastPoint()
+    end
+end
+
+User->>"UI layer": Taps "Finish Creation"
+
+# --- Opzionale: Aggiunta Report Contestuali ---
+# Nota: Qui l'utente prepara solo i dati, non li invia ancora al server
+opt Add Status Report (Trigger UC14)
+    User->>"UI layer": Taps "Add Status"
+    # Nota: UC14 è un flusso separato, qui lo rappresentiamo come chiamata esterna
+    ref over User, "UI layer": UC14: Submit Status Report (Local Draft)
+end
+
+opt Add Obstacle Report (Trigger UC15)
+    User->>"UI layer": Taps "Add Obstacle"
+    ref over User, "UI layer": UC15: Submit Obstacle Report (Local Draft)
+end
+
+# --- Transizione al Salvataggio (UC12) ---
+# Salviamo la bozza localmente prima di passare al flusso di salvataggio vero e proprio
+"UI layer"->"Local storage": cacheDraftPath(geometry, tempReports)
+activate "Local storage"
+"Local storage"-->"UI layer": ok
+deactivate "Local storage"
+
+"UI layer"->>User: Redirect to "Save Path" Screen
+note right of User: Triggers UC12: Save Path (Where Network is used)
+deactivate "UI layer"

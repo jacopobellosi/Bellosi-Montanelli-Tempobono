@@ -1,0 +1,27 @@
+title Design Sequence Diagram: UC10 Set Visibility
+
+actor User
+participant "UI layer"
+participant "Local storage"
+
+# --- Inizio Flusso (Chiamato da UC9 o UC12) ---
+note over User, "UI layer": Triggered by parent Use Case (Save Trip / Save Path)
+
+"UI layer"->User: Show Visibility Options Dialog
+
+alt Context: Called from UC9 (Save Trip)
+    User->"UI layer": Selects Trip Visibility (Public/Private)
+    User->"UI layer": Selects Path Visibility (Public/Private)
+else Context: Called from UC12 (Save Path)
+    User->"UI layer": Selects Path Visibility (Public/Private)
+end
+
+User->"UI layer": Taps "Confirm Selection"
+
+# Salvataggio nel Local Storage
+"UI layer"->"Local storage": saveVisibilityPreferences(selectedOptions)
+activate "Local storage"
+"Local storage"-->"UI layer": saved
+deactivate "Local storage"
+
+note over User, "UI layer": Returns control to parent Use Case with selected values.
