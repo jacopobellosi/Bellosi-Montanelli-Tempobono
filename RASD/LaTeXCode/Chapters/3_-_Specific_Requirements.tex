@@ -362,13 +362,13 @@ This section lists the specific functional requirements that the Best Bike Paths
     \textbf{Entry conditions} & The user is on the main screen of the application. \\
     \hline
     \textbf{Event Flow}     & 1 - The User enters an origin and a destination in the search bar. \\
-                            & 2 - The User taps the "Search" button.(R7) \\
+                            & 2 - The User taps the "Search" button (R7). \\
                             & 3 - \textbf{BBP processes the query by:} \\
-                            & \textbf{a. Identifying all relevant public \texttt{Path}s.} \\
+                            & \textbf{a. Identifying all relevant public \texttt{Path}s (checking Visibility R25).} \\
                             & \textbf{b. Retrieving all associated \texttt{Status\_report} and \texttt{Obstacle\_report} instances (R8).} \\
                             & \textbf{c. Applying the merging (R9) and scoring (R10) logic to calculate the `derivedStatus` and `derivedScore` for each path.} \\
                             & \textbf{d. Querying the \texttt{External Weather Service} for forecast data for the relevant locations.} \\
-                            & 4 - BBP displays the ordered list of paths to the User, including their status and weather info. (R11)\\
+                            & 4 - BBP displays the ordered list of paths to the User, including their status and weather info (R11). \\
     \hline
     \textbf{Exit condition}   & The user is presented with a list of matching paths ordered by score, or a "No results" message. \\
     \hline
@@ -396,12 +396,12 @@ This section lists the specific functional requirements that the Best Bike Paths
     \hline
     \textbf{Entry conditions} & The user is viewing a list of search results (\texttt{pathList}) from UC4. \\
     \hline
-    \textbf{Event Flow}     & 1 - The User taps on a specific path from the results list. (R12)\\
+    \textbf{Event Flow}     & 1 - The User taps on a specific path from the results list (R12). \\
                             & 2 - \textbf{BBP retrieves the full details for the selected path by:} \\
-                            & \textbf{a. Retrieving its complete list of \texttt{GPS\_points}, all associated \texttt{Status\_report}s, and all \texttt{Obstacle\_report}s.} \\
+                            & \textbf{a. Retrieving its complete list of \texttt{GPS\_points}, all associated \texttt{Status\_report}s, and all \texttt{Obstacle\_report}s (R8).} \\
                             & \textbf{b. Applying the merging logic (R9) using the reports to calculate the definitive \texttt{derivedStatus}.} \\
                             & \textbf{c. Querying the \texttt{External Weather Service} for an updated forecast (R14).} \\
-                            & 3 - \textbf{BBP Application displays the \texttt{Path Details} screen to the User}, showing all path details (geometry, inclination, merged status, obstacles, weather). (R13) \\
+                            & 3 - \textbf{BBP Application displays the \texttt{Path Details} screen to the User}, showing all path details (geometry, inclination, merged status, obstacles, weather) (R13). \\
     \hline
     \textbf{Exit condition}   & The user is viewing the detailed information for the selected path. \\
     \hline
@@ -429,18 +429,18 @@ This section lists the specific functional requirements that the Best Bike Paths
     \hline
     \textbf{Entry conditions} & The user is viewing the \texttt{Path Details} screen (from UC5). \\
     \hline
-    \textbf{Event Flow}     & 1 - The User taps the "Follow Path" button.(R15) \\
+    \textbf{Event Flow}     & 1 - The User taps the "Follow Path" button (R15). \\
                             & 2 - BBP Application sends the path geometry to the device's External navigation service (SP22) and simultaneously activates its background statistics tracking (R15). \\
                             & 3 - The External navigation service displays the turn-by-turn route to the User. \\
-                            & 4 - Concurrently, the BBP Application requests continuous location updates from the Device Sensors (GPS) in the background to calculate session statistics (time, distance, speed). \\
+                            & 4 - Concurrently, the BBP Application requests continuous location updates from the Device Sensors (GPS) in the background. \\
                             & 5 - \textbf{Note:} The BBP app does not record the full geometry (it's already known) and does not display a map, as the user is viewing the external app. \\
                             & 6 - The User arrives at the destination (or manually closes the external navigator and returns to the BBP Application to tap "Stop Navigation") (SP23). \\
-                            & 7 - BBP Application stops the location updates and finalizes the session statistics. \\
-                            & 8 - BBP Application displays a "Summary" screen showing the session statistics (time, distance, avg speed).(R16) \\
-                            & 9 - \textbf{If User is unauthenticated:} The Summary screen includes a "Register to Save" button (R17)(R18). \\
-                            & 10 - The \textbf{unauthenticated User} taps "Register to Save", completes registration (UC1), selects a visibility (Public/Private), and the activity (stats-only) is saved (R19). \\
+                            & 7 - BBP Application stops the location updates and finalizes the session statistics using 'Elapsed Time' (R31). \\
+                            & 8 - BBP Application displays a "Summary" screen showing the session statistics (time, distance, avg speed) (R16). \\
+                            & 9 - \textbf{If User is unauthenticated:} The Summary screen includes a "Register to Save" button (R17, R18). \\
+                            & 10 - The \textbf{unauthenticated User} taps "Register to Save", completes registration (UC1), selects a visibility for the Trip (R39.2), and the activity (stats-only) is saved (R19). \\
                             & 11 - \textbf{If User is Registered:} The Summary screen includes a "Save Activity" button. \\
-                            & 12 - The Registered User taps "Save Activity", selects a visibility (Public/Private) , and the activity (stats-only) is saved to their archive.(R33) \\
+                            & 12 - The Registered User taps "Save Activity", selects a visibility for the Trip (R39.2), and the activity (stats-only) is saved to their archive (R33). \\
                             & 13 - If the user (\textbf{unauthenticated} or Registered) exits the summary screen without saving/registering, the session data is discarded (R18). \\
     \hline
     \textbf{Exit condition}   & The user has completed navigation. The session activity (stats-only) is either saved with a visibility setting or discarded. \\
@@ -473,13 +473,11 @@ This section lists the specific functional requirements that the Best Bike Paths
                             & 2 - BBP activates \texttt{Device Sensors} (R23). \\
                             & 3 - BBP displays the recording HUD, showing real-time statistics (R22). \\
                             & 4 - \textbf{In parallel:} BBP records the user's \texttt{GPS\_points} sequence (R21) and monitors sensor data (R23). \\
-                            & 5 - \textbf{Auto-Pause Logic:} If speed is below the threshold, GPS coordinate recording (R21) is paused (R25). The 'Elapsed Time' timer (R22) continues to run. \\
-                            & 6 - \textbf{Auto-Resume Logic:} If speed exceeds the threshold after a pause, GPS coordinate recording (R21) resumes (R26). \\
-                            & 7 - \textbf{If} sensor data exceeds the threshold, BBP internally logs a new \texttt{sensor\_event} (R24). \\
-                            & 8 - The User taps the "Stop Recording" button (R27). \\
-                            & 9 - BBP stops all sensors and finalizes the \texttt{Path} geometry. \\
-                            & 10 - BBP calculates the final \texttt{Statistics} (R31). \\
-                            & 11 - BBP triggers the \textbf{`Save Trip and Path`} use case (UC9), optionally displaying \textit{ReviewDetections} (UC8) if events were logged. \\
+                            & 5 - \textbf{If} sensor data exceeds the threshold, BBP internally logs a new \texttt{sensor\_event} (R24). \\
+                            & 6 - The User taps the "Stop Recording" button (R27). \\
+                            & 7 - BBP stops all sensors and finalizes the \texttt{Path} geometry. \\
+                            & 8 - BBP calculates the final \texttt{Statistics} using 'Elapsed Time' and 'Total Distance' (R31). \\
+                            & 9 - BBP triggers the \textbf{`Save Trip and Path`} use case (UC9), optionally displaying \textit{ReviewDetections} (UC8) if events were logged. \\
     \hline
     \textbf{Exit condition}   & The user has completed the recording. The system proceeds to the save flow (UC9). \\
     \hline
@@ -543,12 +541,12 @@ This section lists the specific functional requirements that the Best Bike Paths
     \textbf{Event Flow}     & 1 - (Triggered by UC7) BBP retrieves weather data (R32) and displays the "Summary \& Save" screen, showing the map and final statistics (R31). \\
                             & 2 - \textbf{Extension Point `Review Detections` (UC8):} \textbf{If} pending \texttt{sensor\_event}s exist (R28), the flow is extended by UC8 to confirm/ignore detections. \\
                             & 3 - The User enters a name for the activity. \\
-                            & 4 - \textbf{`<<include>>` `set visibility` (UC10):} The User selects the visibility for the \textbf{`Trip` (Public/Private for stats [R39.2])} and for the \textbf{`Path` (Public/Private for search [R39.1])}. \\
+                            & 4 - \textbf{`<<include>>` `set visibility` (UC10):} The User selects the visibility for the \textbf{`Trip` (Public/Private for stats [R26])} and for the \textbf{`Path` (Public/Private for search [R25])}. \\
                             & 5 - The User taps "Save" or "Discard". \\
                             & 6 - \textbf{If} "Save" is pressed: \\
                             & \hspace{1em} a. BBP saves the \texttt{Trip} to the user's private archive (R33). \\
-                            & \hspace{1em} b. BBP saves the \texttt{Path} with its chosen visibility (R39.1). \\
-                            & \hspace{1em} c. \textbf{If} the \texttt{Trip} visibility was "Public", BBP updates the \texttt{Path}'s average statistics (R9, R39.2). \\
+                            & \hspace{1em} b. BBP saves the \texttt{Path} with its chosen visibility (R25). \\
+                            & \hspace{1em} c. \textbf{If} the \texttt{Trip} visibility was "Public", BBP updates the \texttt{Path}'s average statistics (R9, R26). \\
                             & \hspace{1em} d. BBP displays a success message (R40). \\
                             & 7 - \textbf{If} "Discard" is pressed, the flow terminates and data is deleted. \\
     \hline
@@ -577,9 +575,9 @@ This section lists the specific functional requirements that the Best Bike Paths
     \hline
     \textbf{Entry conditions} & The user is in the process of saving an activity (called by UC9 or UC12). \\
     \hline
-    \textbf{Event Flow}     & 1 - (Triggered by UC9 or UC12) BBP presents the User with the relevant visibility options [R39.1, R39.2]. \\
-                            & 2 - \textbf{If} called by UC9 (\texttt{Save trip and path}), the User selects visibility for both the \texttt{Trip} (stats aggregation [R39.2]) and the \texttt{Path} (search [R39.1]). \\
-                            & 3 - \textbf{If} called by UC12 (\texttt{Save path}), the User selects visibility only for the \texttt{Path} (search [R39.1]). \\
+    \textbf{Event Flow}     & 1 - (Triggered by UC9 or UC12) BBP presents the User with the relevant visibility options [R25, R26]. \\
+                            & 2 - \textbf{If} called by UC9 (\texttt{Save trip and path}), the User selects visibility for both the \texttt{Trip} (stats aggregation [R26]) and the \texttt{Path} (search [R25]). \\
+                            & 3 - \textbf{If} called by UC12 (\texttt{Save path}), the User selects visibility only for the \texttt{Path} (search [R25]). \\
                             & 4 - The User confirms the selection (R40). \\
     \hline
     \textbf{Exit condition}   & The visibility preference(s) are set and returned to the calling use case. \\
@@ -641,9 +639,9 @@ This section lists the specific functional requirements that the Best Bike Paths
     \hline
     \textbf{Event Flow}     & 1 - (Triggered by UC11) BBP displays the "Save Path" screen. \\
                             & 2 - The User enters a name for the \texttt{Path}. \\
-                            & 3 - \textbf{`<<include>>` `set visibility` (UC10):} The User selects the visibility for the \textbf{`Path`} (e.g., "Public" or "Private") [R39.1]. \\
+                            & 3 - \textbf{`<<include>>` `set visibility` (UC10):} The User selects the visibility for the \textbf{`Path`} (e.g., "Public" or "Private") [R25]. \\
                             & 4 - The User taps "Save" or "Discard". \\
-                            & 5 - \textbf{If} "Save" is pressed, BBP saves the new \texttt{Path} with its chosen visibility (R39.1). \\
+                            & 5 - \textbf{If} "Save" is pressed, BBP saves the new \texttt{Path} with its chosen visibility (R25). \\
                             & 6 - \textbf{If} "Discard" is pressed, the flow terminates and data is deleted. \\
     \hline
     \textbf{Exit condition}   & The new \texttt{Path} is saved with the chosen visibility, or all data is discarded. \\
@@ -706,10 +704,10 @@ This section lists the specific functional requirements that the Best Bike Paths
                             & 2 - BBP displays the status options (e.g., "Optimal", "Requires Maintenance"). \\
                             & 3 - The User selects a status and taps "Submit". \\
                             & 4 - \textbf{BBP saves the new \texttt{Status\_report} associated with the current \texttt{Path} (R37).} \\
-                            & 5 - \textbf{BBP triggers a recalculation of the \texttt{Path}'s `derivedStatus` and `derivedScore` (R10, R11).} \\
+                            & 5 - \textbf{BBP triggers a recalculation of the \texttt{Path}'s `derivedStatus` (R9) and `derivedScore` (R10).} \\
                             & 6 - \textbf{BBP displays a success message to the User.} \\
     \hline
-    \textbf{Exit condition}   & The new \texttt{Status\_report} is saved. The \texttt{Path}'s score is updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
+    \textbf{Exit condition}   & The new \texttt{Status\_report} is saved. The \texttt{Path}'s status and score are updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
     \hline
     \textbf{Exceptions}     & \begin{itemize}[noitemsep, nolistsep]
                                 \item The user cancels the submission. No report is created.
@@ -737,8 +735,8 @@ This section lists the specific functional requirements that the Best Bike Paths
     \textbf{Event Flow}     & 1 - The User selects "Submit Obstacle" (R38). \\
                             & 2 - BBP displays the obstacle report form (e.g., type of obstacle, location pin). \\
                             & 3 - The User selects an obstacle \texttt{type} (e.g., "Pothole"), places a pin on the map to indicate the location, and taps "Submit". \\
-                            & 4 - \textbf{BBP saves the new \texttt{Obstacle\_report} associated with the current \texttt{Path}.} \\
-                            & 5 - \textbf{BBP triggers a recalculation of the \texttt{Path}'s `derivedScore`, as obstacles affect the score (R10, R11).} \\
+                            & 4 - \textbf{BBP saves the new \texttt{Obstacle\_report} associated with the current \texttt{Path} (R38).} \\
+                            & 5 - \textbf{BBP triggers a recalculation of the \texttt{Path}'s `derivedScore`, as obstacles affect the score (R10).} \\
                             & 6 - \textbf{BBP displays a success message to the User.} \\
     \hline
     \textbf{Exit condition}   & The new \texttt{Obstacle\_report} is saved. The \texttt{Path}'s score may be updated. The user is returned to the \texttt{Path Details} screen or to the \texttt{Save path screen}. \\
