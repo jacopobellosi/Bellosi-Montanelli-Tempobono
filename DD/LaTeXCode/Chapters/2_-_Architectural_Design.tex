@@ -266,14 +266,514 @@ In this section it will be shown the Deployment diagram of the BBP system, follo
 
 
 \newpage
-\section{Runtime View}
-\label{sec:runtime_view}%
+\subsubsection{Register Account}
 
-\subsection{SignUp as RCY}
 \begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=0.8\linewidth]{}
-        \caption{Runtime view for 'SignUp as RCY'.}
-        \label{fig:runtime_signupasED}%
-    \end{center}
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC1.png}
+    \caption{Sequence Diagram for Register Account}
+    \label{fig:seq_uc1}
 \end{figure}
+\noindent This diagram illustrates the flow for creating a new user account. Since registration is a public endpoint, the \textbf{Controller layer} bypasses the Security Module and communicates directly with the \textbf{user service}.
+The process follows these key steps:
+\begin{itemize}
+    \item \textbf{Validation:} The \textbf{user service} first orchestrates a check via the \textbf{Model} to ensure the email is unique.
+    \item \textbf{Security:} Before persistence, the password is securely processed by the \textbf{Hash password} component.
+    \item \textbf{Session Creation:} Upon successful saving to the \textbf{BBP Database}, the \textbf{user service} invokes the \textbf{Token manager} to generate a JWT immediately.
+    \item \textbf{Client Handling:} The \textbf{Network layer} receives the token and persists it in \textbf{Local storage}, logging the user in automatically.
+\end{itemize}
+
+\subsubsection{Log In}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC2.png}
+    \caption{Sequence Diagram for  Log In}
+    \label{fig:seq_uc2}
+\end{figure}
+
+\noindent This diagram depicts the authentication process for an existing user. Similar to registration, this is a public route managed by the \textbf{user service}.
+The flow highlights the verification logic:
+\begin{itemize}
+    \item \textbf{Retrieval:} The \textbf{user service} retrieves the user's record (including the stored hash) from the \textbf{BBP Database} via the \textbf{Model}.
+    \item \textbf{Verification:} The credentials are validated by passing the input password and the stored hash to the \textbf{Hash password} component.
+    \item \textbf{Token Generation:} If valid, the \textbf{Token manager} issues a new session token.
+    \item \textbf{Completion:} The token is returned to the client's \textbf{Network layer} and saved in \textbf{Local storage} to authenticate future requests.
+\end{itemize}
+
+\subsubsection{Log Out}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC3.png}
+    \caption{Sequence Diagram for Log Out}
+    \label{fig:seq_uc3}
+\end{figure}
+
+\noindent This diagram shows the termination of a user session. The process involves both server-side invalidation and critical client-side cleanup.
+\begin{itemize}
+    \item \textbf{Server-Side:} The authenticated request is routed by the \textbf{Controller layer} to the \textbf{User service}, which interacts with the \textbf{Token manager} to invalidate the current JWT (preventing reuse).
+    \item \textbf{Client-Side:} Upon receiving the success response, the \textbf{Network layer} commands the \textbf{Local storage} to wipe the stored session token and user data, effectively returning the app to an anonymous state.
+\end{itemize}
+
+\subsubsection{Search Paths}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC4.png}
+    \caption{Sequence Diagram for Search Paths}
+    \label{fig:seq_uc4}
+\end{figure}
+
+\noindent This diagram illustrates the search functionality, implementing the \textbf{"On-Read" aggregation strategy} with a performance optimization.
+\begin{itemize}
+    \item \textbf{Optimization (Eager Loading):} Instead of querying the database for each path individually, the \textbf{Path searcher} requests all necessary data (Paths, associated Reports, and Public Trips) from the \textbf{Model} in a single, optimized query ("Single Big Query").
+    \item \textbf{In-Memory Processing:} The \textbf{Path searcher} iterates through the retrieved raw data in memory. It delegates the logic to the \textbf{Path merger}, which acts as a stateless calculation engine to determine the path's status and score without making further database calls.
+\end{itemize}
+
+\subsubsection{View Path Details}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC5.png}
+    \caption{Sequence Diagram for View Path Details}
+    \label{fig:seq_uc5}
+\end{figure}
+
+\noindent This sequence diagram illustrates the retrieval of comprehensive information for a specific path selected by the user. The workflow is centrally managed by the \textbf{Detailed path view} component, which acts as a data aggregator to compose the final response. Upon receiving the request from the \textbf{Controller layer}, this component coordinates three distinct data sources. First, it retrieves the static geometry and the full history of user reports from the \textbf{Model}. Second, adhering to the "On-Read" aggregation strategy, it delegates the real-time calculation of the path's current status to the \textbf{Path merger}, which processes the raw reports in memory. Finally, it invokes the \textbf{Weather API client} to fetch the current forecast from the external provider. The system consolidates these heterogeneous data—database records, computed metrics, and external API data—into a single data transfer object for the UI.
+
+\subsubsection{Follow Path}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC6.png}
+    \caption{Sequence Diagram for Follow Path}
+    \label{fig:seq_uc6}
+\end{figure}
+
+\noindent This diagram depicts the hybrid navigation process, which involves interaction with external applications and background processing. The flow begins with a preparatory phase where the \textbf{navigation manager} retrieves the path's geometry via the network to launch the \textbf{External navigation service} (e.g., via OS Intent). Concurrently, the \textbf{recording service} initiates a lightweight background session to track the user's performance statistics (time and distance) using the \textbf{sensor manager}, but without recording a new geospatial track.
+
+\noindent Upon completion, the workflow transitions to the saving phase. The diagram illustrates a unified save logic: if the user is anonymous, they perform an optional registration step (referencing UC1) to obtain a token. Subsequently, the \textbf{Network layer} transmits the session statistics and the reference to the original path to the backend. The \textbf{Trip adding} component then orchestrates the persistence, fetching a weather snapshot and atomically saving the new trip linked to the existing path.
+
+
+\subsubsection{Record Path (Automatic)}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC7.png}
+    \caption{Sequence Diagram for Record Path}
+    \label{fig:seq_uc7}
+\end{figure}
+
+\noindent This diagram illustrates the core client-side recording loop. The entire process is orchestrated by the \textbf{Recording state manager}, which acts as the central controller for the background service. Upon initialization, it activates the \textbf{sensor manager} to begin receiving raw data streams from the hardware \textbf{Device sensors}.
+
+\noindent The flow handles two parallel data streams. First, GPS updates are routed to the \textbf{GPS tracker} to construct the path geometry, and subsequently to the \textbf{Stats tracker}, which calculates real-time metrics (speed, distance) and updates the \textbf{UI layer} HUD. Second, motion sensor data is passed to the \textbf{Sensor processor}. If a significant jolt exceeding the threshold is analyzed, the processor immediately persists a "sensor event" to \textbf{Local storage} to prevent data loss. When the user stops the recording, the manager aggregates the final track and retrieved events before triggering the save workflow.
+
+\subsubsection{Review Detections}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC8.png}
+    \caption{Sequence Diagram for Review Detections}
+    \label{fig:seq_uc8}
+\end{figure}
+
+\noindent This diagram details the local validation process for automatically detected obstacles. It occurs entirely within the client application before any data is sent to the server. The \textbf{UI layer} retrieves the list of pending sensor events that were logged during the recording from \textbf{Local storage}.
+
+\noindent The user iterates through these detections on the summary screen. If an event is confirmed (e.g., a real pothole), the \textbf{UI layer} updates its status in \textbf{Local storage} to "Confirmed". If rejected, the event is physically deleted from the local cache. This filtering step ensures that only validated information is prepared for the subsequent upload in UC9.
+
+\subsubsection{Save Trip and Path}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC9.png}
+    \caption{Sequence Diagram for Save Trip and Path}
+    \label{fig:seq_uc9}
+\end{figure}
+
+\noindent This diagram depicts the complex "Save" workflow orchestrated by the backend. The process ensures transactional integrity across multiple entities.
+\begin{itemize}
+    \item \textbf{Orchestration:} Upon receiving the aggregated data (geometry, stats, confirmed reports) from the client, the \textbf{Controller layer} executes a strict sequence. It first invokes \textbf{Path adding} to create the path entity.
+    \item \textbf{Nested Operations:} Using the newly created \texttt{pathID}, the Controller then loops through any confirmed obstacles (from UC8) invoking \textbf{Add obstacle to path}, and saves the user's rating via \textbf{Add status to path}.
+    \item \textbf{Trip Linking:} Finally, it calls \textbf{Trip adding} to persist the user's performance stats and weather snapshot, linking everything to the new Path.
+\end{itemize}
+
+\subsubsection{Set Visibility}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC10.png}
+    \caption{Sequence Diagram for Set Visibility}
+    \label{fig:seq_uc10}
+\end{figure}
+
+\noindent This is a reusable client-side interaction diagram. It details how the application captures the user's privacy preferences (Public vs. Private). The dialog adapts contextually (asking for both Trip and Path visibility, or just Path visibility) based on the parent use case. The selected preferences are persisted to \textbf{Local storage} so they can be bundled with the final save request.
+
+
+\subsubsection{Create Path Manually}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC11.png}
+    \caption{Sequence Diagram for Create Path Manually}
+    \label{fig:seq_uc11}
+\end{figure}
+
+\noindent This diagram illustrates the client-side workflow for manual path creation. The process is characterized by being entirely offline and interactive, relying solely on the \textbf{UI layer} and \textbf{Local storage}.
+
+\begin{itemize}
+    \item \textbf{Local Interaction:} The \textbf{UI layer} manages the map interaction logic directly. Points and segments drawn by the user are maintained in the application's memory without server communication.
+    
+    \item \textbf{Drafting Phase:} During creation, the user can optionally define status or obstacle reports. These are stored as temporary objects within the local state.
+    
+    \item \textbf{Handoff:} The use case concludes when the user finishes drawing. The draft geometry and associated metadata are cached in \textbf{Local storage} to prevent data loss, and the control flow is seamlessly transferred to the \textbf{Save Path (UC12)} use case for persistence.
+\end{itemize}
+
+\subsubsection{Save Path}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC12.png}
+    \caption{Sequence Diagram for Save Path}
+    \label{fig:seq_uc12}
+\end{figure}
+
+\noindent This diagram details the persistence workflow for a manually created path (from UC11). Unlike the automatic recording flow, this process deals exclusively with the Path entity and its manually associated reports.
+
+\begin{itemize}
+    \item \textbf{Draft Retrieval:} The \textbf{UI layer} retrieves the complete draft (geometry + manual reports) from \textbf{Local storage} to populate the save screen.
+    
+    \item \textbf{Orchestration:} The \textbf{Controller layer} acts as the central orchestrator. After validating the user's token via the \textbf{Token manager}, it executes a precise transaction script:
+    \begin{enumerate}
+        \item It invokes the \textbf{Path adding} module to persist the geometry via the \textbf{Model}, obtaining a new \texttt{pathID}.
+        \item Using this ID, it iterates through any manual obstacles or status reports included in the draft, delegating their saving to the \textbf{Add obstacle to path} and \textbf{Add status to path} modules respectively.
+    \end{enumerate}
+    
+    \item \textbf{Completion:} Upon successful persistence, the backend returns a "201 Created" response, prompting the client to clear the draft from \textbf{Local storage}.
+\end{itemize}
+
+
+
+\subsubsection{View "My Trips"}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC13.png}
+    \caption{Sequence Diagram for View "My Trips"}
+    \label{fig:seq_uc13}
+\end{figure}
+
+\noindent This diagram illustrates the retrieval of a user's personal trip history. It follows a standard read-only pattern where the backend orchestrates the secure fetching of private data.
+
+\begin{itemize}
+    \item \textbf{List Retrieval:} The process begins with an authenticated request to the \textbf{Controller layer}. After validating the session via the \textbf{Token manager}, the request is routed to the \textbf{trip searcher} module. This module queries the \textbf{Model} to fetch the summary list of all trips owned by the requesting user.
+    
+    \item \textbf{Detailed View (Optional):} If the user selects a specific trip, a second specific request is made. The \textbf{trip searcher} retrieves the complete dataset (including the high-resolution path geometry, weather snapshot, and specific reports) from the database via the \textbf{Model} to populate the detailed view.
+\end{itemize}
+
+\subsubsection{Submit Status Report}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC14.png}
+    \caption{Sequence Diagram for Submit Status Report}
+    \label{fig:seq_uc14}
+\end{figure}
+
+\noindent This diagram details the workflow for reporting the general condition of a path (e.g., "Optimal", "Requires Maintenance"). The system behavior bifurcates based on the user's current activity context:
+
+\begin{itemize}
+    \item \textbf{Draft Context (from UC11):} If the user is manually creating a new path, the status report is considered part of the draft. It is saved to \textbf{Local storage} by the \textbf{UI layer} and is not sent to the server until the entire path is saved (in UC12).
+    
+    \item \textbf{Live Context (from UC5):} If the user is viewing an existing path, the report is submitted immediately. The \textbf{Controller layer} validates the request and delegates persistence to the \textbf{Add status to path} module, which saves the report via the \textbf{Model}, ensuring the path's public status is updated for the community.
+\end{itemize}
+
+\subsubsection{Submit Obstacle Report}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC15.png}
+    \caption{Sequence Diagram for Submit Obstacle Report}
+    \label{fig:seq_uc15}
+\end{figure}
+
+\noindent This diagram depicts the submission of specific hazard reports (e.g., potholes) at a precise geospatial location. Similar to 'Submit Status Report', it handles two distinct operational modes:
+
+\begin{itemize}
+    \item \textbf{Draft Context:} During manual path creation, the obstacle (type and location pin) is cached in \textbf{Local storage}.
+    
+    \item \textbf{Live Context:} During path viewing, the obstacle is reported instantly. The \textbf{Controller layer} invokes the \textbf{Add obstacle to path} module, which persists the geospatial point and obstacle type to the \textbf{BBP Database} via the \textbf{Model}.
+\end{itemize}
+
+
+\section{Component Interfaces}
+\label{sec:component_interfaces}
+
+This section specifies the Application Programming Interface (API) and the internal method signatures for the specific modules of the BBP system. These interfaces strictly reflect the interactions modeled in the Sequence Diagrams.
+
+
+
+\subsection{Backend Server Components}
+
+\subsubsection*{Controller Layer (REST API)}
+\begin{itemize}
+    \item $POST$ \texttt{/api/auth/register}($UserDTO$ data): $Response<Token>$
+    \item $POST$ \texttt{/api/auth/login}($String$ email, $String$ password): $Response<Token>$
+    \item $POST$ \texttt{/api/auth/logout}($String$ token): $Response<Void>$
+    \item $GET$ \texttt{/api/paths/search}($Coordinates$ origin, $Coordinates$ dest): $Response<List<PathDTO>>$
+    \item $GET$ \texttt{/api/paths/\{id\}}($Integer$ pathID): $Response<PathDetailsDTO>$
+    \item $GET$ \texttt{/api/paths/\{id\}/geometry}($Integer$ pathID): $Response<Geometry>$
+    \item $GET$ \texttt{/api/weather}($Coordinates$ location): $Response<WeatherData>$
+    \item $POST$ \texttt{/api/sessions}($FullSessionData$ data): $Response<IDs>$ \textit{// UC9 Atomic Save}
+    \item $POST$ \texttt{/api/paths}($ManualPathData$ data): $Response<Integer>$ \textit{// UC12 Save Path}
+    \item $GET$ \texttt{/api/trips/mine}(): $Response<List<TripSummary>>$
+    \item $GET$ \texttt{/api/trips/\{id\}}($Integer$ tripID): $Response<FullTripDTO>$
+    \item $POST$ \texttt{/api/reports/status}($Integer$ pathID, $StatusEnum$ status): $Response<Void>$
+    \item $POST$ \texttt{/api/reports/obstacle}($Integer$ pathID, $ObstacleType$ type, $Coords$ loc): $Response<Void>$
+\end{itemize}
+
+\subsubsection*{User Service (Auth)}
+\begin{itemize}
+    \item $registerUser$($UserDTO$ data): $UserEntity$
+    \item $loginUser$($String$ email, $String$ password): $UserEntity$
+    \item $logoutUser$($String$ token): $void$
+\end{itemize}
+
+\subsubsection*{Token Manager (Auth)}
+\begin{itemize}
+    \item $generateToken$($Integer$ userID, $Role$ role): $String$
+    \item $validateToken$($String$ token): $Boolean$
+    \item $invalidateToken$($String$ token): $void$
+\end{itemize}
+
+\subsubsection*{Hash Password (Auth)}
+\begin{itemize}
+    \item $hash$($String$ password): $String$
+    \item $verify$($String$ inputPassword, $String$ storedHash): $Boolean$
+\end{itemize}
+
+\subsubsection*{Path Searcher (Path)}
+\begin{itemize}
+    \item $findPaths$($SearchCriteria$ criteria): $List<PathDTO>$
+\end{itemize}
+
+\subsubsection*{Detailed Path View (Path)}
+\begin{itemize}
+    \item $getPathDetails$($Integer$ pathID): $PathDetailsDTO$
+    \item $getGeometry$($Integer$ pathID): $Geometry$
+\end{itemize}
+
+\subsubsection*{Path Merger (Path)}
+\begin{itemize}
+    \item $calculateMetrics$($List<Report>$ reports, $List<Trip>$ publicTrips): $ComputedMetrics$
+\end{itemize}
+
+\subsubsection*{Path Adding (Path)}
+\begin{itemize}
+    \item $createPath$($Geometry$ geom, $String$ name, $Visibility$ vis, $List<Report>$ reports): $Integer$ \textit{// Returns PathID}
+\end{itemize}
+
+\subsubsection*{Add Status to Path (Path)}
+\begin{itemize}
+    \item $saveStatus$($Integer$ pathID, $Integer$ userID, $StatusEnum$ status): $Boolean$
+\end{itemize}
+
+\subsubsection*{Add Obstacle to Path (Path)}
+\begin{itemize}
+    \item $saveObstacle$($Integer$ pathID, $Integer$ userID, $ObstacleType$ type, $Coordinates$ loc): $Boolean$
+\end{itemize}
+
+\subsubsection*{Trip Adding (Trip)}
+\begin{itemize}
+    \item $createTrip$($TripStats$ stats, $WeatherData$ weather, $Integer$ pathID, $Integer$ userID, $Visibility$ vis): $Integer$
+\end{itemize}
+
+\subsubsection*{Trip Searcher (Trip)}
+\begin{itemize}
+    \item $getTripsByUser$($Integer$ userID): $List<TripSummary>$
+    \item $getTripDetails$($Integer$ tripID, $Integer$ userID): $FullTripDTO$
+\end{itemize}
+
+\subsubsection*{Model (Persistence)}
+\begin{itemize}
+    \item $findUserByEmail$($String$ email): $UserEntity$
+    \item $createUser$($UserData$ data, $String$ passwordHash): $Integer$
+    \item $findPathsByLocation$($GeoBox$ area): $List<PathEntity>$
+    \item $findAllPathDataInArea$($GeoBox$ area): $List<AggregatedData>$ 
+    \item $getPathDetails$($Integer$ pathID): $PathEntity$
+    \item $getGPSPoints$($Integer$ referenceID, $Type$ type): $List<GPSPoint>$
+    \item $savePath$($Geometry$ geometry, $String$ name, $Visibility$ visibility): $Integer$
+    \item $saveTrip$($TripStats$ stats, $WeatherData$ weather, $Integer$ pathID): $Integer$
+    \item $saveReport$($ReportData$ report): $Integer$
+    \item $findTripsByOwner$($Integer$ userID): $List<TripEntity>$
+\end{itemize}
+
+\subsubsection*{Weather API Client}
+\begin{itemize}
+    \item $getWeather$($Coordinates$ location): $WeatherData$ \textit{// Current snapshot}
+    \item $getForecast$($Coordinates$ location): $ForecastData$ \textit{// Future prediction}
+\end{itemize}
+
+\subsection{Mobile Client Components}
+
+\subsubsection*{Network Layer}
+\begin{itemize}
+    \item $register$($String$ email, $String$ password, $String$ name): $void$
+    \item $login$($String$ email, $String$ password): $void$
+    \item $logout$(): $void$
+    \item $searchPaths$($Coordinates$ origin, $Coordinates$ dest, $String$ token): $List<PathDTO>$
+    \item $fetchWeather$($Coordinates$ location, $String$ token): $WeatherData$
+    \item $savePathAndTripSession$($FullSessionData$ data, $String$ token): $void$ \textit{// UC9}
+    \item $saveManualPath$($DraftPath$ data, $String$ token): $void$ \textit{// UC12}
+    \item $fetchPathGeometry$($Integer$ pathID): $Geometry$
+    \item $submitStatusReport$($Integer$ pathID, $Status$ status, $String$ token): $void$
+    \item $submitObstacleReport$($Integer$ pathID, $Obstacle$ obstacle, $String$ token): $void$
+    \item $getMyTrips$($String$ token): $List<TripSummary>$
+\end{itemize}
+
+\subsubsection*{Recording State Manager (Recording Service)}
+\begin{itemize}
+    \item $startRecording$(): $void$
+    \item $stopRecording$(): $void$
+    \item $startBackgroundTracking$(): $void$ \textit{// For UC6}
+    \item $stopTracking$(): $void$
+\end{itemize}
+
+\subsubsection*{GPS Tracker}
+\begin{itemize}
+    \item $init$(): $void$
+    \item $reset$(): $void$
+    \item $processLocation$($Location$ loc): $void$
+    \item $getFullTrack$(): $List<GPSPoint>$
+\end{itemize}
+
+\subsubsection*{Stats Tracker}
+\begin{itemize}
+    \item $reset$(): $void$
+    \item $updateDistanceAndSpeed$($Location$ loc): $void$
+    \item $getSessionStats$(): $TripStats$
+\end{itemize}
+
+\subsubsection*{Sensor Processor}
+\begin{itemize}
+    \item $init$(): $void$
+    \item $processMotion$($SensorData$ data): $void$
+    \item $getDetectedEvents$(): $List<SensorEvent>$
+\end{itemize}
+
+\subsubsection*{Sensor Manager}
+\begin{itemize}
+    \item $startListening$(): $void$
+    \item $stopListening$(): $void$
+    \item $startGPSOnly$(): $void$
+\end{itemize}
+
+\subsubsection*{Navigation Manager}
+\begin{itemize}
+    \item $prepareNavigation$($Integer$ pathID): $void$
+    \item $followPath$($Geometry$ geometry): $void$
+\end{itemize}
+
+\subsubsection*{Local Storage}
+\begin{itemize}
+    \item $saveToken$($String$ token): $void$
+    \item $getToken$(): $String$
+    \item $clearSessionData$(): $void$
+    \item $saveSensorEvent$($SensorEvent$ event): $void$
+    \item $retrieveTempEvents$(): $List<SensorEvent>$
+    \item $updateEventStatus$($Integer$ eventID, $Status$ status): $void$
+    \item $deleteEvent$($Integer$ eventID): $void$
+    \item $saveTempTrip$($TripData$ data): $void$
+    \item $clearTempTrip$(): $void$
+    \item $cacheDraftPath$($Geometry$ geom, $List<Report>$ reports): $void$
+    \item $retrieveDraftPath$(): $DraftPath$
+    \item $clearDraftPath$(): $void$
+    \item $saveDraftStatus$($Report$ status): $void$
+    \item $saveDraftObstacle$($Report$ obstacle): $void$
+    \item $saveVisibilityPreferences$($Visibility$ vis): $void$
+\end{itemize}
+
+\section{Selected Architectural Styles and Patterns}
+\label{sec:architectural_styles}
+
+The architecture of the Best Bike Paths (BBP) system is designed as a composite structure that integrates several established architectural styles and design patterns. These choices were driven by the specific requirements of the system, such as the need for robust geospatial data handling, clear separation of concerns, and secure data transmission.
+
+\subsection{Architectural Styles}
+
+\subsubsection{Client-Server Architecture}
+At the highest level of abstraction, the BBP system adopts a classic \textbf{Client-Server} architectural style. This choice is dictated by the distinct nature of the two main components:
+\begin{itemize}
+    \item \textbf{The Client (Mobile App):} Responsible for the presentation logic, user interaction, and, critically, the real-time acquisition of sensor data (GPS, accelerometer, gyroscope). It acts as a "thick client" capable of performing local processing (e.g., pothole detection) to reduce network latency and server load.
+    \item \textbf{The Server (Backend):} Acts as the centralized source of truth. It is responsible for the heavy-lifting of business logic, data aggregation, security enforcement, and persistent storage.
+\end{itemize}
+The communication between these two entities is stateless and occurs over a secure RESTful API (HTTPS), ensuring standard interoperability and independent scalability of the client and server components.
+
+\subsubsection{Layered Architecture (Backend)}
+Within the Backend Server, we have adopted a \textbf{Layered Architecture} pattern to strictly enforce the separation of concerns. This ensures that each component has a specific responsibility and only interacts with the layers immediately adjacent to it, promoting maintainability and testability. The layers are organized as follows:
+\begin{enumerate}
+    \item \textbf{Controller Layer (Presentation):} The outermost layer that handles incoming HTTP requests, performs input validation, and routes them to the appropriate business logic. It acts as the interface to the outside world.
+    \item \textbf{Security Layer (Middleware):} An intercepting layer responsible for authentication and authorization (JWT validation) before any business logic is executed.
+    \item \textbf{Service Layer (Business Logic):} The core of the application (e.g., \texttt{Path Service}, \texttt{Trip Service}). It implements the complex business rules, orchestrates workflows, and performs calculations like path scoring.
+    \item \textbf{Data Access Layer (Persistence):} Encapsulated by the \texttt{Model} component, this layer abstracts the underlying database technology, providing a clean API for data storage and retrieval.
+\end{enumerate}
+
+\subsection{Design Patterns}
+
+\subsubsection{Repository Pattern}
+The \textbf{Repository Pattern} is implemented within the \texttt{Model} component. Its purpose is to decouple the business logic in the Service Layer from the specific details of the database implementation (PostgreSQL/PostGIS). The Services do not write SQL queries directly; instead, they call high-level methods provided by the Model (e.g., \texttt{saveTrip}, \texttt{findPathsByLocation}). This abstraction makes the code cleaner and allows for easier changes to the database schema or technology in the future without affecting the business rules.
+
+\subsubsection{Data Transfer Object (DTO)}
+To facilitate efficient data exchange between the Client and the Server, we employ the \textbf{Data Transfer Object (DTO)} pattern. Instead of exposing the internal database entities (which may contain sensitive or redundant information) directly to the API, we define specific classes (DTOs) that encapsulate exactly the data needed for a particular operation. For example, when viewing path details (UC5), a \texttt{PathDetailsDTO} aggregates geometry, weather, status, and statistics into a single packet, reducing the number of network calls ("chattiness") and decoupling the internal domain model from the external interface.
+
+\subsubsection{Facade Pattern}
+The \textbf{Facade Pattern} is utilized in multiple areas to simplify interactions with complex subsystems:
+\begin{itemize}
+    \item \textbf{Controller as Facade:} The Controller layer acts as a facade for the Client, hiding the complexity of the internal service interactions. The client makes a single call (e.g., "Save Trip"), and the Controller handles the internal coordination.
+    \item \textbf{Weather API Client:} This component acts as a facade/adapter for the external third-party Weather Service. It abstracts the specific HTTP calls, authentication, and JSON parsing required by the external provider, offering a simple internal interface (e.g., \texttt{getForecast}) to the BBP services.
+\end{itemize}
+
+\subsubsection{Transaction Script / Orchestrator}
+For complex write operations, specifically the "Save Trip and Path" (UC9) and "Save Path" (UC12) scenarios, we adopted a \textbf{Transaction Script} or \textbf{Orchestrator} approach implemented within the Controller layer. Instead of distributing the logic of creating paths, saving reports, and linking trips across disparate components, the Controller acts as a central orchestrator. It executes these steps in a precise, sequential order (Create Path $\rightarrow$ Save Reports $\rightarrow$ Save Trip), ensuring transactional integrity. If any step fails, the entire logical operation can be rolled back or handled as an error, preventing inconsistent data states (e.g., a Trip linked to a non-existent Path).
+
+\subsubsection{Lazy Loading (On-Read Aggregation)}
+While not a structural GoF pattern, the decision to calculate the "Path Status" and "Score" dynamically at the time of the request (UC4, UC5) implements a \textbf{Lazy Loading} strategy. This ensures that users always see the most up-to-date information based on the latest "freshness" of reports, avoiding the data consistency issues that would arise from storing a static, pre-calculated score in the database.
+
+\section{Other Design Decisions}
+\label{sec:other_design_decisions}
+
+In addition to the primary architectural patterns, several specific design decisions were made to address the system's non-functional requirements, particularly regarding performance, reliability, and operational maintenance.
+
+\subsection{Availability}
+To ensure the high availability required by the RASD (PR-2), the system is designed to eliminate single points of failure:
+\begin{itemize}
+    \item \textbf{Redundancy in Application Tier:} The Application Server is stateless and deployed across multiple instances behind a Load Balancer. If a specific server node fails or becomes unresponsive, the Load Balancer automatically redirects traffic to the remaining healthy nodes, ensuring continuous service for the end-users.
+    \item \textbf{Database Clustering:} The persistence layer utilizes a Primary-Replica configuration. While the Primary node handles writes, one or more Standby Replicas replicate data in near real-time. In the event of a critical failure of the Primary node, a failover mechanism promotes a Replica to Primary, minimizing downtime.
+    \item \textbf{Graceful Degradation:} The system is designed to handle the unavailability of external services (e.g., Weather API) gracefully. If the Weather API is unreachable during a "Save Trip" operation (UC9), the transaction does not fail; instead, the trip is saved without weather data, and a warning is logged, preserving the core functionality.
+\end{itemize}
+
+\subsection{Scalability}
+The BBP system is designed to handle varying loads, from daily commutes to peak weekend usage:
+\begin{itemize}
+    \item \textbf{Horizontal Scaling (Application):} Because the backend services are stateless (authentication is handled via self-contained JWTs), the system can scale horizontally. We can dynamically add or remove Application Server instances based on CPU or RAM usage thresholds without changing the code or configuration.
+    \item \textbf{Read/Write Splitting (Database):} The "Search Paths" (UC4) and "View Details" (UC5) operations are read-intensive and constitute the majority of the traffic. The design offloads these read operations to the Database Read Replicas, leaving the Primary Database free to handle write-intensive transactions like "Save Trip" (UC9). This ensures that heavy search traffic does not degrade the performance of data recording.
+\end{itemize}
+
+\subsection{Notification Handling and Asynchronous Processing}
+While BBP relies primarily on immediate user feedback, internal "system notifications" are handled asynchronously to improve perceived performance:
+\begin{itemize}
+    \item \textbf{Decoupling Aggregation:} As seen in the design of the \texttt{Trip Service}, the recalculation of path statistics (R9) is triggered via an \texttt{Aggregation Publisher}. This allows the critical "Save Trip" transaction to complete and return a success message to the user immediately, while the heavy computational task of updating the path's average statistics happens asynchronously in the background (On-Write strategy). This prevents user interface freezing during complex server-side calculations.
+\end{itemize}
+
+\subsection{Ease of Deployment}
+To facilitate smooth updates and consistent environments:
+\begin{itemize}
+    \item \textbf{Containerization:} All backend components (Application Server, Web Server) are packaged as Docker containers. This ensures that the software runs identically on a developer's machine, the testing environment, and the production cloud infrastructure, eliminating "it works on my machine" issues.
+    \item \textbf{Orchestration:} The deployment view suggests the use of a container orchestration platform (like Kubernetes or a managed Cloud equivalent). This abstracts the hardware management, allowing for automated rolling updates (updating the software without downtime) and self-healing (automatically restarting crashed containers).
+\end{itemize}
+
+\subsection{Data Storage}
+The choice of \textbf{PostgreSQL} with the \textbf{PostGIS} extension is a strategic design decision:
+\begin{itemize}
+    \item \textbf{Hybrid Data Handling:} BBP requires strict relational integrity for user accounts and trips (best served by SQL) alongside complex geospatial queries for path finding (e.g., "Find all paths within this bounding box"). PostGIS allows us to handle both data types within a single, transactional database engine.
+    \item \textbf{Atomicity:} By using a single database technology, we can wrap complex operations—like saving a Trip, creating a Path, and logging Reports—into a single ACID transaction (UC9), guaranteeing data consistency.
+\end{itemize}
