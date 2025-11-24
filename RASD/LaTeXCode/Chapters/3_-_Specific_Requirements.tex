@@ -4,7 +4,58 @@ This section details the interfaces between the Best Bike Paths (BBP) system and
 
 \subsection{User interfaces}
 \label{subsec:User_interfaces}%
-The primary user interface for the BBP system will be a native mobile application designed for smartphones (IOS and Android platforms). The interface must prioritize clarity, usability, and robustness, particularly for outdoor use under varying light conditions. It will adopt a map-centric design, prominently displaying geographical data and path information. Key interaction elements will include a clear search bar for origin/destination input, interactive map elements for manual path creation and viewing details, easily accessible buttons for critical functions like starting/stopping automatic recording, and a dedicated Heads-Up Display (HUD) during active recording sessions showing real-time statistics (speed, distance, time) with high legibility. The interface will also incorporate clear feedback mechanisms and prompts for user input, such as the review and confirmation of automatically detected sensor events presented at the conclusion of a trip . Navigation between different sections (e.g., Map, Search Results, My Trips, User Profile) must be intuitive and consistent throughout the application.
+The primary user interface for the BBP system will be a native mobile application designed for smartphones (IOS and Android platforms). The interface must prioritize clarity, usability, and robustness, particularly for outdoor use under varying light conditions. It will adopt a map-centric design, prominently displaying geographical data and path information. Key interaction elements will include a clear search bar for origin/destination input, interactive map elements for manual path creation and viewing details, easily accessible buttons for critical functions like starting/stopping automatic recording, and a dedicated Heads-Up Display (HUD) during active recording sessions showing real-time statistics (speed, distance, time) with high legibility. The interface will also incorporate clear feedback mechanisms and prompts for user input, such as review and confirmation of automatically detected sensor events presented at the conclusion of a trip . Navigation between different sections (e.g., Map, Search Results, My Trips, User Profile) must be intuitive and consistent throughout the application. 
+
+% Inizio delle due colonne centrate
+\begin{center}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/home mockup.png}
+    \caption{View home}
+    \label{fig:home}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/profile mockup.png}
+    \caption{View profile details}
+    \label{fig:profile_details}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+\end{center}
+% Fine delle due colonne centrate
+
+% Inizio delle due colonne centrate
+\begin{center}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/create path mockup.png}
+    \caption{View create path}
+    \label{fig:create path}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/search path mockup.png}
+    \caption{View search path}
+    \label{fig:search path}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+\end{center}
+% Fine delle due colonne centrate
+
 \subsection{Hardware interfaces}
 \label{subsec:hardware_interfaces}%
 The BBP system requires direct interaction with specific hardware components integral to the user's mobile device. Foremost is the Global Positioning System (GPS) receiver, from which the application must continuously acquire accurate location data (latitude, longitude, timestamp) to track the user's position during navigation and automatic trip recording. Secondly, BBP must interface with the device's inertial measurement unit (IMU) sensors, specifically the accelerometer and gyroscope. Access to the raw data streams from these sensors is mandatory for the implementation of the automatic obstacle detection feature, enabling BBP to identify significant motion events that may correspond to real-world path anomalies, such as potholes. Furthermore, the application relies on standard smartphone hardware, including the touchscreen display for all user input and output, and potentially the device's vibration motor for non-visual notifications (e.g., indicating a potential obstacle has been logged). BBP assumes these hardware components are functional and accessible via the device's operating system APIs.
