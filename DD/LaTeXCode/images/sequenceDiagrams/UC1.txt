@@ -13,6 +13,7 @@ database "BBP Database"
 
 # --- Inizio Flusso ---
 User->"UI layer": Enters details (email, pass) & Taps "Register"
+activate User
 activate "UI layer"
 
 "UI layer"->"Network layer": register(email, password, name)
@@ -83,6 +84,7 @@ else New User (Success Flow)
     # 10. Redirect UI
     "Network layer"-->"UI layer": success
     deactivate "Network layer"
-    "UI layer"->User: Redirect to Map / Main Screen
+    "UI layer"-->User: Redirect to Map / Main Screen
     deactivate "UI layer"
+    deactivate User
 end

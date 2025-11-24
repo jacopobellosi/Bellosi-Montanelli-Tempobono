@@ -7,6 +7,7 @@ participant "Local storage"
 participant "Controller layer"
 participant "Token manager"
 participant "Weather API client"
+actor "External weather service"
 participant "Path adding"
 participant "Add obstacle to path"
 participant "Add status to path"
@@ -30,8 +31,15 @@ activate "Token manager"
 deactivate "Token manager"
 "Controller layer"->"Weather API client": getWeather(lat, long)
 activate "Weather API client"
+
+"Weather API client"->"External weather service": getWeather(lat, long)
+activate "External weather service"
+"External weather service"-->"Weather API client":weatherData
+deactivate "External weather service"
+
 "Weather API client"-->"Controller layer": weatherData
 deactivate "Weather API client"
+
 "Controller layer"-->"Network layer": weatherJSON
 deactivate "Controller layer"
 "Network layer"-->"UI layer": weatherInfo
@@ -46,11 +54,14 @@ note right of User: User reviews & confirms obstacles and selects Status & Visib
 # --- Fase 3: Decisione (Salva o Scarta) ---
 alt User Discards
     User->"UI layer": Taps "Discard"
+    activate User
+    activate "UI layer"
     "UI layer"->"Local storage": clearTempTrip()
     activate "Local storage"
     "Local storage"-->"UI layer": cleared
     deactivate "Local storage"
-    "UI layer"->User: Redirect to Home
+    "UI layer"-->User: Redirect to Home
+    deactivate "UI layer"
     
 else User Saves
     User->"UI layer": Taps "Save"
@@ -75,7 +86,7 @@ else User Saves
     deactivate "Token manager"
 
     # B. Orchestrazione: Salvataggio PATH + REPORT (Step 1)
-    "Controller layer"->"Path adding": createPath(geometry, name, visibility, obstacles, status)
+    "Controller layer"->"Path adding": createPath(geometry, name, visibility)
     activate "Path adding"
 
         # B1. Salva Geometria Path
@@ -84,13 +95,17 @@ else User Saves
         "Model"->"BBP Database": INSERT INTO paths...
         activate "BBP Database"
         "BBP Database"-->"Model": newPathId
+        
         deactivate "BBP Database"
         "Model"-->"Path adding": pathId
         deactivate "Model"
+        "Path adding"-->"Controller layer":pathId
+        deactivate "Path adding"
+        
 
         # B2. Salva Ostacoli (UC8 results)
         loop For each confirmed obstacle
-            "Path adding"->"Add obstacle to path": saveObstacle(pathId, type, location)
+            "Controller layer"->"Add obstacle to path": saveObstacle(pathId, type, location)
             activate "Add obstacle to path"
             "Add obstacle to path"->"Model": createReport(obstacleData)
             activate "Model"
@@ -100,12 +115,12 @@ else User Saves
             deactivate "BBP Database"
             "Model"-->"Add obstacle to path": Added succesfully
             deactivate "Model"
-            "Add obstacle to path"-->"Path adding": ok
+            "Add obstacle to path"-->"Controller layer": ok
             deactivate "Add obstacle to path"
         end
 
         # B3. Salva Status
-        "Path adding"->"Add status to path": saveStatus(pathId, statusValue)
+        "Controller layer"->"Add status to path": saveStatus(pathId, statusValue)
         activate "Add status to path"
         "Add status to path"->"Model": createReport(statusData)
         activate "Model"
@@ -115,11 +130,11 @@ else User Saves
         deactivate "BBP Database"
         "Model"-->"Add status to path": Added succesfully
         deactivate "Model"
-        "Add status to path"-->"Path adding": ok
+        "Add status to path"-->"Controller layer": pathId
         deactivate "Add status to path"
 
-    "Path adding"-->"Controller layer": pathId
-    deactivate "Path adding"
+    
+    
 
     # C. Orchestrazione: Salvataggio TRIP (Step 2)
     "Controller layer"->"Trip adding": createTrip(stats, weather, pathId, userId, visibility)
@@ -140,8 +155,12 @@ else User Saves
     deactivate "Controller layer"
 
     "Network layer"->"Local storage": clearTempTrip()
+    activate "Local storage"
+    "Local storage"-->"Network layer":success
+    deactivate "Local storage"
     "Network layer"-->"UI layer": Success
     deactivate "Network layer"
-    "UI layer"->User: Redirect to My Trips
+    "UI layer"-->User: Redirect to My Trips
+    deactivate User
     deactivate "UI layer"
 end

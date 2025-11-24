@@ -13,6 +13,7 @@ database "BBP Database"
 
 # --- Inizio Flusso ---
 User->"UI layer": Enters credentials & Taps "Login"
+activate User
 activate "UI layer"
 
 "UI layer"->"Network layer": login(email, password)
@@ -72,6 +73,7 @@ else Valid Credentials (Success Flow)
     # 9. Redirect UI
     "Network layer"-->"UI layer": success
     deactivate "Network layer"
-    "UI layer"->User: Redirect to Map / Main Screen
+    "UI layer"-->User: Redirect to Map / Main Screen
     deactivate "UI layer"
+    deactivate User
 end

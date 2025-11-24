@@ -15,6 +15,7 @@ database "BBP Database"
 
 # --- Fase 1: Interazione Utente ---
 User->"UI layer": Taps "Report Status"
+activate User
 activate "UI layer"
 "UI layer"-->User: Show Status Options (Optimal, Requires Maintenance...)
 
@@ -28,6 +29,7 @@ alt Context: Called from UC11 (Draft Mode)
     "Local storage"-->"UI layer": saved
     deactivate "Local storage"
     "UI layer"-->User: Show "Status added to draft"
+    deactivate User
     note right of "UI layer": Data will be sent to server\nlater during UC12 (Save Path)
 
 else Context: Called from UC5 (Live Mode)
@@ -72,6 +74,7 @@ else Context: Called from UC5 (Live Mode)
     deactivate "Controller layer"
 
     "Network layer"-->"UI layer": Show "Report Submitted"
+    deactivate "UI layer"
     deactivate "Network layer"
 end
 deactivate "UI layer"

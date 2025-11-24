@@ -32,6 +32,7 @@ note right of User: UC10: Set Visibility (Path only)
 # --- Fase 3: Salvataggio (Orchestrato dal Controller) ---
 alt User Discards
     User->"UI layer": Taps "Discard"
+    activate User
     activate "UI layer"
     "UI layer"->"Local storage": deleteDraftPath()
     activate "Local storage"
@@ -39,9 +40,11 @@ alt User Discards
     deactivate "Local storage"
     "UI layer"-->User: Redirect to Home
     deactivate "UI layer"
+    deactivate User
 
 else User Saves
     User->"UI layer": Taps "Save"
+    activate User
     activate "UI layer"
 
     "UI layer"->"Local storage": getToken()
@@ -74,10 +77,12 @@ else User Saves
         deactivate "BBP Database"
         "Model"-->"Path adding": pathId
         deactivate "Model"
+        "Path adding"-->"Controller layer":PathId
+        deactivate "Path adding"
 
         # B2. Salva Ostacoli Manuali (se presenti nella bozza)
         loop For each manual obstacle
-            "Path adding"->"Add obstacle to path": saveObstacle(pathId, type, location)
+            "Controller layer"->"Add obstacle to path": saveObstacle(pathId, type, location)
             activate "Add obstacle to path"
             "Add obstacle to path"->"Model": createObstacleReport(data)
             activate "Model"
@@ -87,13 +92,13 @@ else User Saves
             deactivate "BBP Database"
             "Model"-->"Add obstacle to path": reportId
             deactivate "Model"
-            "Add obstacle to path"-->"Path adding": ok
+            "Add obstacle to path"-->"Controller layer": ok
             deactivate "Add obstacle to path"
         end
 
         # B3. Salva Status Manuale (se presente nella bozza)
         opt Status Report exists
-            "Path adding"->"Add status to path": saveStatus(pathId, statusValue)
+            "Controller layer"->"Add status to path": saveStatus(pathId, statusValue)
             activate "Add status to path"
             "Add status to path"->"Model": createStatusReport(data)
             activate "Model"
@@ -103,12 +108,11 @@ else User Saves
             deactivate "BBP Database"
             "Model"-->"Add status to path": reportId
             deactivate "Model"
-            "Add status to path"-->"Path adding": ok
+            "Add status to path"-->"Controller layer": ok
             deactivate "Add status to path"
         end
 
-    "Path adding"-->"Controller layer": pathId
-    deactivate "Path adding"
+
 
     # C. Risposta Finale
     "Controller layer"-->"Network layer": 201 Created
@@ -122,5 +126,6 @@ else User Saves
     "Network layer"-->"UI layer": Success
     deactivate "Network layer"
     "UI layer"-->User: Redirect to My Paths
+    deactivate User
     deactivate "UI layer"
 end

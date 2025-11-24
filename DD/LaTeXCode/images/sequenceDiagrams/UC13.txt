@@ -11,7 +11,7 @@ participant "Model"
 database "BBP Database"
 
 # --- Inizio Flusso ---
-User->"UI layer": Navigates to Profile -> Taps "My Trips"
+User->>"UI layer": Navigates to Profile -> Taps "My Trips"
 activate "UI layer"
 
 "UI layer"->"Local storage": getToken()
@@ -53,11 +53,12 @@ deactivate "trip searcher"
 deactivate "Controller layer"
 "Network layer"-->"UI layer": Show List
 deactivate "Network layer"
-"UI layer"->User: Displays list of trips
+
 
 # --- Loop Dettaglio (Opzionale) ---
 opt User selects a Trip
     User->"UI layer": Taps on specific Trip
+    activate User
     "UI layer"->"Network layer": getTripDetails(tripId, token)
     activate "Network layer"
     "Network layer"->"Controller layer": GET /api/trips/{id}
@@ -86,6 +87,7 @@ opt User selects a Trip
     "Network layer"-->"UI layer": Display Details
     deactivate "Network layer"
     "UI layer"->User: Shows Map, Stats, Weather, Reports
+    deactivate User
     deactivate "UI layer"
 end
 deactivate "UI layer"

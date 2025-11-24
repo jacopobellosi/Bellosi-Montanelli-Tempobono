@@ -10,6 +10,7 @@ participant "Token manager"
 
 # --- Inizio Flusso ---
 User->"UI layer": Taps "Logout"
+activate User
 activate "UI layer"
 
 "UI layer"->"Network layer": logout()
@@ -45,5 +46,6 @@ deactivate "Local storage"
 # 6. Redirect UI
 "Network layer"-->"UI layer": loggedOut
 deactivate "Network layer"
-"UI layer"->User: Redirect to Login / Home (Anonymous)
+"UI layer"-->User: Redirect to Login / Home (Anonymous)
 deactivate "UI layer"
+deactivate User

@@ -3,9 +3,9 @@ title Design Sequence Diagram: UC4 Search Paths
 actor User
 participant "UI layer"
 participant "Network layer"
-participant "Local storage"
+
 participant "Controller layer"
-participant "Token manager"
+
 participant "Path searcher"
 participant "Path merger"
 participant "Model"
@@ -13,13 +13,9 @@ database "BBP Database"
 
 # --- Inizio Flusso ---
 User->"UI layer": Enters Criteria (Origin, Dest) & Search
+activate User
 activate "UI layer"
 
-# Recupero Token
-"UI layer"->"Local storage": getToken()
-activate "Local storage"
-"Local storage"-->"UI layer": jwtToken
-deactivate "Local storage"
 
 "UI layer"->"Network layer": searchPaths(criteria, token)
 activate "Network layer"
@@ -28,11 +24,7 @@ activate "Network layer"
 "Network layer"->"Controller layer": GET /api/paths/search
 activate "Controller layer"
 
-# 2. Sicurezza
-"Controller layer"->"Token manager": validateRequest(token)
-activate "Token manager"
-"Token manager"-->"Controller layer": tokenValid
-deactivate "Token manager"
+
 
 
 
@@ -77,5 +69,6 @@ deactivate "Controller layer"
 
 "Network layer"-->"UI layer": Display Results
 deactivate "Network layer"
-"UI layer"->User: Shows List of Paths
+"UI layer"-->User: Shows List of Paths
 deactivate "UI layer"
+deactivate User

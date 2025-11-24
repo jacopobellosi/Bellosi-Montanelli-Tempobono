@@ -14,12 +14,14 @@ participant "navigation manager"
 participant "recording service"
 participant "sensor manager"
 participant "Device sensor"
-participant "External navigation service"
-participant "Weather API client"
+actor "External navigation service"
+actor "Weather API client"
 
 # --- Inizio Flusso ---
 User->>"UI layer": Taps "Follow Path"
+activate User
 activate "UI layer"
+#get token
 
 # 1. Recupero Geometria Path (Pre-Navigazione)
 "UI layer"->"navigation manager": prepareNavigation(pathId)
@@ -28,6 +30,8 @@ activate "navigation manager"
 activate "Network layer"
 "Network layer"->"Controller layer": GET /api/paths/{id}/geometry
 activate "Controller layer"
+
+
 "Controller layer"->"Detailed path view": getGeometry(pathId)
 activate "Detailed path view"
 "Detailed path view"->"Model": getGPSPoints(pathId)
@@ -69,6 +73,7 @@ end
 User->"UI layer": Returns to App & Taps "Stop"
 "UI layer"->"recording service": stopTracking()
 "recording service"->>"sensor manager": stopListening()
+"sensor manager"->>"Device sensor": stopListening()
 deactivate "Device sensor"
 deactivate "sensor manager"
 
@@ -76,9 +81,11 @@ deactivate "sensor manager"
 deactivate "recording service"
 
 "UI layer"-->User: Show Summary (Stats Only)
+deactivate User
 
 # --- Gestione Salvataggio Unificata ---
 User->"UI layer": Taps "Save" (Selects Visibility)
+activate User
 
 # A. Blocco Opzionale: Registrazione (Solo se anonimo)
 opt User is Anonymous
@@ -87,7 +94,9 @@ opt User is Anonymous
     # Riferimento a UC1 (Sintassi corretta per sequence diagram testuale)
     note right of "UI layer": Executes UC1: Register Account\n(Returns new Token & UserId)
     "UI layer"->"Local storage": saveToken(newToken)
+    activate "Local storage"
     "Local storage"-->"UI layer": Confermation
+    deactivate "Local storage"
 end
 
 # B. Flusso di Salvataggio Comune (Ora l'utente ha un token, nuovo o esistente)
@@ -135,3 +144,7 @@ deactivate "Controller layer"
 
 "Network layer"-->"UI layer": Success
 deactivate "Network layer"
+
+"UI layer"-->User:Return to main page
+deactivate "UI layer"
+deactivate User

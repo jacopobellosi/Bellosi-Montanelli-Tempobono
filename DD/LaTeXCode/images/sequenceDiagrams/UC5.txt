@@ -3,23 +3,22 @@ title Design Sequence Diagram: UC5 View Path Details
 actor User
 participant "UI layer"
 participant "Network layer"
-participant "Local storage"
+
 participant "Controller layer"
-participant "Token manager"
+
 participant "Detailed path view"
 participant "Path merger"
 participant "Weather API client"
+actor "External weather service"
 participant "Model"
 database "BBP Database"
 
 # --- Inizio Flusso ---
 User->"UI layer": Taps on a specific Path
+activate User
 activate "UI layer"
 
-"UI layer"->"Local storage": getToken()
-activate "Local storage"
-"Local storage"-->"UI layer": jwtToken
-deactivate "Local storage"
+
 
 "UI layer"->"Network layer": getPathDetails(pathId, token)
 activate "Network layer"
@@ -28,11 +27,7 @@ activate "Network layer"
 "Network layer"->"Controller layer": GET /api/paths/{id}
 activate "Controller layer"
 
-# 2. Sicurezza (Diretta su Token Manager)
-"Controller layer"->"Token manager": validateToken(token)
-activate "Token manager"
-"Token manager"-->"Controller layer": tokenValid
-deactivate "Token manager"
+
 
 # 3. Routing
 "Controller layer"->"Detailed path view": getPathDetails(pathId)
@@ -56,7 +51,12 @@ deactivate "Path merger"
 
 # 6. Recupero Meteo (Forecast) - R14
 "Detailed path view"->"Weather API client": getForecast(lat, long)
+
 activate "Weather API client"
+"Weather API client"->"External weather service": getWeather(lat, long)
+activate "External weather service"
+"External weather service"-->"Weather API client":weatherData
+deactivate "External weather service"
 "Weather API client"-->"Detailed path view": weatherForecast
 deactivate "Weather API client"
 
@@ -69,5 +69,6 @@ deactivate "Controller layer"
 
 "Network layer"-->"UI layer": Display Path Details
 deactivate "Network layer"
-"UI layer"->User: Shows Map, Stats, Status, Weather
+"UI layer"-->User: Shows Map, Stats, Status, Weather
+deactivate User
 deactivate "UI layer"

@@ -61,7 +61,9 @@ loop While Recording Active
 
     # B. Flusso Sensori Movimento (Buche)
     "Device sensor"->>"sensor manager": Accelerometer/Gyro Data
+    activate "sensor manager"
     "sensor manager"->>"Recording state manager": onSensorChanged(data)
+    deactivate "sensor manager"
     activate "Recording state manager"
     
     "Recording state manager"->>"Sensor processor": processMotion(data)

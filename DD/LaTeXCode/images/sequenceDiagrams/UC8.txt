@@ -23,22 +23,26 @@ loop For each obstacle selected by User
     
     alt User Confirms
         User->"UI layer": Taps "Yes / Confirm"
+        activate User
         activate "UI layer"
         "UI layer"->"Local storage": updateEventStatus(eventId, CONFIRMED)
         activate "Local storage"
         "Local storage"-->"UI layer": updated
         deactivate "Local storage"
         "UI layer"-->User: Show obstacle confirmed
+        deactivate User
         deactivate "UI layer"
         
     else User Rejects
         User->"UI layer": Taps "No / Ignore"
+        activate User
         activate "UI layer"
         "UI layer"->"Local storage": deleteEvent(eventId)
         activate "Local storage"
         "Local storage"-->"UI layer": deleted
         deactivate "Local storage"
         "UI layer"-->User: Show the obstacle ignored
+        deactivate User
         deactivate "UI layer"
     end
 end
