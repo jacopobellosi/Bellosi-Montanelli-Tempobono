@@ -7,63 +7,47 @@ sequenceDiagram
     User->App: taps "Follow Path" (R15)
     activate App
 
-    /'
-       Step 1: BBP sends the route to the external app
-       (as per SP22 and Figure 2.6).
-    '/
+    /' App synchronously calls the external service and waits '/
     App->NavService: openWithRoute(pathGeometry)
     activate NavService
     NavService-->User: [Shows Turn-by-Turn Navigation]
 
-    /'
-       Step 2: BBP *also* starts recording stats
-       in the background (as per UC6 Event Flow).
-    '/
-    App->GPS: startLocationUpdates()
+    /' App asynchronously starts GPS updates (fire-and-forget) '/
+    App->>GPS: startLocationUpdates()
     activate GPS
 
     loop Background Updates
-        /'
-           The app doesn't show a map, but it collects
-           GPS data to calculate stats (Step 4, 5).
-        '/
-        GPS-->App: onLocationChanged(newLocation)
-
-        /' --- BUG FIX --- '/
-        /' Removed redundant activate/deactivate. '/
-        /' The App is already active, so this is just a self-message. '/
+        /' GPS asynchronously sends data back to the App '/
+        GPS-->>App: onLocationChanged(newLocation)
         App->App: updateSessionStats(newLocation, time)
     end
 
-    /'
-       Step 6: User finishes navigating and
-       manually returns to BBP (as per SP23).
-    '/
+    /' User returns to App and synchronously taps "Stop" '/
     User->App: [Returns to BBP] taps "Stop Navigation"
     deactivate NavService
 
-    /' Step 7: BBP stops recording. '/
-    App->GPS: stopLocationUpdates()
+    /' App asynchronously stops GPS updates '/
+    App->>GPS: stopLocationUpdates()
     deactivate GPS
 
-    note right of App: App finalizes session statistics (R16).
+    note right of App: App finalizes session statistics using Elapsed Time (R31) (R16).
 
-    /' Step 8: Show Summary '/
+    /' App synchronously responds to the user's "Stop" tap '/
     App-->User: showNavigationSummary(sessionStats)
 
-    /' Step 9-13: Save logic '/
-    alt User is Anonymous (R17)
+    /' The save logic is a synchronous UI flow '/
+    alt User is Unauthenticated (R17)
         User->App: tapsRegisterToSave()
         note right of App: Triggers UC1: Register Account (R19)
 
-        User->App: selectsVisibility(visibility) (R39)
+        User->App: selectsVisibility(visibility) (R39.2)
         note right of App: System saves Trip to new account.
         App-->User: [Trip Saved Confirmation]
 
     else User is Registered (R33)
         User->App: tapsSaveActivity()
 
-        User->App: selectsVisibility(visibility) (R39)
+        User->App: selectsVisibility(visibility) (R39.2)
         note right of App: System saves Trip to user's archive.
         App-->User: [Trip Saved Confirmation]
     end

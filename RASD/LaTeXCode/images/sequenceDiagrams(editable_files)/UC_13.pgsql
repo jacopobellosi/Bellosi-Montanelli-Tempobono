@@ -5,7 +5,7 @@ sequenceDiagram
     User->App: tapsViewMyTrips()
     activate App
 
-    note right of App: System retrieves summary for all user's private trips.
+    note right of App: System retrieves summary for all user's private trips (R34).
 
     App-->User: showMyTripsList(tripsList)
     deactivate App
@@ -14,7 +14,7 @@ sequenceDiagram
         User->App: selectsTrip(tripID)
         activate App
 
-        note right of App: System retrieves full trip (GPS, stats, weather, reports).
+        note right of App: System retrieves full trip (GPS, stats, weather, reports) (R35).
 
         App-->User: showTripDetails(fullTripData)
         deactivate App

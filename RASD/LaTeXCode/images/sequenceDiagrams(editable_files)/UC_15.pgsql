@@ -17,7 +17,7 @@ sequenceDiagram
        handling the report submission.
     '/
     note right of App: System saves new Obstacle_report (R38).
-    note right of App: System triggers Path score recalculation (R10, R11).
+    note right of App: System recalculates path score (R10).
 
     App-->User: showMessage("Obstacle report submitted!")
     deactivate App

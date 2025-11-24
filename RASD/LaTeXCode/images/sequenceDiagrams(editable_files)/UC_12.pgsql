@@ -18,7 +18,7 @@ sequenceDiagram
            BBP Application is now active,
            handling the save logic internally.
         '/
-        note right of App: System saves the new Path with selected visibility (R39.1).
+        note right of App: System saves the new Path with selected visibility (R25).
 
         App-->User: showMessage("Path saved successfully!")
         App-->User: showMainMapScreen()

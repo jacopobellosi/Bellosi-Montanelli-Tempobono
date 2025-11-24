@@ -3,34 +3,39 @@ sequenceDiagram
     participant "BBP Application" as App
     actor "Device Sensors (GPS, IMU)" as Sensors
 
+    /' User synchronously starts the recording and waits for the HUD '/
     User->App: tapsStartRecording() (R20)
     activate App
     App-->User: showRecordingHUD()
 
-    App->Sensors: startLocationUpdates()
+    /' App asynchronously starts the sensors (fire-and-forget) '/
+    App->>Sensors: startLocationUpdates()
     activate Sensors
-    App->Sensors: startSensorMonitoring()
+    App->>Sensors: startSensorMonitoring()
 
     note right of App: App displays real-time stats (R22). Timer (Elapsed Time) is always running.
 
-    loop Continuous Updates
-        Sensors-->App: onLocationChanged(newLocation, currentSpeed)
+    loop Continuous Asynchronous Updates
+        /' Sensors independently send data back via callbacks '/
+        Sensors-->>App: onLocationChanged(newLocation)
 
-        alt currentSpeed > threshold [Auto-Resume / Recording] (R26)
-            App->App: recordGpsPoint(newLocation) (R21)
+        /' Always record GPS (No auto-pause) '/
+        App->App: recordGpsPoint(newLocation) (R21)
 
-            Sensors-->App: onSensorEvent(sensorData) (R23)
-            note right of App: (Checks if sensorData > threshold)
-            App->App: logSensorEvent(sensorData) (R24)
+        Sensors-->>App: onSensorEvent(sensorData) (R23)
 
-        else currentSpeed < threshold [Auto-Pause] (R25)
-            note right of App: GPS/Sensor recording paused (R25). Timer (R22) continues.
+        opt sensorData > threshold
+             note right of App: Checks if sensorData > threshold (R24)
+             App->App: logSensorEvent(sensorData)
         end
     end
 
+    /' User synchronously stops the recording '/
     User->App: tapsStopRecording() (R27)
-    App->Sensors: stopLocationUpdates()
-    App->Sensors: stopSensorMonitoring()
+
+    /' App asynchronously stops the sensors '/
+    App->>Sensors: stopLocationUpdates()
+    App->>Sensors: stopSensorMonitoring()
     deactivate Sensors
 
     note right of App: Check if sensor activity were logged

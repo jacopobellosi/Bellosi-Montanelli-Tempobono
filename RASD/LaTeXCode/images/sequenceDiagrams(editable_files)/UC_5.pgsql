@@ -10,8 +10,8 @@ sequenceDiagram
        BBP Application is now active,
        representing all internal system processing.
     '/
-    note right of App: System retrieves Path, all GPS Points, and all associated Reports.
-    note right of App: Applies merging logic (R8) to calculate definitive status.
+    note right of App: System retrieves Path and all associated Reports (R8).
+    note right of App: Applies merging logic (R9) to calculate definitive status.
 
     App->Weather: getForecast(pathLocations)
     activate Weather

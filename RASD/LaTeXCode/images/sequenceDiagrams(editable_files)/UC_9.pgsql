@@ -25,10 +25,10 @@ sequenceDiagram
         User->App: tapsSave()
 
         note right of App: System saves the private Trip (R33).
-        note right of App: System saves the Path (R39.1).
+        note right of App: System saves the Path with selected visibility (R25).
 
         alt visibility is "Public"
-            note right of App: System updates Path average stats (R39.2).
+            note right of App: System updates Path average stats (R26).
         end
 
         App-->User: showMessage("Save successful!")

@@ -10,7 +10,7 @@ sequenceDiagram
        BBP Application is now active,
        representing all internal system processing.
     '/
-    note right of App: System finds paths, retrieves reports, applies merging (R8) & scoring (R9) logic.
+    note right of App: Finds public paths (R25), retrieves reports (R8), applies merging (R9) & scoring (R10).
 
     App->Weather: getForecast(location)
     activate Weather
@@ -20,7 +20,7 @@ sequenceDiagram
     alt No paths found
         App-->User: showMessage("No results found")
     else Paths found
-        note right of App: Returns ordered list of paths with scores, merged status, and weather.
+        note right of App: Returns ordered list of paths with scores, merged status, and weather (R11).
         App-->User: displaySearchResults(pathList)
     end
     deactivate App
