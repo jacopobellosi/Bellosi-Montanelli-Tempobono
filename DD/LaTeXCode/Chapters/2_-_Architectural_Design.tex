@@ -89,38 +89,40 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
 \label{sec:low_level_view}
 \noindent The figure above represents the complete low-level architecture of the BBP system. It details the internal sub-components within the \texttt{Mobile App} and the \texttt{BBP backend server} and illustrates their core responsibilities and collaborations.
 
-\subsection*{Mobile App (Client) Component Descriptions}
+\subsection{Mobile App Components}
+
 \begin{itemize}
-    \item \textbf{UI layer:} This is the central hub for all user interaction within the \texttt{Mobile App}. It receives user input and orchestrates the other client-side components by sending commands through various interfaces, such as the \texttt{recording interface} (to the \texttt{recording service}) and the \texttt{Navigation interface} (to the \texttt{navigation manager}). It also receives data to display, consuming the \texttt{HUD interface} from the \texttt{recording service} for live stats and the \texttt{connection interface} from the \texttt{Network layer}.
-    
-    \item \textbf{sensor manager:} This component's function is to abstract the complex hardware of the \texttt{Device sensor} (GPS, gyroscope, accelerometer). It consumes the raw data from the \texttt{Device sensor interface} and provides a clean, processed data stream to the \texttt{recording service} via the \texttt{Sensor interface}.
-    
-    \item \textbf{recording service:} This is the core component for all trip recording (UC7). It runs as a background service, activated by the \texttt{UI layer} via the \texttt{recording interface}. It consumes the data stream from the \texttt{sensor manager} to build the trip track and detect obstacles. It provides the \texttt{HUD interface} back to the \texttt{UI layer} with real-time statistics (R22) and sends the final trip data to both the \texttt{Network layer} and \texttt{Local storage} via the \texttt{Saving interface}.
-    
-    \item \textbf{navigation manager:} This component handles the external navigation functionality (UC6). It is triggered by the \texttt{UI layer} (via the \texttt{Navigation interface}) and communicates with the \texttt{Network layer} (via the \texttt{connection interface}) to get route information, before finally launching the external app through the \texttt{Navigation service} interface.
-    
-    \item \textbf{Network layer:} This component is responsible for all communication with the \texttt{BBP backend server}. It consumes the \texttt{BBP API} (provided by the \texttt{Controller layer}) using the HTTPS/REST protocol. It also fetches data to be sent by consuming the \texttt{Saving interface} from both the \texttt{recording service} and \texttt{Local storage} (to sync cached data).
-    
-    \item \textbf{Local storage:} This component handles on-device persistence (e.g., SQLite for caching trips, SharedPreferences for auth tokens). It consumes the \texttt{Saving interface} from the \texttt{recording service} to save trip data locally. It provides data back to the \texttt{Network layer} (for synchronization) and the \texttt{UI layer} (for retrieving tokens/settings).
+    \item \textbf{UI layer}: This component serves as the primary interface for user interaction. It is responsible for rendering the application's visual elements, managing the navigational flow between different screens, and capturing user inputs. It orchestrates the presentation of real-time data, such as maps and recording statistics, ensuring a responsive user experience.
+
+    \item \textbf{sensor manager}: This component acts as a hardware abstraction layer. Its primary function is to interface directly with the device's physical sensors (GPS, accelerometer, and gyroscope). It handles the acquisition of raw telemetry data and normalizes these signals for internal processing.
+
+    \item \textbf{recording service}: This component encapsulates the core business logic for the automatic path recording feature. Operating as a background process, it is responsible for tracking the user's movement, calculating real-time session statistics (e.g., speed, distance, duration), and analyzing sensor data to detect significant physical events, such as potholes.
+
+    \item \textbf{navigation manager}: This component is responsible for facilitating the navigation experience. It manages the logic required to initiate turn-by-turn directions, handling the preparation of route geometry and the invocation of external navigation capabilities provided by the operating system.
+
+    \item \textbf{Network layer}: This component manages all remote data transmission. It is responsible for serializing domain objects into JSON format, constructing HTTP requests, and handling network responses. It ensures that all communication with the remote server adheres to the defined API protocols.
+
+    \item \textbf{Local storage}: This component provides a persistence mechanism within the mobile device. It is tasked with securely storing sensitive session information, such as authentication tokens, and caching temporary data—including draft paths and recording sessions—to ensure data integrity and availability during offline scenarios.
 \end{itemize}
 
-\subsection*{BBP backend server Component Descriptions}
+\subsection{BBP Backend Server Components}
+
 \begin{itemize}
-    \item \textbf{Controller layer:} This component is the single entry point (Facade) for the entire backend. It provides the \texttt{BBP API} that the \texttt{Network layer} consumes. Its primary job is to parse incoming JSON requests and route them to the correct internal service, either to the \texttt{authentication interface} (for public routes like login) or to the \texttt{Security interface} (for all protected routes).
-    
-    \item \textbf{Security module:} This component acts as the central authorization gate (middleware) for the system. It consumes requests from the \texttt{Controller layer} via the \texttt{Security interface}. It validates the user's JWT token by communicating with the \texttt{Auth service}. If the request is valid, it forwards the request to the appropriate service through the \texttt{Path interface}, \texttt{Trip interface}, or \texttt{Profile interface}.
-    
-    \item \textbf{Auth service:} This component handles all business logic related to user identity (UC1, UC2). It provides the \texttt{authentication interface}, which is used by the \texttt{Controller layer} (for login/register) and the \texttt{Security module} (for token validation). It communicates with the \texttt{Model} component (via the \texttt{Model interface}) to create or retrieve user data from the \texttt{BBP Database}.
-    
-    \item \textbf{Profile manager:} This component manages user-specific data that is not related to authentication (e.g., name, email, user settings). It receives authorized requests from the \texttt{Security module} via the \texttt{Profile interface} and communicates with the \texttt{Model} component to read or update user profile information.
-    
-    \item \textbf{Path service:} This component handles all business logic related to \texttt{Paths} (UC4, UC5). It receives authorized requests from the \texttt{Security module} via the \texttt{Path interface}. It communicates with the \texttt{Model} to perform complex geospatial searches (R9) and retrieves data from the \texttt{Weather API client} (via the \texttt{Weather interface}) to get real-time *forecasts* for a selected path (R14).
-    
-    \item \textbf{Trip service:} This component handles all business logic for individual \texttt{Trips} (UC9, UC13). It receives authorized requests from the \texttt{Security module} via the \texttt{Trip interface}. It communicates with the \texttt{Model} to save new trips or retrieve a user's trip history. It also communicates with the \texttt{Weather API client} (via the \texttt{Weather interface}) to fetch a *historical snapshot* of the weather when a trip is saved (R32).
-    
-    \item \textbf{Model:} This component is the Data Access Layer (DAL) for the entire application, implementing the Repository Pattern. It provides the central \texttt{Model interface} that is consumed by all services (\texttt{Auth}, \texttt{Profile}, \texttt{Path}, \texttt{Trip}). It is the only component that communicates with the \texttt{BBP Database}, translating internal data requests into \texttt{SQL/ORM} commands via the \texttt{DBMS API}.
-    
-    \item \textbf{Weather API client:} This is a wrapper component whose sole function is to manage communication with the \texttt{External weather service}. It provides the \texttt{Weather interface} (consumed by both \texttt{Path service} and \texttt{Trip service}) and translates those calls into external HTTPS/REST requests, consuming the \texttt{Weather API}.
+    \item \textbf{Controller layer}: This component serves as the entry point for the backend system. It is responsible for exposing the RESTful API endpoints, receiving incoming HTTP requests, and performing initial validation of the input data before delegating the processing to the appropriate internal logic.
+
+    \item \textbf{Security module}: This component acts as an interception filter for protecting the system's resources. Its primary function is to enforce authorization policies by verifying the validity of session tokens and ensuring that only authenticated requests are permitted to access protected business logic.
+
+    \item \textbf{Auth service}: This component encapsulates the logic regarding user identity management. It handles the critical processes of registering new accounts, verifying user credentials during login attempts, and generating secure session tokens for authenticated users.
+
+    \item \textbf{Profile manager}: This component is dedicated to the administration of user-specific data. It handles operations related to the retrieval and modification of personal profile information, ensuring that user preferences and account details are accurately maintained.
+
+    \item \textbf{Path service}: This component contains the domain logic associated with cycling paths. It is responsible for executing search algorithms based on geospatial criteria, computing path scores based on community feedback, and processing detailed path information for display.
+
+    \item \textbf{Trip service}: This component manages the lifecycle of individual user trips. Its functions include the processing and persistence of recorded cycling sessions, the logical association of trips with specific paths, and the retrieval of a user's personal activity history.
+
+    \item \textbf{Model}: This component serves as the Data Access Layer (DAL), implementing the Repository pattern. It is responsible for abstracting the underlying database technology, translating high-level domain operations into specific queries to persist, update, and retrieve relational and geospatial data.
+
+    \item \textbf{Weather API client}: This component acts as a gateway to external meteorological services. It is responsible for formulating requests to third-party APIs to retrieve current weather conditions or forecasts and for parsing the external response data into a format usable by the internal system.
 \end{itemize}
 
 
