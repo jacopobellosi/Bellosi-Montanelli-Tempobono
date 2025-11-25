@@ -139,10 +139,9 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
     \end{center}
 \end{figure}
 
-The \texttt{Path service} component is the centralized unit responsible for all operations concerning cycling paths. It operates as a facade that exposes a unified \texttt{Path interface} to the external \texttt{Security module}, internally delegating specific responsibilities to a set of specialized sub-components. The internal architecture ensures a clear separation of concerns for path creation, retrieval, and modification.
-
+The \texttt{Path service} component is the centralized unit responsible for all operations concerning cycling paths. It functions as a facade that presents a unified \texttt{Path interface} to the external \texttt{Security module}, while internally delegating distinct tasks to a collection of dedicated sub-components. This internal design guarantees a well-defined separation of responsibilities for path creation, lookup, and modification.
 \begin{itemize}
-    \item \textbf{Path adding}: This sub-component manages the persistence of new path entities. It is invoked when a user finalizes a path creation process (e.g., during a manual save operation). Its primary function is to validate the geometric and metadata integrity of the new path and coordinate its storage by communicating with the \texttt{Model} via the \texttt{Model interface}.
+    \item \textbf{Path adding}: This sub-component manages the persistence of new path entities. It is invoked when a user finalises a path-creation process (e.g., during a manual save operation). Its primary function is to validate the geometric and metadata integrity of the new path and coordinate its storage by communicating with the \texttt{Model} via the \texttt{Model interface}.
 
     \item \textbf{Path searcher}: This sub-component is responsible for the execution of search queries. It processes criteria provided by the user (such as origin and destination), interacts with the \texttt{Model} to perform geospatial queries, and retrieves the set of relevant path candidates.
 
@@ -168,13 +167,17 @@ The \texttt{Path service} component is the centralized unit responsible for all 
 \noindent This component is responsible for all business logic related to individual \texttt{Trips}, including their creation (UC9) and retrieval (UC13). It exposes a single facade port to the \texttt{Security module}, which internally routes requests to two specialized interfaces: \texttt{Trip adding interface} and \texttt{Trip search interface}.
 
 \begin{itemize}
-    \item \textbf{trip adding:} This module handles the complex orchestration of saving a new \texttt{Trip} (UC9). It \textit{provide} the \texttt{Trip adding interface} to receive the trip data. To execute the save operation, it \textit{consumes} (requires) two critical interfaces:
-    \begin{itemize}
-        \item The \texttt{Weather interface} (from the \texttt{Weather API client}) to fetch the snapshot of the weather conditions for the trip (R32).
-        \item The \texttt{Model interface} (from the \texttt{Model}) to atomically save the new \texttt{Trip}, its associated \texttt{Path}, and any confirmed \texttt{Reports} to the database (R33).
-    \end{itemize}
-    
-    \item \textbf{trip searcher:} This module handles the retrieval of a user's personal trip history (UC13). It \textit{provides} the \texttt{Trip search interface}. It executes a simple read operation by \textit{consuming} (requiring) the \texttt{Model interface} to fetch the list of \texttt{Trips} associated with the user's ID.
+    \item \textbf{path adding}: This component is responsible for the persistence of new path entities into the system. It handles the validation of geometric data and metadata provided by the user (such as during manual path creation) and coordinates the transactional storage of this information within the database.
+
+    \item \textbf{Path searcher}: This component encapsulates the logic for path discovery. Its primary function is to process user-defined search criteria (e.g., origin and destination coordinates) and execute complex geospatial queries to identify relevant routes. It also coordinates with the aggregation logic to ensure that the returned search results reflect the current computed status of each path.
+
+    \item \textbf{Detailed path view}: This component acts as a data aggregator for the presentation layer. Its function is to compile a comprehensive snapshot of a specific path by synthesizing heterogeneous data sources: it retrieves static geometric data, requests the computation of the dynamic path status, and fetches real-time meteorological forecasts to provide the user with a complete contextual overview.
+
+    \item \textbf{Path merger}: This component serves as a stateless calculation engine implementing the system's consensus algorithms. It is responsible for processing the history of user-submitted reports to derive a definitive "Path Status" (e.g., "Optimal", "Requires Maintenance"). It applies specific business rules regarding data freshness and majority voting to filter noise and determine the current condition of a route without modifying the persistent state directly.
+
+    \item \textbf{Add status to path}: This component manages the submission of general condition ratings. It is responsible for processing user feedback regarding the overall quality of a path, ensuring that these subjective assessments are correctly structured and persisted as \texttt{Status\_reports} for future aggregation.
+
+    \item \textbf{Add obstacle to path}: This component handles the reporting of specific physical hazards. It is tasked with processing geospatial submissions regarding obstacles (e.g., potholes, roadworks), validating the input location, and persisting these critical safety warnings as \texttt{Obstacle\_reports}.
 \end{itemize}
 
 \subsubsection{CMP: Auth service}
@@ -186,23 +189,15 @@ The \texttt{Path service} component is the centralized unit responsible for all 
         \label{fig:Auth service}%
     \end{center}
 \end{figure}
-\noindent This component manages all business logic for user identity (UC1, UC2). It serves a dual role: it provides public-facing services for registration and login (triggered by the \texttt{Controller layer}), and it also provides a private, internal service for token validation (consumed by the \texttt{Security module}).
+
+The \texttt{Auth service} component constitutes the authoritative domain boundary for identity and access management within the system. It acts as a comprehensive security provider, encapsulating the logic required to establish, verify, and maintain user identities throughout their lifecycle, ensuring that all access to the system is strictly authenticated.
 
 \begin{itemize}
-    \item \textbf{user service:} This is the central orchestrator for all authentication logic, directly containing the business rules for registration and login. It \textit{consumes} (requires) the \texttt{authentication interface} provided by the external \texttt{Controller layer}. To execute its tasks, it \textit{consumes} (requires) three distinct interfaces:
-    \begin{itemize}
-        \item The \texttt{Hashing interface} (provided by \texttt{Hash password}).
-        \item The \texttt{token creation interface} (provided by \texttt{token manager}).
-        \item The \texttt{Model interface} (provided by the external \texttt{Model}).
-    \end{itemize}
-    
-    \item \textbf{Hash password:} A specialized utility module that \textit{provides} the \texttt{Hashing interface}. Its sole function is to securely hash new passwords to verify existing hashes during login or to compare during registration, consumed by the \texttt{user service}.
-    
-    \item \textbf{token manager:} This module is responsible for all \textbf{JWT} (JSON Web Token) operations. It \textit{provides} two distinct interfaces:
-    \begin{itemize}
-        \item The \texttt{token creation interface}, which is consumed by the \texttt{user service} to generate a new session token upon successful login.
-        \item The \texttt{validation interface}, which is consumed by the external \texttt{Security module} to validate tokens for all protected API requests.
-    \end{itemize}
+    \item \textbf{User service}: This sub-component serves as the central orchestrator for authentication workflows. It implements the core business rules for user onboarding and session initiation. Its responsibilities include validating registration data, enforcing uniqueness constraints for new accounts, and verifying credentials during login attempts. It coordinates the cryptographic processing of sensitive data and the issuance of session tokens, acting as the logical bridge between the transient authentication request and the persistent user identity.
+
+    \item \textbf{Hash password}: This sub-component is a specialized cryptographic utility dedicated to data integrity and confidentiality. Its sole function is to apply strong, one-way hashing algorithms (typically salted) to user passwords. It ensures that credentials are never stored or processed in plain text, providing the verification mechanism (comparing a candidate password against a stored hash) required during the login process without exposing the underlying secrets.
+
+    \item \textbf{Token manager}: This sub-component manages the lifecycle of security tokens (JSON Web Tokens). It is responsible for two critical security operations: the generation of cryptographically signed tokens upon successful authentication, embedding user claims and expiration policies; and the validation of incoming tokens for protected resources, verifying their signature and validity period to enforce stateless session management.
 \end{itemize}
 
 \subsubsection{CMP: Recording service}
@@ -218,16 +213,17 @@ The \texttt{Path service} component is the centralized unit responsible for all 
 \subsubsection{CMP: Recording service}
 \label{sec:cmp_recording_service}
 
-\noindent This component package contains the core client-side logic for the trip recording functionality (UC7). It is designed as a background service orchestrated by an internal \texttt{Recording state manager} that commands several specialized sub-modules. It receives commands from the \texttt{UI layer} and raw data from the \texttt{sensor manager}.
+
+The \texttt{Recording service} component constitutes the core engine for real-time activity tracking on the client side. Designed as a background service to ensure continuity even when the application is minimized, it acts as a centralized controller that manages the acquisition, processing, and temporary persistence of telemetry data from the device's hardware.
 
 \begin{itemize}
-    \item \textbf{Recording state manager:} This is the central "brain" or orchestrator of the service. It \textit{consumes} (requires) the \texttt{Recording interface} from the \texttt{UI layer} (to receive start/stop commands) and the \texttt{Sensor interface} from the \texttt{sensor manager} (to receive the raw hardware data stream). It, in turn, \textit{provides} (controls) command interfaces to its "worker" modules: the \texttt{GPS point interface} (for the \texttt{GPS tracker}) and the \texttt{Processing sensor interface} (for the \texttt{Sensor processor}).
-    
-    \item \textbf{GPS tracker:} This module's sole responsibility is to manage the GPS data stream. It \textit{consumes} (requires) the \texttt{GPS point interface} from the \texttt{Recording state manager}. It \textit{provides} a data interface (the stream of \texttt{GPS\_points}) that is consumed by the \texttt{Stats tracker} for calculations.
-    
-    \item \textbf{Sensor processor:} This module is responsible for analyzing the high-frequency motion sensor data (R24) to detect potential obstacles. It \textit{consumes} (requires) the \texttt{Processing sensor interface} from the \texttt{Recording state manager}. When a significant event (e.g., a pothole) is detected, it \textit{consumes} (requires) the \texttt{Saving interface} from the \texttt{Local storage} component to persist this \texttt{sensor\_event} locally.
-    
-    \item \textbf{Stats tracker:} This module is responsible for calculating real-time statistics (R22) for the user. It \textit{consumes} (requires) the data interface provided by the \texttt{GPS tracker} to calculate distance and speed. It \textit{provides} the \texttt{HUD interface}, which is consumed by the external \texttt{UI layer} to display live statistics to the user.
+    \item \textbf{Recording state manager}: This sub-component acts as the central orchestrator of the recording session. It manages the lifecycle of the activity (Start, Stop) based on commands received from the \texttt{UI layer}. Its primary responsibility is to synchronize the activation and deactivation of the data collection modules (\texttt{GPS tracker} and \texttt{Sensor processor}) and to manage the data flow from the \texttt{sensor manager}.
+
+    \item \textbf{GPS tracker}: This sub-component is specialized in handling geospatial data. It consumes the stream of raw coordinates provided by the hardware, filters noise, and constructs the ordered sequence of \texttt{GPS\_points} that represents the Trip's geometry. It also feeds clean position data to the \texttt{Stats tracker}.
+
+    \item \textbf{Stats tracker}: This sub-component is responsible for the real-time calculation of session metrics. By processing the distance and time deltas from the GPS stream, it computes the user's current speed, average speed, total distance, and elapsed time, providing the \texttt{UI layer} with a continuous stream of updates for the Heads-Up Display (HUD).
+
+    \item \textbf{Sensor processor}: This sub-component implements the logic for automatic obstacle detection (R24). It continuously analyzes the high-frequency data stream from the accelerometer and gyroscope. By applying a threshold-based algorithm, it identifies significant shock events (potential potholes) and creates \texttt{sensor\_event} objects, which are immediately persisted to \texttt{Local storage} for later review.
 \end{itemize}
 
 
