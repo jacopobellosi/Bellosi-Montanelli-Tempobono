@@ -139,25 +139,20 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
     \end{center}
 \end{figure}
 
-\noindent This component manages all business logic related to \texttt{Paths}, including their manual creation (UC11), searching (UC4), and detailed viewing (UC5). It implements a full "On-Read" aggregation strategy. It exposes a single \texttt{Path interface} port to the \texttt{Security module}, which internally routes requests to three specialized interfaces.
+The \texttt{Path service} component is the centralized unit responsible for all operations concerning cycling paths. It operates as a facade that exposes a unified \texttt{Path interface} to the external \texttt{Security module}, internally delegating specific responsibilities to a set of specialized sub-components. The internal architecture ensures a clear separation of concerns for path creation, retrieval, and modification.
 
 \begin{itemize}
-    \item \textbf{path adding:} This module handles the logic for manually creating a new \texttt{Path}. It is activated by the \texttt{Path adding interface} and its sole responsibility is to communicate with the \texttt{Model} component (via the \texttt{Model interface}) to persist the new \texttt{Path} entity in the database.
-    
-    \item \textbf{Path searcher:} This module handles the primary search functionality (UC4). It is activated by the \texttt{Search path interface}. It implements the "On-Read" (lazy) aggregation logic by communicating with two components:
-    \begin{itemize}
-        \item The \texttt{Model} (via the \texttt{Model interface}): to retrieve the \texttt{Paths} themselves, all associated public \texttt{Trips} (for live statistics calculation), and all \texttt{Reports}.
-        \item The \texttt{Path merger} (via the \texttt{Path merger interface}): to calculate the "fresh" status (R9) from the retrieved reports.
-    \end{itemize}
-    
-    \item \textbf{Detailed path view:} This module handles the logic for fetching a single, detailed \texttt{Path} (UC5). It is activated by the \texttt{Detailed path interface}. This is the most complex read operation, as it communicates with three components to build the final view:
-    \begin{itemize}
-        \item The \texttt{Model} (via the \texttt{Model interface}): for all core path, trip, and report data.
-        \item The \texttt{Path merger} (via the \texttt{Path merger interface}): for the "fresh" status.
-        \item The \texttt{Weather API client} (via the \texttt{Weather interface}): to fetch the current weather *forecast* for the path's location (R14).
-    \end{itemize}
-    
-    \item \textbf{Path merger:} This is an internal "worker" module that implements the \textit{On-Read} logic for calculating the path status (R9). It \textit{provides} the \texttt{Path merger interface} (consumed by \texttt{Path searcher} and \texttt{Detailed path view}). To perform its calculation, it communicates with the \texttt{Model} component (via the \texttt{Model interface}) to retrieve the necessary \texttt{Status\_reports}.
+    \item \textbf{Path adding}: This sub-component manages the persistence of new path entities. It is invoked when a user finalizes a path creation process (e.g., during a manual save operation). Its primary function is to validate the geometric and metadata integrity of the new path and coordinate its storage by communicating with the \texttt{Model} via the \texttt{Model interface}.
+
+    \item \textbf{Path searcher}: This sub-component is responsible for the execution of search queries. It processes criteria provided by the user (such as origin and destination), interacts with the \texttt{Model} to perform geospatial queries, and retrieves the set of relevant path candidates.
+
+    \item \textbf{Detailed path view}: This sub-component handles the retrieval and aggregation of comprehensive information for a specific path. It orchestrates data collection from multiple sources: it fetches static path data from the \texttt{Model}, requests current status calculations from the \texttt{Path merger}, and retrieves real-time weather forecasts by invoking the external \texttt{Weather API client}.
+
+    \item \textbf{Path merger}: This sub-component serves as a stateless calculation engine. Its function is to compute the dynamic status of a path (e.g., "Optimal" vs "Requires Maintenance") by aggregating historical user reports. It applies specific business rules, such as freshness and majority voting, to derive a definitive status without directly persisting data.
+
+    \item \textbf{Add status to path}: This sub-component manages the submission of general condition reports. When a user provides feedback on a path's status, this module processes the input and delegates the persistence of the new status report to the \texttt{Model}.
+
+    \item \textbf{Add obstacle to path}: This sub-component handles the reporting of specific hazards. It processes user submissions regarding obstacles (e.g., type and location) and ensures these critical safety updates are recorded in the system via the \texttt{Model}.
 \end{itemize}
 
 \subsubsection{CMP: Trip service}
