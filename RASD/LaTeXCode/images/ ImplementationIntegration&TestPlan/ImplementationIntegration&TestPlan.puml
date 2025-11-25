@@ -1,0 +1,81 @@
+@startuml
+' === Global Style ===
+skinparam rectangle {
+    RoundCorner 0
+    BorderColor Black
+    FontColor Black
+    FontSize 13
+    Shadowing false
+    Padding 10
+}
+skinparam arrow {
+    Color Black
+    Thickness 1.5
+}
+top to bottom direction
+
+' === Colors matching logical layers ===
+skinparam rectangle<<Auth>> {
+    BackgroundColor #F4CCCC
+}
+skinparam rectangle<<Backend>> {
+    BackgroundColor #CFE2F3
+}
+skinparam rectangle<<Mobile>> {
+    BackgroundColor #D9EAD3
+}
+skinparam rectangle<<Integration>> {
+    BackgroundColor #D9D2E9
+}
+skinparam rectangle<<Test>> {
+    BackgroundColor #FFF2CC
+}
+skinparam rectangle<<Deploy>> {
+    BackgroundColor White
+}
+
+' === Nodes Definition ===
+
+' 1. Foundation
+rectangle "Auth Service & User DBMS\n(I + T)" as Step1 <<Auth>>
+
+' 2. Parallel Development Streams
+rectangle "Path Service & Geospatial DB\n(I + T)" as Step2 <<Backend>>
+rectangle "Mobile Sensor & Recording Service\n(I + T)" as Step3 <<Mobile>>
+
+' 3. Trip Integration (Backend Logic)
+rectangle "Trip Service & Weather Client\n(I + T)" as Step4 <<Backend>>
+
+' 4. System Integration (Mobile + Backend)
+rectangle "Client-Server Integration\n(Network Layer & Controller)\n(I + T)" as Step5 <<Integration>>
+
+' 5. Advanced Features
+rectangle "Navigation Manager & Scoring\n(I + T)" as Step6 <<Integration>>
+
+' 6. Testing & Deployment
+rectangle "Closed Alpha Testing" as Alpha <<Test>>
+rectangle "Open Beta Testing" as Beta <<Test>>
+rectangle "Deployment" as Deploy <<Deploy>>
+
+' === Relationships ===
+
+' Foundation leads to parallel streams
+Step1 -down-> Step2
+Step1 -down-> Step3
+
+' Backend stream continues
+Step2 -down-> Step4
+
+' Mobile and Backend streams MERGE at the Integration Step
+Step4 -down-> Step5
+Step3 -down-> Step5
+
+' Advanced features built on top of integration
+Step5 -down-> Step6
+
+' Final Phases
+Step6 -down-> Alpha
+Alpha -down-> Beta
+Beta -down-> Deploy
+
+@enduml
