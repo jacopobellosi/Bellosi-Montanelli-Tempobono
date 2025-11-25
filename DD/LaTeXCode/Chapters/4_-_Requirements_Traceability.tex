@@ -1,0 +1,123 @@
+\section{Requirements Traceability}
+
+This section provides a bidirectional trace between the requirements defined in the RASD and the architectural components defined in the DD.
+
+\subsection{Requirement to Component Mapping}
+The following table details which specific component is responsible for satisfying each functional requirement.
+
+\begin{longtable}{|p{0.08\linewidth}|p{0.62\linewidth}|p{0.22\linewidth}|}
+    \hline
+    \textbf{ID} & \textbf{Requirement Description (Summary)} & \textbf{Component} \\
+    \hline
+    \endhead
+
+    R1 & Allow Users to sign up & Auth Service \\
+    \hline
+    R2 & Verify username/email uniqueness & Auth Service \\
+    \hline
+    R3 & Allow RCY login & Auth Service \\
+    \hline
+    R4 & Provide login feedback & Auth Service \\
+    \hline
+    R5 & View personal page & Profile Manager \\
+    \hline
+    R6 & Allow logout & Auth Service \\
+    \hline
+    R7 & Search for public bike paths & Path Service \\
+    \hline
+    R8 & Retrieve reports for searched paths & Path Service \\
+    \hline
+    R9 & Calculate merged status & Path Service \\
+    \hline
+    R10 & Calculate path score & Path Service \\
+    \hline
+    R11 & Display ordered search results & Path Service \\
+    \hline
+    R12 & Select path to view details & Path Service \\
+    \hline
+    R13 & Display path details (geometry, status, etc.) & Path Service \\
+    \hline
+    R14 & Retrieve and display weather forecast & Path Service \\
+    \hline
+    R15 & Initiate navigation mode & Navigation Manager \\
+    \hline
+    R16 & Show trip summary after navigation & Navigation Manager \\
+    \hline
+    R17 & Offer registration to anonymous user after nav & Navigation Manager \\
+    \hline
+    R18 & Discard session if registration refused & Navigation Manager \\
+    \hline
+    R19 & Save navigated session as Trip if registered & Trip Service \\
+    \hline
+    R20 & Start automatic recording session & Recording Service \\
+    \hline
+    R21 & Record GPS coordinates sequence & Recording Service \\
+    \hline
+    R22 & Display real-time statistics & Recording Service \\
+    \hline
+    R23 & Monitor accelerometer and gyroscope & Recording Service \\
+    \hline
+    R24 & Log sensor\_event on threshold exceed & Sensor Processor \\
+    \hline
+    R25 & Store/Enforce Path Visibility (Public/Private) & Path Service \\
+    \hline
+    R26 & Store/Enforce Trip Visibility (Stats Aggregation) & Trip Service \\
+    \hline
+    R27 & Stop automatic trip recording & Recording Service \\
+    \hline
+    R28 & Present sensor\_events for review & Sensor Processor \\
+    \hline
+    R29 & Confirm or ignore sensor\_events & Sensor Processor \\
+    \hline
+    R30 & Create Obstacle\_report for confirmed events & Sensor Processor \\
+    \hline
+    R31 & Calculate final stats using Elapsed Time & Recording Service \\
+    \hline
+    R32 & Retrieve/Associate weather with trip & Trip Service \\
+    \hline
+    R33 & Save completed Trip to archive & Trip Service \\
+    \hline
+    R34 & View list of saved trips & Trip Service \\
+    \hline
+    R35 & View details of a saved trip & Trip Service \\
+    \hline
+    R36 & Manually create path geometry & Path Service \\
+    \hline
+    R37 & Submit Status\_report & Path Service \\
+    \hline
+    R38 & Submit Obstacle\_report & Path Service \\
+    \hline
+    R39 & Specify visibility options (UI) & UI Layer \\
+    \hline
+    R40 & Display feedback messages & UI Layer \\
+    \hline
+\end{longtable}
+
+\newpage
+
+\subsection{Component Coverage Matrix}
+The following matrix summarizes the requirements covered by each architectural component, ensuring that all system modules have a defined purpose rooted in the requirements.
+
+\begin{longtable}{|p{0.35\linewidth}|p{0.60\linewidth}|}
+    \hline
+    \textbf{Architectural Component} & \textbf{Satisfied Requirements} \\
+    \hline
+    \endhead
+
+    \textbf{Auth Service} & R1, R2, R3, R4, R6 \\
+    \hline
+    \textbf{Profile Manager} & R5 \\
+    \hline
+    \textbf{Path Service} & R7, R8, R9, R10, R11, R12, R13, R14, R25, R36, R37, R38 \\
+    \hline
+    \textbf{Trip Service} & R19, R26, R32, R33, R34, R35 \\
+    \hline
+    \textbf{Recording Service} & R20, R21, R22, R23, R27, R31 \\
+    \hline
+    \textbf{Sensor Processor} & R24, R28, R29, R30 \\
+    \hline
+    \textbf{Navigation Manager} & R15, R16, R17, R18 \\
+    \hline
+    \textbf{UI Layer (Mobile)} & R39, R40 \\
+    \hline
+\end{longtable}
