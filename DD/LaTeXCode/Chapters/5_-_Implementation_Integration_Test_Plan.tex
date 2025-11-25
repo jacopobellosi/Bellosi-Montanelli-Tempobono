@@ -1,8 +1,20 @@
 \section{Implementation, Integration and Test Plan}
 
-Adhering to the \textbf{Client-Server} and \textbf{Microservices-oriented} architecture defined in Section 2, the implementation phase is structured into sequential \textbf{Development Steps (Dev-Steps)}. Each step focuses on specific architectural components and includes an \textbf{Implementation (I)} phase followed immediately by a \textbf{Testing (T)} phase.
+Having selected a Client-Server architecture with a Microservices-oriented backend, the most suited solution for the Implementation, Integration and Testing phase requires, at first, the splitting of the development team in specialized sub-teams (Backend and Mobile). Each one will focus on different aspects of the system while keeping a strong communication with the other teams to assure a coherent final artifact. Each team will host the necessary expertise (e.g., Database, API, iOS/Android) in order to avoid task dispersion.
 
-The development strategy adopts a \textbf{Bottom-Up approach} for the Backend (Data Layer $\rightarrow$ Logic $\rightarrow$ API) and a \textbf{Component-Based approach} for the Mobile Client, merging at \textbf{Dev-Step 5}.
+The general development guidelines are now presented through a simple graph (Figure \ref{fig:implementation_plan}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{DD/LaTeXCode/images/ImplementationIntegrationTestPlan/ImplementationIntegrationTestPlan.png}
+    \caption{Implementation, Integration and Test Plan}
+    \label{fig:implementation_plan}
+\end{figure}
+
+While it is true that some development steps must wait for dependencies (as shown in the graph), each sub-team must keep itself updated with any progress occurring throughout the entire process, from the start up until the final deployment. This is made possible through the arrangement of periodical meetings and by documenting the whole process through clean and secure means.
+For the same purposes, after the completion of a development step, the team which took care of the process will continue handling all the modifications that could possibly arise during the following development stages.
+
+The development strategy adopts a \textbf{Bottom-Up approach} for the Backend (Data Layer $\rightarrow$ Logic $\rightarrow$ API) and a \textbf{Component-Based approach} for the Mobile Client, merging at \textbf{Dev-Step 5}. The process is structured into sequential \textbf{Development Steps (Dev-Steps)}, where each step focuses on specific architectural components and includes an \textbf{Implementation (I)} phase followed immediately by a \textbf{Testing (T)} phase.
 
 \subsection{Dev-Step 1: Core Infrastructure (Auth \& Data)}
 \textbf{Components:} \texttt{User DBMS}, \texttt{Auth Service}, \texttt{Profile Manager}, \texttt{Local Storage}.
@@ -46,7 +58,7 @@ This step prepares the backend to receive complex trip data.
 This is the critical milestone where Mobile (Step 3) and Backend (Steps 2 \& 4) are connected.
 \begin{itemize}
     \item \textbf{I:} Implementation of the \texttt{Controller Layer} transaction scripts to atomically save data. Connection of the Mobile \texttt{Network Layer} to the Backend REST API.
-    \item \textbf{T:} \textbf{System Testing:} End-to-end verification of the "Record $\rightarrow$ Save" flow (UC9). Verification of data consistency between the Mobile local cache and the Server DB.
+    \item \textbf{T:} \textbf{System Testing:} End-to-end verification of the "Record $\rightarrow$ Save" flow (UC9). Verification of data consistency between the Mobile local cache and the Server database.
 \end{itemize}
 
 \subsection{Dev-Step 6: Advanced Features}
@@ -60,7 +72,7 @@ With the core system stable, advanced features are layered on top.
 
 \subsection{Dev-Step 7: Release}
 \begin{itemize}
-    \item \textbf{Closed Alpha:} Distributed to the dev team to identify blocking bugs.
+    \item \textbf{Closed Alpha:} Distributed to the development team to identify blocking bugs.
     \item \textbf{Open Beta:} Released to a limited user base to stress-test the \texttt{BBP Database} under concurrent load (PR-7).
     \item \textbf{Deployment:} Final containerization (Docker) and deployment to the production environment.
 \end{itemize}
