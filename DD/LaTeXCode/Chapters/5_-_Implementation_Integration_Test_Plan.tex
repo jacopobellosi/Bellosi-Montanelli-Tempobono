@@ -2,7 +2,7 @@
 
 The implementation of the Best Bike Paths system follows a **Bottom-Up** integration strategy for the Backend, ensuring data integrity before business logic is applied, and a **Component-Based** strategy for the Mobile Client to handle hardware dependencies parallel to backend development.
 
-The process is structured into \textbf{5 Development Steps (Dev-Steps)}, each concluding with a specific Integration Test.
+The process is structured into \textbf{6 Development Steps (Dev-Steps)}, each concluding with a specific Integration Test.
 
 \subsection{Dev-Step 1: Data Layer \& Authentication Core}
 \textbf{Goal:} Establish the persistence layer and user identity management, the foundation for all other data associations.
@@ -10,14 +10,14 @@ The process is structured into \textbf{5 Development Steps (Dev-Steps)}, each co
 \begin{itemize}
     \item \textbf{Backend Implementation:}
     \begin{itemize}
-        \item Setup of \texttt{PostgreSQL} with \texttt{PostGIS} extension. Implementation of the \textbf{Model} component (Repository Pattern) to handle User and Path schemas.
-        \item Implementation of the \textbf{Auth Service} (User Service, Token Manager, Hash Password) to handle \texttt{registerUser} and \texttt{loginUser} logic.
-        \item Exposure of Authentication endpoints via the \textbf{Controller Layer}.
+        \item Setup of \texttt{PostgreSQL} with \texttt{PostGIS} extension.
+        \item Implementation of the \textbf{User Service} and \textbf{Profile Manager}.
+        \item Development of the \textbf{Hash Password} and \textbf{Token Manager} utilities to secure the \texttt{authentication interface}.
     \end{itemize}
     \item \textbf{Mobile Implementation:}
     \begin{itemize}
         \item Setup of the \textbf{Local Storage} (SQLite/SharedPreferences) for token persistence.
-        \item Implementation of the \textbf{Network Layer} skeleton.
+        \item Implementation of the \textbf{Network Layer} skeleton consuming the \texttt{BBP API}.
         \item Implementation of Login/Register screens in the \textbf{UI Layer}.
     \end{itemize}
     \item \textbf{Testing Strategy:}
@@ -33,13 +33,13 @@ The process is structured into \textbf{5 Development Steps (Dev-Steps)}, each co
 \begin{itemize}
     \item \textbf{Backend Implementation:}
     \begin{itemize}
-        \item Implementation of the \textbf{Path Service} (Path Adding, Path Searcher).
-        \item Implementation of \texttt{findPathsByLocation} geospatial queries in the \textbf{Model}.
+        \item Implementation of the \textbf{Path Adding} component to handle geometry persistence.
+        \item Implementation of the \textbf{Path Searcher} component to execute geospatial queries via the \texttt{Search path interface}.
     \end{itemize}
     \item \textbf{Mobile Implementation:}
     \begin{itemize}
         \item Implementation of the Map Visualization in the \textbf{UI Layer}.
-        \item Development of the "Create Path Manually" (UC11) flow, allowing users to draw geometries.
+        \item Development of the "Create Path Manually" flow, connecting the UI to the \textbf{Local Storage} for draft caching.
     \end{itemize}
     \item \textbf{Testing Strategy:}
     \begin{itemize}
@@ -54,8 +54,8 @@ The process is structured into \textbf{5 Development Steps (Dev-Steps)}, each co
     \item \textbf{Mobile Implementation:}
     \begin{itemize}
         \item Implementation of the \textbf{Sensor Manager} to abstract GPS and IMU hardware.
-        \item Implementation of the \textbf{Recording Service} (Recording State Manager, GPS Tracker, Stats Tracker).
-        \item Development of the \textbf{Sensor Processor} algorithm to detect potholes (threshold logic).
+        \item Implementation of the \textbf{Recording State Manager} to orchestrate the \textbf{GPS Tracker} and \textbf{Stats Tracker}.
+        \item Development of the \textbf{Sensor Processor} algorithm to detect potholes (threshold logic) and log events via the \texttt{Saving interface}.
     \end{itemize}
     \item \textbf{Testing Strategy:}
     \begin{itemize}
@@ -69,13 +69,13 @@ The process is structured into \textbf{5 Development Steps (Dev-Steps)}, each co
 \begin{itemize}
     \item \textbf{Backend Implementation:}
     \begin{itemize}
-        \item Implementation of the \textbf{Trip Service} (Trip Adding).
-        \item Implementation of the \textbf{Weather API Client} to fetch weather snapshots on save (R32).
+        \item Implementation of the \textbf{Trip Adding} and \textbf{Trip Searcher} components.
+        \item Integration of the \textbf{Weather API Client} to fetch snapshots via the \texttt{Weather interface}.
         \item Implementation of the Transaction Script in the \textbf{Controller} to atomically save Trips, Paths, and Reports.
     \end{itemize}
     \item \textbf{Mobile Implementation:}
     \begin{itemize}
-        \item Implementation of the "Save Trip" (UC9) workflow, including the \textbf{Review Detections} screen.
+        \item Implementation of the "Save Trip" workflow, utilizing the \textbf{UI Layer} to present the \textbf{Review Detections} screen.
         \item Connection of the \textbf{Recording Service} output to the \textbf{Network Layer}.
     \end{itemize}
     \item \textbf{Testing Strategy:}
@@ -90,15 +90,23 @@ The process is structured into \textbf{5 Development Steps (Dev-Steps)}, each co
 \begin{itemize}
     \item \textbf{Mobile Implementation:}
     \begin{itemize}
-        \item Implementation of the \textbf{Navigation Manager} to trigger external apps (UC6).
+        \item Implementation of the \textbf{Navigation Manager} to trigger external apps via OS Intents.
     \end{itemize}
     \item \textbf{Backend Implementation:}
     \begin{itemize}
-        \item Implementation of the \textbf{Path Merger} and \textbf{Scoring} logic (R9, R10).
-        \item Enabling the \texttt{Trip Service} to trigger path updates when a public trip is saved (R26).
+        \item Implementation of the \textbf{Path Merger} to calculate fresh status on read.
+        \item Implementation of the \textbf{Detailed Path View} aggregator.
+        \item Enabling the \textbf{Trip Adding} component to trigger path scoring updates when a public trip is saved.
     \end{itemize}
     \item \textbf{Testing Strategy:}
     \begin{itemize}
         \item \textit{Acceptance Testing:} Verify that saving a "Public" trip correctly alters the aggregate average speed and status of the associated Path in search results.
     \end{itemize}
+\end{itemize}
+
+\subsection{Dev-Step 6: Beta Testing \& Deployment}
+\begin{itemize}
+    \item \textbf{Closed Alpha:} Internal release to the development team to fix blocking bugs.
+    \item \textbf{Open Beta:} Release to a limited group of users to stress-test the \texttt{BBP Database} with real-world concurrent connections and verify GPS trace handling at scale.
+    \item \textbf{Final Deployment:} Deployment of the Backend Docker containers to the production environment behind the Load Balancer.
 \end{itemize}
