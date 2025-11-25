@@ -1,123 +1,167 @@
 \section{Requirements Traceability}
 
-This section provides a bidirectional trace between the requirements defined in the RASD and the architectural components defined in the DD.
+This section provides a comprehensive mapping between the functional requirements defined in the RASD and the specific sub-components described in the Low-Level Component View (Section 2.4) of the Design Document.
 
-\subsection{Requirement to Component Mapping}
-The following table details which specific component is responsible for satisfying each functional requirement.
+\subsection{Requirement Allocation}
+The following list details the specific responsibilities of each low-level sub-component regarding the system requirements.
 
-\begin{longtable}{|p{0.08\linewidth}|p{0.62\linewidth}|p{0.22\linewidth}|}
-    \hline
-    \textbf{ID} & \textbf{Requirement Description (Summary)} & \textbf{Component} \\
-    \hline
-    \endhead
+\begin{itemize}
+    \item \textbf{User Service} (Backend / Auth Service)
+    \begin{itemize}
+        \item \textbf{R1, R3, R6:} Handles the business logic for registration, login, and logout.
+    \end{itemize}
 
-    R1 & Allow Users to sign up & Auth Service \\
-    \hline
-    R2 & Verify username/email uniqueness & Auth Service \\
-    \hline
-    R3 & Allow RCY login & Auth Service \\
-    \hline
-    R4 & Provide login feedback & Auth Service \\
-    \hline
-    R5 & View personal page & Profile Manager \\
-    \hline
-    R6 & Allow logout & Auth Service \\
-    \hline
-    R7 & Search for public bike paths & Path Service \\
-    \hline
-    R8 & Retrieve reports for searched paths & Path Service \\
-    \hline
-    R9 & Calculate merged status & Path Service \\
-    \hline
-    R10 & Calculate path score & Path Service \\
-    \hline
-    R11 & Display ordered search results & Path Service \\
-    \hline
-    R12 & Select path to view details & Path Service \\
-    \hline
-    R13 & Display path details (geometry, status, etc.) & Path Service \\
-    \hline
-    R14 & Retrieve and display weather forecast & Path Service \\
-    \hline
-    R15 & Initiate navigation mode & Navigation Manager \\
-    \hline
-    R16 & Show trip summary after navigation & Navigation Manager \\
-    \hline
-    R17 & Offer registration to anonymous user after nav & Navigation Manager \\
-    \hline
-    R18 & Discard session if registration refused & Navigation Manager \\
-    \hline
-    R19 & Save navigated session as Trip if registered & Trip Service \\
-    \hline
-    R20 & Start automatic recording session & Recording Service \\
-    \hline
-    R21 & Record GPS coordinates sequence & Recording Service \\
-    \hline
-    R22 & Display real-time statistics & Recording Service \\
-    \hline
-    R23 & Monitor accelerometer and gyroscope & Recording Service \\
-    \hline
-    R24 & Log sensor\_event on threshold exceed & Sensor Processor \\
-    \hline
-    R25 & Store/Enforce Path Visibility (Public/Private) & Path Service \\
-    \hline
-    R26 & Store/Enforce Trip Visibility (Stats Aggregation) & Trip Service \\
-    \hline
-    R27 & Stop automatic trip recording & Recording Service \\
-    \hline
-    R28 & Present sensor\_events for review & Sensor Processor \\
-    \hline
-    R29 & Confirm or ignore sensor\_events & Sensor Processor \\
-    \hline
-    R30 & Create Obstacle\_report for confirmed events & Sensor Processor \\
-    \hline
-    R31 & Calculate final stats using Elapsed Time & Recording Service \\
-    \hline
-    R32 & Retrieve/Associate weather with trip & Trip Service \\
-    \hline
-    R33 & Save completed Trip to archive & Trip Service \\
-    \hline
-    R34 & View list of saved trips & Trip Service \\
-    \hline
-    R35 & View details of a saved trip & Trip Service \\
-    \hline
-    R36 & Manually create path geometry & Path Service \\
-    \hline
-    R37 & Submit Status\_report & Path Service \\
-    \hline
-    R38 & Submit Obstacle\_report & Path Service \\
-    \hline
-    R39 & Specify visibility options (UI) & UI Layer \\
-    \hline
-    R40 & Display feedback messages & UI Layer \\
-    \hline
-\end{longtable}
+    \item \textbf{Hash Password \& Token Manager} (Backend / Auth Service)
+    \begin{itemize}
+        \item \textbf{R2:} Ensures credential uniqueness and security validation.
+        \item \textbf{R4:} Provides the validation logic to trigger feedback on failed attempts.
+    \end{itemize}
+
+    \item \textbf{Profile Manager} (Backend)
+    \begin{itemize}
+        \item \textbf{R5:} Manages the retrieval and update of user personal information.
+    \end{itemize}
+
+    \item \textbf{Path Searcher} (Backend / Path Service)
+    \begin{itemize}
+        \item \textbf{R7, R25:} Handles geospatial searching while filtering by Path Visibility (R25).
+    \end{itemize}
+
+    \item \textbf{Path Merger} (Backend / Path Service)
+    \begin{itemize}
+        \item \textbf{R8, R9:} Retrieves raw reports and calculates the merged path status.
+        \item \textbf{R10:} Computes the path score based on conditions and metrics.
+    \end{itemize}
+
+    \item \textbf{Detailed Path View} (Backend / Path Service)
+    \begin{itemize}
+        \item \textbf{R11, R12, R13:} Aggregates geometry, status, and reports for list and detailed views.
+        \item \textbf{R14:} Fetches and attaches the weather forecast to the path view.
+    \end{itemize}
+
+    \item \textbf{Path Adding} (Backend / Path Service)
+    \begin{itemize}
+        \item \textbf{R36:} Handles the persistence of manually created path geometries.
+        \item \textbf{R25:} Enforces the initial visibility setting during creation.
+    \end{itemize}
+
+    \item \textbf{Add Status/Obstacle to Path} (Backend / Path Service)
+    \begin{itemize}
+        \item \textbf{R37, R38:} Handles the persistence of manual status and obstacle reports.
+    \end{itemize}
+
+    \item \textbf{Trip Adding} (Backend / Trip Service)
+    \begin{itemize}
+        \item \textbf{R19, R33:} Manages the atomic saving of trips (including those from new registrations).
+        \item \textbf{R26:} Enforces Trip Visibility logic during the save process.
+        \item \textbf{R32:} Fetches and associates the historical weather snapshot.
+    \end{itemize}
+
+    \item \textbf{Trip Searcher} (Backend / Trip Service)
+    \begin{itemize}
+        \item \textbf{R34, R35:} Handles the retrieval of the user's trip history and details.
+    \end{itemize}
+
+    \item \textbf{Recording State Manager} (Client / Recording Service)
+    \begin{itemize}
+        \item \textbf{R20, R27:} Orchestrates the start/stop lifecycle of the recording.
+    \end{itemize}
+
+    \item \textbf{GPS Tracker \& Stats Tracker} (Client / Recording Service)
+    \begin{itemize}
+        \item \textbf{R21:} Captures and processes the GPS coordinate sequence.
+        \item \textbf{R22, R31:} Calculates real-time and final statistics (using Elapsed Time).
+    \end{itemize}
+
+    \item \textbf{Sensor Processor} (Client / Recording Service)
+    \begin{itemize}
+        \item \textbf{R23, R24:} Monitors accelerometer/gyroscope data and logs events on threshold exceed.
+    \end{itemize}
+
+    \item \textbf{Local Storage \& UI Layer} (Client)
+    \begin{itemize}
+        \item \textbf{R28, R29:} Manages the local review queue and user confirmation logic.
+        \item \textbf{R30:} Persists confirmed events as valid reports.
+        \item \textbf{R39:} Provides the UI for visibility selection.
+        \item \textbf{R40:} Displays feedback messages.
+    \end{itemize}
+
+    \item \textbf{Navigation Manager} (Client)
+    \begin{itemize}
+        \item \textbf{R15:} Triggers the external navigation service.
+        \item \textbf{R16, R17, R18:} Manages the post-navigation summary and optional registration.
+    \end{itemize}
+\end{itemize}
 
 \newpage
 
-\subsection{Component Coverage Matrix}
-The following matrix summarizes the requirements covered by each architectural component, ensuring that all system modules have a defined purpose rooted in the requirements.
+\subsection{Traceability Matrix}
+The following matrix maps requirements to the specific low-level sub-components defined in Section 2.4.
+\\
+\textbf{Legend (Backend):}
+\begin{itemize}
+    \item \textbf{UserSvc:} User Service
+    \item \textbf{ProfMgr:} Profile Manager
+    \item \textbf{P-Search:} Path Searcher
+    \item \textbf{P-Merge:} Path Merger
+    \item \textbf{P-View:} Detailed Path View
+    \item \textbf{P-Add:} Path Adding
+    \item \textbf{T-Add:} Trip Adding
+    \item \textbf{T-Search:} Trip Searcher
+\end{itemize}
+\textbf{Legend (Client):}
+\begin{itemize}
+    \item \textbf{RecMgr:} Recording State Manager
+    \item \textbf{GPS/Stats:} GPS \& Stats Tracker
+    \item \textbf{SensProc:} Sensor Processor
+    \item \textbf{NavMgr:} Navigation Manager
+    \item \textbf{UI/Loc:} UI \& Local Storage
+\end{itemize}
 
-\begin{longtable}{|p{0.35\linewidth}|p{0.60\linewidth}|}
+\begin{longtable}{|l|c|c|c|c|c|c|c|c|c|c|c|c|c|}
     \hline
-    \textbf{Architectural Component} & \textbf{Satisfied Requirements} \\
+    \textbf{ID} & \rotatebox{90}{\textbf{UserSvc}} & \rotatebox{90}{\textbf{ProfMgr}} & \rotatebox{90}{\textbf{P-Search}} & \rotatebox{90}{\textbf{P-Merge}} & \rotatebox{90}{\textbf{P-View}} & \rotatebox{90}{\textbf{P-Add}} & \rotatebox{90}{\textbf{T-Add}} & \rotatebox{90}{\textbf{T-Search}} & \rotatebox{90}{\textbf{RecMgr}} & \rotatebox{90}{\textbf{GPS/Stats}} & \rotatebox{90}{\textbf{SensProc}} & \rotatebox{90}{\textbf{NavMgr}} & \rotatebox{90}{\textbf{UI/Loc}} \\
     \hline
     \endhead
 
-    \textbf{Auth Service} & R1, R2, R3, R4, R6 \\
-    \hline
-    \textbf{Profile Manager} & R5 \\
-    \hline
-    \textbf{Path Service} & R7, R8, R9, R10, R11, R12, R13, R14, R25, R36, R37, R38 \\
-    \hline
-    \textbf{Trip Service} & R19, R26, R32, R33, R34, R35 \\
-    \hline
-    \textbf{Recording Service} & R20, R21, R22, R23, R27, R31 \\
-    \hline
-    \textbf{Sensor Processor} & R24, R28, R29, R30 \\
-    \hline
-    \textbf{Navigation Manager} & R15, R16, R17, R18 \\
-    \hline
-    \textbf{UI Layer (Mobile)} & R39, R40 \\
-    \hline
+    R1 & \checkmark & & & & & & & & & & & & \\ \hline
+    R2 & \checkmark & & & & & & & & & & & & \\ \hline
+    R3 & \checkmark & & & & & & & & & & & & \\ \hline
+    R4 & \checkmark & & & & & & & & & & & & \\ \hline
+    R5 & & \checkmark & & & & & & & & & & & \\ \hline
+    R6 & \checkmark & & & & & & & & & & & & \\ \hline
+    R7 & & & \checkmark & & & & & & & & & & \\ \hline
+    R8 & & & & \checkmark & & & & & & & & & \\ \hline
+    R9 & & & & \checkmark & & & & & & & & & \\ \hline
+    R10 & & & & \checkmark & & & & & & & & & \\ \hline
+    R11 & & & & & \checkmark & & & & & & & & \\ \hline
+    R12 & & & & & \checkmark & & & & & & & & \\ \hline
+    R13 & & & & & \checkmark & & & & & & & & \\ \hline
+    R14 & & & & & \checkmark & & & & & & & & \\ \hline
+    R15 & & & & & & & & & & & & \checkmark & \\ \hline
+    R16 & & & & & & & & & & & & \checkmark & \\ \hline
+    R17 & & & & & & & & & & & & \checkmark & \\ \hline
+    R18 & & & & & & & & & & & & \checkmark & \\ \hline
+    R19 & & & & & & & \checkmark & & & & & & \\ \hline
+    R20 & & & & & & & & & \checkmark & & & & \\ \hline
+    R21 & & & & & & & & & & \checkmark & & & \\ \hline
+    R22 & & & & & & & & & & \checkmark & & & \\ \hline
+    R23 & & & & & & & & & & & \checkmark & & \\ \hline
+    R24 & & & & & & & & & & & \checkmark & & \\ \hline
+    R25 & & & \checkmark & & & \checkmark & & & & & & & \\ \hline
+    R26 & & & & & & & \checkmark & & & & & & \\ \hline
+    R27 & & & & & & & & & \checkmark & & & & \\ \hline
+    R28 & & & & & & & & & & & & & \checkmark \\ \hline
+    R29 & & & & & & & & & & & & & \checkmark \\ \hline
+    R30 & & & & & & & & & & & & & \checkmark \\ \hline
+    R31 & & & & & & & & & & \checkmark & & & \\ \hline
+    R32 & & & & & & & \checkmark & & & & & & \\ \hline
+    R33 & & & & & & & \checkmark & & & & & & \\ \hline
+    R34 & & & & & & & & \checkmark & & & & & \\ \hline
+    R35 & & & & & & & & \checkmark & & & & & \\ \hline
+    R36 & & & & & & \checkmark & & & & & & & \\ \hline
+    R37 & & & & & & \checkmark & & & & & & & \\ \hline
+    R38 & & & & & & \checkmark & & & & & & & \\ \hline
+    R39 & & & & & & & & & & & & & \checkmark \\ \hline
+    R40 & & & & & & & & & & & & & \checkmark \\ \hline
 \end{longtable}

@@ -1,0 +1,104 @@
+\section{Implementation, Integration and Test Plan}
+
+The implementation of the Best Bike Paths system follows a **Bottom-Up** integration strategy for the Backend, ensuring data integrity before business logic is applied, and a **Component-Based** strategy for the Mobile Client to handle hardware dependencies parallel to backend development.
+
+The process is structured into \textbf{5 Development Steps (Dev-Steps)}, each concluding with a specific Integration Test.
+
+\subsection{Dev-Step 1: Data Layer \& Authentication Core}
+\textbf{Goal:} Establish the persistence layer and user identity management, the foundation for all other data associations.
+
+\begin{itemize}
+    \item \textbf{Backend Implementation:}
+    \begin{itemize}
+        \item Setup of \texttt{PostgreSQL} with \texttt{PostGIS} extension. Implementation of the \textbf{Model} component (Repository Pattern) to handle User and Path schemas.
+        \item Implementation of the \textbf{Auth Service} (User Service, Token Manager, Hash Password) to handle \texttt{registerUser} and \texttt{loginUser} logic.
+        \item Exposure of Authentication endpoints via the \textbf{Controller Layer}.
+    \end{itemize}
+    \item \textbf{Mobile Implementation:}
+    \begin{itemize}
+        \item Setup of the \textbf{Local Storage} (SQLite/SharedPreferences) for token persistence.
+        \item Implementation of the \textbf{Network Layer} skeleton.
+        \item Implementation of Login/Register screens in the \textbf{UI Layer}.
+    \end{itemize}
+    \item \textbf{Testing Strategy:}
+    \begin{itemize}
+        \item \textit{Unit Testing:} Verification of JWT token generation and Password Hashing algorithms.
+        \item \textit{Integration Testing (I1):} Verification that the Mobile Client can successfully authenticate via REST API and store the received token.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Dev-Step 2: Path Management (Geospatial Core)}
+\textbf{Goal:} Enable the creation, storage, and retrieval of \texttt{Path} entities, the primary asset of the system.
+
+\begin{itemize}
+    \item \textbf{Backend Implementation:}
+    \begin{itemize}
+        \item Implementation of the \textbf{Path Service} (Path Adding, Path Searcher).
+        \item Implementation of \texttt{findPathsByLocation} geospatial queries in the \textbf{Model}.
+    \end{itemize}
+    \item \textbf{Mobile Implementation:}
+    \begin{itemize}
+        \item Implementation of the Map Visualization in the \textbf{UI Layer}.
+        \item Development of the "Create Path Manually" (UC11) flow, allowing users to draw geometries.
+    \end{itemize}
+    \item \textbf{Testing Strategy:}
+    \begin{itemize}
+        \item \textit{Integration Testing (I2):} Verify that a GeoJSON path drawn on the Client is correctly serialized, transmitted, and stored as a PostGIS geometry in the Database.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Dev-Step 3: Mobile Sensor \& Recording Logic (Client Heavy)}
+\textbf{Goal:} Develop the complex client-side logic for hardware interaction and tracking. This step is independent of the Backend.
+
+\begin{itemize}
+    \item \textbf{Mobile Implementation:}
+    \begin{itemize}
+        \item Implementation of the \textbf{Sensor Manager} to abstract GPS and IMU hardware.
+        \item Implementation of the \textbf{Recording Service} (Recording State Manager, GPS Tracker, Stats Tracker).
+        \item Development of the \textbf{Sensor Processor} algorithm to detect potholes (threshold logic).
+    \end{itemize}
+    \item \textbf{Testing Strategy:}
+    \begin{itemize}
+        \item \textit{Field Testing:} Physical tests to calibrate the accelerometer thresholds for \texttt{sensor\_events} (R24) and verify GPS accuracy.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Dev-Step 4: Trip Integration \& Persistence}
+\textbf{Goal:} Connect the recorded data (Step 3) to the persistent storage (Step 1 \& 2) via the Backend.
+
+\begin{itemize}
+    \item \textbf{Backend Implementation:}
+    \begin{itemize}
+        \item Implementation of the \textbf{Trip Service} (Trip Adding).
+        \item Implementation of the \textbf{Weather API Client} to fetch weather snapshots on save (R32).
+        \item Implementation of the Transaction Script in the \textbf{Controller} to atomically save Trips, Paths, and Reports.
+    \end{itemize}
+    \item \textbf{Mobile Implementation:}
+    \begin{itemize}
+        \item Implementation of the "Save Trip" (UC9) workflow, including the \textbf{Review Detections} screen.
+        \item Connection of the \textbf{Recording Service} output to the \textbf{Network Layer}.
+    \end{itemize}
+    \item \textbf{Testing Strategy:}
+    \begin{itemize}
+        \item \textit{System Testing (S1):} Full end-to-end flow: \textit{Record -> Stop -> Review -> Save -> Verify Data in DB}.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Dev-Step 5: Advanced Features \& Final Polish}
+\textbf{Goal:} Complete the ecosystem with navigation and scoring logic.
+
+\begin{itemize}
+    \item \textbf{Mobile Implementation:}
+    \begin{itemize}
+        \item Implementation of the \textbf{Navigation Manager} to trigger external apps (UC6).
+    \end{itemize}
+    \item \textbf{Backend Implementation:}
+    \begin{itemize}
+        \item Implementation of the \textbf{Path Merger} and \textbf{Scoring} logic (R9, R10).
+        \item Enabling the \texttt{Trip Service} to trigger path updates when a public trip is saved (R26).
+    \end{itemize}
+    \item \textbf{Testing Strategy:}
+    \begin{itemize}
+        \item \textit{Acceptance Testing:} Verify that saving a "Public" trip correctly alters the aggregate average speed and status of the associated Path in search results.
+    \end{itemize}
+\end{itemize}
