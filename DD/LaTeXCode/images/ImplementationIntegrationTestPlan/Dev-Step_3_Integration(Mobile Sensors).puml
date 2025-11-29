@@ -1,0 +1,19 @@
+@startuml
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    RoundCorner 5
+}
+top to bottom direction
+
+rectangle "Mobile Test Driver" as Driver #DDDDDD
+rectangle "Recording Service" as Rec
+rectangle "Sensor Processor" as Proc
+rectangle "Sensor Manager" as Mgr
+rectangle "Local Storage" as Local
+
+Driver --> Rec
+Rec --> Mgr
+Rec --> Proc
+Proc --> Local
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    RoundCorner 5
+}
+top to bottom direction
+
+rectangle "Test Driver" as Driver #DDDDDD
+rectangle "Trip Service" as Trip
+rectangle "Weather API\nClient" as Weather
+rectangle "Model" as Model
+
+Driver --> Trip
+Trip --> Model
+Trip --> Weather
+@enduml

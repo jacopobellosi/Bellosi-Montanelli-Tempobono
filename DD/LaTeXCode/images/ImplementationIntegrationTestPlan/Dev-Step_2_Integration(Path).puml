@@ -1,0 +1,20 @@
+@startuml
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    RoundCorner 5
+}
+top to bottom direction
+
+rectangle "Test Driver" as Driver #DDDDDD
+rectangle "Path Service" as Path
+rectangle "Path Searcher" as Search
+rectangle "Model" as Model
+rectangle "BBP Database\n(PostGIS)" as DB
+
+Driver --> Path
+Path --> Search
+Search --> Model
+Path --> Model
+Model --> DB
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    RoundCorner 5
+}
+top to bottom direction
+
+rectangle "Mobile UI Layer" as UI
+rectangle "Network Layer" as Net
+rectangle "Controller Layer" as Cont
+rectangle "Auth Service" as Auth
+rectangle "Path Service" as Path
+rectangle "Trip Service" as Trip
+rectangle "Model" as Model
+
+UI --> Net
+Net --> Cont
+Cont --> Auth
+Cont --> Path
+Cont --> Trip
+Auth --> Model
+Path --> Model
+Trip --> Model
+@enduml

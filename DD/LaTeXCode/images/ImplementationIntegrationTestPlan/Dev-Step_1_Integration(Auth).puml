@@ -1,0 +1,24 @@
+@startuml
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    RoundCorner 5
+}
+skinparam arrow {
+    Color Black
+}
+top to bottom direction
+
+rectangle "Test Driver" as Driver #DDDDDD
+rectangle "Auth Service" as Auth
+rectangle "Profile Manager" as Prof
+rectangle "Model" as Model
+rectangle "User DBMS" as DB
+
+Driver --> Auth
+Driver --> Prof
+Auth --> Model
+Prof --> Model
+Model --> DB
+
+@enduml
