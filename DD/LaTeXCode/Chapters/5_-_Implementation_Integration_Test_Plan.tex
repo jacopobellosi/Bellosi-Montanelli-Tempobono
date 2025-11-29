@@ -15,10 +15,16 @@ The general development guidelines are presented in the high-level workflow grap
 The integration follows a \textbf{Bottom-Up Strategy}. Implementation starts from the "leaves" of the hierarchy (independent modules like the Model or Sensor Manager) that do not require other functionalities to work.
 These modules require a \textbf{Test Driver} to be developed and tested in isolation. Once a module is validated, it is integrated into the upper layer, eventually replacing the Driver with the actual calling component (e.g., the Controller or UI).
 
+To ensure consistency across development environments, \textbf{Docker} and \textbf{Docker Compose} are utilized from the start to containerize the Database and Mock External Services.
+
 \subsection{Dev-Step 1: Core Infrastructure (Auth \& Data)}
 \textbf{Goal:} Establish the persistence layer and user identity management.
 \begin{itemize}
-    \item \textbf{Activities:} Setup of PostgreSQL. Implementation of \texttt{User Service}, \texttt{Profile Manager}, and the \texttt{Model} repository.
+    \item \textbf{Activities:} 
+    \begin{itemize}
+        \item Configuration of the \texttt{docker-compose} environment for PostgreSQL and PostGIS.
+        \item Implementation of \texttt{User Service}, \texttt{Profile Manager}, and the \texttt{Model} repository.
+    \end{itemize}
     \item \textbf{Integration:} The \texttt{Auth Service} and \texttt{Profile Manager} are tested via a Driver to verify credential validation and database writes before the API is exposed.
 \end{itemize}
 
@@ -99,7 +105,7 @@ Once the individual components are integrated, the system as a whole must underg
 \subsubsection{Functional Testing}
 This phase verifies that the software behaves exactly as specified in the Use Cases.
 \begin{itemize}
-    \item \textbf{Scenario Validation:} Execution of end-to-end test scripts covering the critical paths defined in the RASD Scenarios (e.g., "Scenario 3.2: Automatic Recording with Auto-Pause").
+    \item \textbf{Scenario Validation:} Execution of end-to-end test scripts covering the critical paths defined in the RASD Scenarios (e.g., "Scenario 3.2: Automatic Recording").
     \item \textbf{Boundary Analysis:} Testing edge cases for input data, such as creating a path with 0 points, submitting an obstacle report outside the path boundaries, or handling invalid credentials (UC2).
     \item \textbf{Consistency Check:} Verifying that data saved during a "Trip" (UC9) is correctly reflected in the "Path" aggregated statistics (R9, R10) immediately or after the expected eventual consistency delay.
 \end{itemize}
