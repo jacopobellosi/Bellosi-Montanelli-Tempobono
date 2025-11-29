@@ -2,7 +2,7 @@
 In this section, designed to expand on the “User Interfaces” section of the RASD (Section 3.1.1), we provide a complete overview of the appearance and functionality of the user interface with which users will interact.
 
 \section{Home and first start}
-
+The first start view (Figure 3.1) is the user’s very first contact with BBP. From here, the app briefly introduces its purpose and asks the user to grant the permissions needed for location and motion sensors; if these are denied, only browsing and manual features remain available, as described in the assumptions of the RASD. Once the initial step is completed, the user lands on the home view (Figure 3.2), which acts as the main entry point to the app. On this screen, the central map can be explored by panning and zooming, and the user can start a search by specifying origin and destination. From the same view, shortcuts allow the user to open the search flow, begin recording or creating a new path, and access their profile or settings area with a single tap, keeping all key actions close at hand.
 
 \begin{center}
     \begin{minipage}{0.4\textwidth}
@@ -28,6 +28,7 @@ In this section, designed to expand on the “User Interfaces” section of the 
 \end{center}
 
 \section{Create new path}
+The screens in this subsection walk the user through the full process of creating a new path. In the creation mode view (Figure 3.3), the user first chooses whether to rely on automatic recording while cycling or to draw the path manually. If automatic mode is selected (Figure 3.4), the user can start, pause, resume and stop the recording; in the background, the app continuously collects GPS data and live statistics, as defined in the automatic recording requirements. If manual mode is selected instead, the user first configures basic information such as name and visibility in the start manual mode view (Figure 3.5), then switches to the manual waypoints view (Figure 3.6), where they place and adjust points directly on the map to shape the path. At the end of either flow, the trip review screens (Figures 3.7 and 3.8) present a summary of the ride or drawn path, showing map, statistics and any detected events, and let the user choose visibility and finally save or discard the result.
 
 \begin{center}
     \begin{minipage}{0.4\textwidth}
@@ -99,6 +100,7 @@ In this section, designed to expand on the “User Interfaces” section of the 
 \end{center}
 
 \section{Find trips}
+The “Find trips” views show how a user searches for existing paths and decides which one to follow. In the search trip view (Figure 3.9), the user can specify origin and destination, optionally refine the request, and then launch the search. BBP processes the query and returns a list of matching paths ordered according to the scoring and merging logic defined in the RASD. By tapping one of these results, the user opens the trip details view (Figure 3.10), where the full geometry is displayed on the map along with distance, elevation, overall status, reported obstacles and associated weather information; from here, the user can start navigation or access additional actions related to that path. During an active ride, the “view during trip” screen (Figure 3.11) focuses on real-time feedback, combining the map with a compact heads-up display that shows live statistics and offers clear controls to end the session and later review or save the trip.
 
 \begin{center}
     \begin{minipage}{0.4\textwidth}
@@ -137,6 +139,7 @@ In this section, designed to expand on the “User Interfaces” section of the 
 \end{center}
 
 \section{Profile management and settings}
+The views in this subsection cover how users manage their identity and personal area, whether they are guests or registered cyclists. The guest profile view (Figure 3.12) shows a simplified profile area, where the user can see limited information and decide whether to sign up or log in. Choosing sign up opens the dedicated sign up view (Figure 3.13), where new users enter their credentials and, if validation succeeds, are taken to the main screen; choosing login opens the login view (Figure 3.14), where existing users authenticate. Once logged in, the profile view (Figure 3.15) displays the user’s personal information and provides shortcuts to actions such as viewing “My Trips” (Figure 3.17), adjusting settings (Figure 3.18), or logging out (Figure 3.16), which clears the session and returns the app to guest mode. In this way, the profile and settings screens give the user a clear place to manage their account, review their history and customise how BBP behaves, in line with the requirements defined in the RASD.
 
 \begin{center}
     \begin{minipage}{0.4\textwidth}
@@ -145,7 +148,7 @@ In this section, designed to expand on the “User Interfaces” section of the 
     \centering
     \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/mockup/welcome guest.png}
     \caption{View profile guest}
-    \label{fig:search trips}
+    \label{fig:profile guest}
     \end{figure}
     \end{minipage}
     \hspace{0.1\textwidth}
@@ -153,9 +156,68 @@ In this section, designed to expand on the “User Interfaces” section of the 
     \centering
     \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/mockup/sign}
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/mockup/Sign up.png}
+    \caption{View sign up}
+    \label{fig:sign up}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+\end{center}
+
+\begin{center}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/mockup/Login Page.png}
+    \caption{View login}
+    \label{fig:login}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/mockup/Profile.png}
     \caption{View profile}
-    \label{fig:trips details}
+    \label{fig:profile}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+\end{center}
+
+\begin{center}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/mockup/Logout.png}
+    \caption{View logout}
+    \label{fig:logout}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/mockup/My Trips.png}
+    \caption{View my trips}
+    \label{fig:my trips}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+\end{center}
+
+\begin{center}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/mockup/Settings.png}
+    \caption{View settings}
+    \label{fig:settings}
     \end{figure}
     \end{minipage}
     \hspace{0.1\textwidth}
