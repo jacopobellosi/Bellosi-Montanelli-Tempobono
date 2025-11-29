@@ -92,3 +92,48 @@ With the core system integrated, the final steps focus on:
     \item \textbf{Closed Alpha:} Distributed to the development team to identify blocking bugs.
     \item \textbf{Open Beta:} Released to a limited user base to stress-test the database under concurrent load.
 \end{itemize}
+
+\subsection{System Testing Strategy}
+Once the individual components are integrated, the system as a whole must undergo rigorous testing to ensure it meets the Functional and Non-Functional requirements defined in the RASD. The testing strategy for BBP focuses on five key areas.
+
+\subsubsection{Functional Testing}
+This phase verifies that the software behaves exactly as specified in the Use Cases.
+\begin{itemize}
+    \item \textbf{Scenario Validation:} Execution of end-to-end test scripts covering the critical paths defined in the RASD Scenarios (e.g., "Scenario 3.2: Automatic Recording with Auto-Pause").
+    \item \textbf{Boundary Analysis:} Testing edge cases for input data, such as creating a path with 0 points, submitting an obstacle report outside the path boundaries, or handling invalid credentials (UC2).
+    \item \textbf{Consistency Check:} Verifying that data saved during a "Trip" (UC9) is correctly reflected in the "Path" aggregated statistics (R9, R10) immediately or after the expected eventual consistency delay.
+\end{itemize}
+
+\subsubsection{Performance Testing}
+This phase validates the system's response times against the constraints defined in Section 3.3 of the RASD.
+\begin{itemize}
+    \item \textbf{Latency Measurement:} Automated tools (e.g., JMeter) will measure the response time of the REST API.
+    \begin{itemize}
+        \item \textbf{PR-1 (Login):} Must complete within 2.0 seconds.
+        \item \textbf{PR-2 (Search):} Complex geospatial queries must return within 5.0 seconds.
+        \item \textbf{PR-6 (Save):} Atomic transactions for saving trips must complete within 4.0 seconds.
+    \end{itemize}
+    \item \textbf{Sensor Latency:} Verification that the \texttt{Recording Service} initializes and begins capturing data within 1.5 seconds of tapping "Start" (PR-4).
+\end{itemize}
+
+\subsubsection{Load and Stress Testing}
+Given the potential for high traffic in urban areas, the backend must be tested under heavy load.
+\begin{itemize}
+    \item \textbf{Concurrency Testing:} Simulating \textbf{1,000 concurrent users} performing searches and navigations (PR-7) to ensure the Nginx Load Balancer correctly distributes traffic and the database Read Replicas handle the query volume without degradation.
+    \item \textbf{Write-Heavy Stress:} Simulating \textbf{50 concurrent recordings starting per minute} (PR-8) to verify that the Database Primary node can handle the high volume of atomic write transactions for Trip saving.
+    \item \textbf{Endurance Testing:} Running the backend for extended periods (48+ hours) under moderate load to identify memory leaks in the Java/Spring Boot containers.
+\end{itemize}
+
+\subsubsection{Field and Hardware Testing}
+Unlike standard web apps, BBP relies on physical movement and hardware sensors.
+\begin{itemize}
+    \item \textbf{GPS Accuracy Test:} Comparing the recorded \texttt{GPS\_points} (R21) against a reference professional GPS tracker on a known route to verify the 1Hz sampling rate and accuracy.
+    \item \textbf{Pothole Algorithm Calibration:} Performing physical rides over known obstacles to verify that the \texttt{Sensor Processor} correctly triggers a \texttt{sensor\_event} (R24) when the accelerometer data exceeds the threshold, and does \textit{not} trigger false positives on smooth roads.
+    \item \textbf{Battery Drain Analysis:} ensuring the background recording process does not consume excessive battery, allowing for long sessions (e.g., 3+ hours).
+\end{itemize}
+
+\subsubsection{Usability and UI Testing}
+\begin{itemize}
+    \item \textbf{Outdoor Visibility:} Verifying that the High-Contrast Map and HUD (R22) are legible in direct sunlight.
+    \item \textbf{Cross-Platform Consistency:} Ensuring the application behaves identically on iOS and Android devices, particularly regarding permission handling for Location and Motion sensors.
+\end{itemize}
