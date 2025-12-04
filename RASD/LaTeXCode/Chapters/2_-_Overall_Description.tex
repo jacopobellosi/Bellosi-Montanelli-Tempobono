@@ -166,14 +166,14 @@
 \begin{center}
     \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
-        \textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (Success, Auto-Pause GPS \& Detection) – Key Scenario} \\
+        \textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (Success) Key Scenario} \\
         \hline
         \textbf{Actor} & Carlo (registered user) \\
         \hline
         \textbf{Preconditions} & Accurate GPS data (\hyperref[da:2]{DA2}), reliable threshold (\hyperref[da:4]{DA4}), device fixed to bike (\hyperref[da:5]{DA5}). \\
         \hline
         % --- DESCRIZIONE MODIFICATA ---
-        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. While riding, Carlo stops for 5 minutes. The app detects low  speed and \textbf{automatically pauses the GPS coordinate recording (R25)}, but the \textbf{session timer (Elapsed Time) continues to run}. When Carlo restarts cycling, the app automatically resumes GPS tracking (R26). Later, a strong shock occurs due to a pothole. Sensors send data spikes to BBP (R24). Upon completion, BBP asks for confirmation (\hyperref[da:7]{DA7}); Carlo validates correct detections (R27) and saves the trip. The app displays summary (R29) before saving /publishng path and trip(\hyperref[da:13]{DA13}). \\
+        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. The rides go really smoothly, but later, a strong shock occurs due to a pothole. Sensors send data spikes to BBP (R24). Upon completion, BBP asks for confirmation (\hyperref[da:7]{DA7}); Carlo validates correct detections (R27) and saves the trip. The app displays summary (R29) before saving /publishng path and trip(\hyperref[da:13]{DA13}). \\
         % --- FINE MODIFICA ---
         \hline
         \textbf{Postconditions} & Trip data ('Elapsed Time' and confirmed detections) are stored in Carlo’s archive. 'Average Speed' is calculated using 'Elapsed Time'. \\
@@ -209,7 +209,7 @@
         \textbf{Preconditions} & Flat and obstacle-free Path; no sensor spikes (\hyperref[da:4]{DA4}). \\
         \hline
         % --- DESCRIZIONE MODIFICATA ---
-        \textbf{Description} & Carlo rides on a smooth Path. The system correctly applies auto-pause/resume of the GPS during stops, while the timer continues. No anomalies are detected (R24). When pressing “End and Save,” BBP skips the “Review” step (R26) and directly shows the summary screen. \\
+        \textbf{Description} & Carlo rides on a smooth Path. No anomalies are detected (R24). When pressing “End and Save,” BBP skips the “Review” step (R26) and directly shows the summary screen. \\
         % --- FINE MODIFICA ---
         \hline
         \textbf{Postconditions} & Trip saved successfully without detected issues. \\
@@ -263,7 +263,7 @@ Unlike Activity Diagrams, which model process flows, the following State Machine
 \paragraph{Trip State Diagram.}
 This diagram (Figure \ref{fig:sd_trip}) models the lifecycle of a \texttt{Trip} recording session (UC7). The object begins in the \texttt{Idle} (or Ready) state. When the \texttt{RCY} initiates the recording (R20, \texttt{tapsStartRecording()}), the object transitions to the \texttt{Recording} state. In this state, it actively records GPS (R21) and sensor (R23) data, and the 'Elapsed Time' (R22) runs continuously.
 
-Since all auto-pause logic has been removed, the object remains in the \texttt{Recording} state without interruption until the \texttt{RCY} explicitly triggers the \texttt{tapsStopRecording()} event (R27). At this point, the object transitions to the \texttt{Stopped (Pending Save)} state, where the collected data is passed to the \texttt{Save trip and path} (UC9) use case. Depending on the user's final choice, the object transitions to one of two final states: \texttt{Saved} (R33) or \texttt{Discarded}.
+ The object remains in the \texttt{Recording} state without interruption until the \texttt{RCY} explicitly triggers the \texttt{tapsStopRecording()} event (R27). At this point, the object transitions to the \texttt{Stopped (Pending Save)} state, where the collected data is passed to the \texttt{Save trip and path} (UC9) use case. Depending on the user's final choice, the object transitions to one of two final states: \texttt{Saved} (R33) or \texttt{Discarded}.
 
 \begin{figure}[H]
     \centering
@@ -404,8 +404,8 @@ Here are listed a summary of the main functions of the BBP system:\\\\
 \textbf{Logout:} The User ends the current session; subsequent access requires logging in again.\\
 \textbf{Search Path:} The User specifies origin and destination; BBP computes scores and returns an ordered list of publishable Paths.\\
 \textbf{View Path details:} After selecting a Path, BBP displays the polyline, distance, elevation, the merged current status, reported obstacles, and the weather forecast associated with the Path .\\
-\textbf{Follow Path (Navigation):} The User taps “Follow Path”; BBP redirect to an External navigation service and use GPS to acquire travel data. At the end, BBP show the summary of the trip and offer registration to save the data.\\
-\textbf{Start Automatic Recording:} A registered User starts a session; BBP records the \textbf{Trip's geometry} (GPS) and live stats while acquiring motion-sensor data. The system automatically pauses GPS/sensor recording (but not the elapsed time) when the user stops (R25) and resumes when they restart (R26).\\
+\textbf{Follow Path (Navigation):} The User taps “Follow Path”; BBP redirect to an External navigation service and uses GPS to acquire travel data. At the end, BBP show the summary of the trip and offers registration to save the data.\\
+\textbf{Start Automatic Recording:} A registered User starts a session; BBP records the \textbf{Trip's geometry} (GPS) and live stats while acquiring motion-sensor data. The system, when the user terminates and decides to terminate the recording, will recreate the total Path.\\
 \textbf{Automatic Detection Review:} At the end of recording, BBP asks the User to confirm or reject sensor-detected anomalies (e.g., potholes); only confirmed detections are retained.\\
 \textbf{End \& Save Trip:} BBP computes trip statistics and attaches a weather snapshot; the trip (and any confirmed detections) is saved to the User’s archive.\\
 \textbf{Manual Path creation :} The User opens the editor, draws the Path, optionally adds maintenance pins or the path status, sets type and visibility, and presses “Save.”\\

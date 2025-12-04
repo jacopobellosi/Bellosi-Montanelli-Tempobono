@@ -81,8 +81,8 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-Complete_low_level_diagram.drawio.png}
-        \caption{High Level Diagram.}
-        \label{fig:high_level_diagram}%
+        \caption{Low Level Diagram.}
+        \label{fig:low_level_diagram}%
     \end{center}
 \end{figure}
 \section{Low-Level Component View}
@@ -108,9 +108,8 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
 \subsection{BBP Backend Server Components}
 
 \begin{itemize}
-    \item \textbf{Controller layer}: This component serves as the entry point for the backend system. It is responsible for exposing the RESTful API endpoints, receiving incoming HTTP requests, and performing initial validation of the input data before delegating the processing to the appropriate internal logic.
+    \item \textbf{Controller layer}: This component serves as the entry point for the backend system. It is responsible for exposing the RESTful API endpoints, receiving incoming HTTP requests, and performing initial validation of the input data before delegating the processing to the appropriate internal logic, it also check the validity of the request ensuring only the authorized users can access.
 
-    \item \textbf{Security module}: This component acts as an interception filter for protecting the system's resources. Its primary function is to enforce authorization policies by verifying the validity of session tokens and ensuring that only authenticated requests are permitted to access protected business logic.
 
     \item \textbf{Auth service}: This component encapsulates the logic regarding user identity management. It handles the critical processes of registering new accounts, verifying user credentials during login attempts, and generating secure session tokens for authenticated users.
 
@@ -249,7 +248,7 @@ In this section it will be shown the Deployment diagram of the BBP system, follo
 \noindent \textbf{Web Server:} The Web Server provides access to the Application Server's service to all the Mobile Apps that reach the system. In particular, the Web Server does not execute any business logic, but it simply acts as a gateway and performs load balancing on the received requests, distributing them to the various Application Servers in order to handle large User traffic and terminate SSL connections.
 
 \vspace{0.5em}
-\noindent \textbf{Application Server:} The Application Server contains the business logic of the entire system. Moreover, it communicates to the client through HTTPS protocol managed by the Web Server. The various requests coming from the Web Server are routed to the corresponding internal service (Auth, Path, Trip) thanks to the Controller Layer. Furthermore, it communicates to the Database Server through the Model component via JDBC. This node is replicated in order to handle large user traffic and ensure high availability.
+\noindent \textbf{Application Server:} The Application Server contains the business logic of the entire system. Moreover, it communicates with the client through the HTTPS protocol managed by the Web Server. The various requests coming from the Web Server are routed to the corresponding internal service (Auth, Path, Trip) thanks to the Controller Layer. Furthermore, it communicates to the Database Server through the Model component via JDBC. This node can be replicated to handle large user traffic and ensure high availability.
 
 \vspace{0.5em}
 \noindent \textbf{Database Server:} All the data about Users, Paths, Trips, Reports and the complex geospatial data (GPS tracks) are stored into the Database Server and managed by the PostgreSQL engine with PostGIS extension. The various Application Servers can retrieve and store information on this node through the Model component, which manages the connections. This node is strictly isolated from the public internet.
@@ -704,8 +703,9 @@ The communication between these two entities is stateless and occurs over a secu
 \subsubsection{Layered Architecture (Backend)}
 Within the Backend Server, we have adopted a \textbf{Layered Architecture} pattern to strictly enforce the separation of concerns. This ensures that each component has a specific responsibility and only interacts with the layers immediately adjacent to it, promoting maintainability and testability. The layers are organized as follows:
 \begin{enumerate}
-    \item \textbf{Controller Layer (Presentation):} The outermost layer that handles incoming HTTP requests, performs input validation, and routes them to the appropriate business logic. It acts as the interface to the outside world.
-    \item \textbf{Security Layer (Middleware):} An intercepting layer responsible for authentication and authorization (JWT validation) before any business logic is executed.
+    \item \textbf{Controller Layer (Presentation):} Controller Layer (Presentation \& Orchestration): The outermost layer that handles incoming HTTP requests and input validation. Design Decision: For complex workflows involving multiple independent domain services (e.g., saving a Trip and a Path simultaneously), the Controller also assumes the role of an Orchestrator. This choice was made to prevent tight coupling between domain services (e.g., preventing Trip Service from depending on Path Service), ensuring that each business service remains self-contained and reusable.
+    
+    \item \textbf{Auth Layer (Middleware):} An intercepting layer responsible for authentication and authorization (JWT validation) before any business logic is executed.
     \item \textbf{Service Layer (Business Logic):} The core of the application (e.g., \texttt{Path Service}, \texttt{Trip Service}). It implements the complex business rules, orchestrates workflows, and performs calculations like path scoring.
     \item \textbf{Data Access Layer (Persistence):} Encapsulated by the \texttt{Model} component, this layer abstracts the underlying database technology, providing a clean API for data storage and retrieval.
 \end{enumerate}
@@ -726,7 +726,7 @@ The \textbf{Facade Pattern} is utilized in multiple areas to simplify interactio
 \end{itemize}
 
 \subsubsection{Transaction Script / Orchestrator}
-For complex write operations, specifically the "Save Trip and Path" (UC9) and "Save Path" (UC12) scenarios, we adopted a \textbf{Transaction Script} or \textbf{Orchestrator} approach implemented within the Controller layer. Instead of distributing the logic of creating paths, saving reports, and linking trips across disparate components, the Controller acts as a central orchestrator. It executes these steps in a precise, sequential order (Create Path $\rightarrow$ Save Reports $\rightarrow$ Save Trip), ensuring transactional integrity. If any step fails, the entire logical operation can be rolled back or handled as an error, preventing inconsistent data states (e.g., a Trip linked to a non-existent Path).
+For complex write operations (UC9, UC12), we explicitly adopted an Orchestrator pattern implemented within the Controller layer. While traditional layered architectures often delegate this to a service, we placed this logic in the Controller to maintain zero coupling between the Path and Trip business domains. The Controller ensures the transactional sequence (Create Path -> Save Reports -> Save Trip), acting effectively as an Application Service or API Gateway for these specific composite use cases.
 
 \subsubsection{Lazy Loading (On-Read Aggregation)}
 While not a structural GoF pattern, the decision to calculate the "Path Status" and "Score" dynamically at the time of the request (UC4, UC5) implements a \textbf{Lazy Loading} strategy. This ensures that users always see the most up-to-date information based on the latest "freshness" of reports, avoiding the data consistency issues that would arise from storing a static, pre-calculated score in the database.
