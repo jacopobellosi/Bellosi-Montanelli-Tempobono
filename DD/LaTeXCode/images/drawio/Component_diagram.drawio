@@ -1470,7 +1470,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="yWN_UDFOirIkaLAWaH18" name="Recording_detailed_view">
-    <mxGraphModel dx="1264" dy="875" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1497" dy="1002" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1632,21 +1632,8 @@
         <mxCell id="VusJC3lbvPPL7wMZt4xP-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Update stats&lt;br&gt;interface" vertex="1">
           <mxGeometry height="30" width="90" x="395" y="140" as="geometry" />
         </mxCell>
-        <mxCell id="_EDDm7BWqkgtSG7mws4L-1" edge="1" parent="1" source="h25K4QqD7NTFwmgC8EjB-2" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=halfCircle;endFill=0;endSize=6;strokeWidth=1;sketch=0;" target="_EDDm7BWqkgtSG7mws4L-3" value="">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="-25" y="425" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="_EDDm7BWqkgtSG7mws4L-2" edge="1" parent="1" source="YLSbnyIp3IrOxiVPSeSX-1" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=oval;endFill=0;sketch=0;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;endSize=10;" target="_EDDm7BWqkgtSG7mws4L-3" value="">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="-65" y="425" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="_EDDm7BWqkgtSG7mws4L-3" parent="1" style="ellipse;whiteSpace=wrap;html=1;align=center;aspect=fixed;fillColor=none;strokeColor=none;resizable=0;perimeter=centerPerimeter;rotatable=0;allowArrows=0;points=[];outlineConnect=1;" value="" vertex="1">
           <mxGeometry height="10" width="10" x="-51" y="370" as="geometry" />
-        </mxCell>
-        <mxCell id="_EDDm7BWqkgtSG7mws4L-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Sensor update interface" vertex="1">
-          <mxGeometry height="30" width="90" x="-115" y="380" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
