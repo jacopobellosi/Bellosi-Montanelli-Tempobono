@@ -754,7 +754,7 @@ The BBP system is designed to handle varying loads, from daily commutes to peak 
 \subsection{Notification Handling and Asynchronous Processing}
 While BBP relies primarily on immediate user feedback, internal "system notifications" are handled asynchronously to improve perceived performance:
 \begin{itemize}
-    \item \textbf{Decoupling Aggregation:} As seen in the design of the \texttt{Trip Service}, the recalculation of path statistics (R9) is triggered via an \texttt{Aggregation Publisher}. This allows the critical "Save Trip" transaction to complete and return a success message to the user immediately, while the heavy computational task of updating the path's average statistics happens asynchronously in the background (On-Write strategy). This prevents user interface freezing during complex server-side calculations.
+    \item \textbf{Decoupling Aggregation:} To ensure users consistently access the most up-to-date information regarding path conditions and safety, the system adopts an On-Read Aggregation strategy. In contrast to pre-calculation methods that may yield stale data, the system computes the ``Path Status'' and ``Score'' dynamically at request time. This logic is encapsulated within the stateless \texttt{Path Merger} component, prioritizing data freshness over read latency. To mitigate the performance impact of on-the-fly calculations, the architecture employs optimized PostgreSQL aggregation functions and in-memory dataset processing to minimize database round-trips, potentially supplemented by short-lived caching policies for high-traffic paths.
 \end{itemize}
 
 \subsection{Ease of Deployment}
