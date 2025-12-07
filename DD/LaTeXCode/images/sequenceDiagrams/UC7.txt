@@ -40,7 +40,7 @@ deactivate "Recording state manager"
 loop While Recording Active
 
     # A. Flusso GPS (Distanza e Traccia)
-    "Device sensor"->>"sensor manager": GPS Location Update
+    "Device sensor"->>"sensor manager": onLocationChanged(Location loc)
     activate "sensor manager"
     "sensor manager"->>"Recording state manager": onLocationChanged(loc)
     deactivate "sensor manager"
@@ -60,7 +60,7 @@ loop While Recording Active
     deactivate "Stats tracker"
 
     # B. Flusso Sensori Movimento (Buche)
-    "Device sensor"->>"sensor manager": Accelerometer/Gyro Data
+    "Device sensor"->>"sensor manager": onSensorChanged(SensorData data)
     activate "sensor manager"
     "sensor manager"->>"Recording state manager": onSensorChanged(data)
     deactivate "sensor manager"
