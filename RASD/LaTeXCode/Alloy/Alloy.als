@@ -1,6 +1,3 @@
-// ---------- BBP COMPLETE MODEL (STATIC + DYNAMIC) ----------
-// Auto–pause logic has been removed according to the updated RASD.
-
 // ----- 1. Enumerations -----
 
 enum PathStatus { Optimal, Medium, RequiresMaintenance }
