@@ -81,8 +81,8 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-Complete_low_level_diagram.drawio.png}
-        \caption{High Level Diagram.}
-        \label{fig:high_level_diagram}%
+        \caption{Low Level Diagram.}
+        \label{fig:low_level_diagram}%
     \end{center}
 \end{figure}
 \section{Low-Level Component View}
@@ -94,11 +94,11 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
 \begin{itemize}
     \item \textbf{UI layer}: This component serves as the primary interface for user interaction. It is responsible for rendering the application's visual elements, managing the navigational flow between different screens, and capturing user inputs. It orchestrates the presentation of real-time data, such as maps and recording statistics, ensuring a responsive user experience.
 
-    \item \textbf{sensor manager}: This component acts as a hardware abstraction layer. Its primary function is to interface directly with the device's physical sensors (GPS, accelerometer, and gyroscope). It handles the acquisition of raw telemetry data and normalizes these signals for internal processing.
+    \item \textbf{Sensor manager}: This component acts as a hardware abstraction layer. Its primary function is to interface directly with the device's physical sensors (GPS, accelerometer, and gyroscope). It handles the acquisition of raw telemetry data and normalizes these signals for internal processing.
 
-    \item \textbf{recording service}: This component encapsulates the core business logic for the automatic path recording feature. Operating as a background process, it is responsible for tracking the user's movement, calculating real-time session statistics (e.g., speed, distance, duration), and analyzing sensor data to detect significant physical events, such as potholes.
+    \item \textbf{Recording service}: This component encapsulates the core business logic for the automatic path recording feature. Operating as a background process, it is responsible for tracking the user's movement, calculating real-time session statistics (e.g., speed, distance, duration), and analyzing sensor data to detect significant physical events, such as potholes.
 
-    \item \textbf{navigation manager}: This component is responsible for facilitating the navigation experience. It manages the logic required to initiate turn-by-turn directions, handling the preparation of route geometry and the invocation of external navigation capabilities provided by the operating system.
+    \item \textbf{Navigation manager}: This component is responsible for facilitating the navigation experience. It manages the logic required to initiate turn-by-turn directions, handling the preparation of route geometry and the invocation of external navigation capabilities provided by the operating system.
 
     \item \textbf{Network layer}: This component manages all remote data transmission. It is responsible for serializing domain objects into JSON format, constructing HTTP requests, and handling network responses. It ensures that all communication with the remote server adheres to the defined API protocols.
 
@@ -108,9 +108,8 @@ A third-party data provider that \textit{provides} the \texttt{Weather info API}
 \subsection{BBP Backend Server Components}
 
 \begin{itemize}
-    \item \textbf{Controller layer}: This component serves as the entry point for the backend system. It is responsible for exposing the RESTful API endpoints, receiving incoming HTTP requests, and performing initial validation of the input data before delegating the processing to the appropriate internal logic.
+    \item \textbf{Controller layer}: This component serves as the entry point for the backend system. It is responsible for exposing the RESTful API endpoints, receiving incoming HTTP requests, and performing initial validation of the input data before delegating the processing to the appropriate internal logic, it also check the validity of the request ensuring only the authorized users can access.
 
-    \item \textbf{Security module}: This component acts as an interception filter for protecting the system's resources. Its primary function is to enforce authorization policies by verifying the validity of session tokens and ensuring that only authenticated requests are permitted to access protected business logic.
 
     \item \textbf{Auth service}: This component encapsulates the logic regarding user identity management. It handles the critical processes of registering new accounts, verifying user credentials during login attempts, and generating secure session tokens for authenticated users.
 
@@ -167,7 +166,7 @@ The \texttt{Path service} component is the centralized unit responsible for all 
 \noindent This component is responsible for all business logic related to individual \texttt{Trips}, including their creation (UC9) and retrieval (UC13). It exposes a single facade port to the \texttt{Security module}, which internally routes requests to two specialized interfaces: \texttt{Trip adding interface} and \texttt{Trip search interface}.
 
 \begin{itemize}
-    \item \textbf{path adding}: This component is responsible for the persistence of new path entities into the system. It handles the validation of geometric data and metadata provided by the user (such as during manual path creation) and coordinates the transactional storage of this information within the database.
+    \item \textbf{Path adding}: This component is responsible for the persistence of new path entities into the system. It handles the validation of geometric data and metadata provided by the user (such as during manual path creation) and coordinates the transactional storage of this information within the database.
 
     \item \textbf{Path searcher}: This component encapsulates the logic for path discovery. Its primary function is to process user-defined search criteria (e.g., origin and destination coordinates) and execute complex geospatial queries to identify relevant routes. It also coordinates with the aggregation logic to ensure that the returned search results reflect the current computed status of each path.
 
@@ -200,6 +199,29 @@ The \texttt{Auth service} component constitutes the authoritative domain boundar
     \item \textbf{Token manager}: This sub-component manages the lifecycle of security tokens (JSON Web Tokens). It is responsible for two critical security operations: the generation of cryptographically signed tokens upon successful authentication, embedding user claims and expiration policies; and the validation of incoming tokens for protected resources, verifying their signature and validity period to enforce stateless session management.
 \end{itemize}
 
+\subsubsection{CMP: Model}
+\label{sec:cmp_model}
+\label{sec:cmp_auth_service}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/componentDiagrams/Component_diagram-Model_detailed_view.drawio.png}
+        \caption{Model}
+        \label{fig:Model}%
+    \end{center}
+\end{figure}
+The \texttt{Model} component constitutes the persistence layer of the backend. As illustrated in the detailed view, it adopts the Repository Pattern to decouple the business logic from the underlying data access technology. The component exposes specific interfaces to the Service Layer (e.g., \textit{Model path interface}, \textit{Model trip interface}), routing requests to the appropriate internal repository.
+\begin{itemize}
+    \item \textbf{Path repository}: This sub-component is responsible for managing cycling path entities. It interacts with the PostGIS engine via the DBMS API to execute optimized geospatial queries (such as finding paths within a bounding box) and persists geometric data.
+
+    \item \textbf{Trip repository}: This sub-component handles the storage and retrieval of user trips. It manages the large volume of statistical data generated by recording sessions and links each trip to the corresponding user and path.
+
+    \item \textbf{Report repository}: This sub-component manages community feedback. It persists \texttt{Status\_reports} and \texttt{Obstacle\_reports}, ensuring they are correctly associated with the relevant path and spatially indexed for efficient retrieval during the aggregation phase.
+
+    \item \textbf{User repository}: This sub-component serves the \texttt{Auth service} and \texttt{Profile manager}. It encapsulates all operations related to the \texttt{users} table, handling account creation, credential retrieval, and profile updates.
+
+    \item \textbf{Transaction repository}: This logical sub-component acts as a coordinator for atomic operations. It is responsible for managing complex transactions that span multiple entities (e.g., saving a Trip which implicitly updates Path statistics), ensuring ACID properties are maintained across the database interactions.
+\end{itemize}
+
 \subsubsection{CMP: Recording service}
 \label{sec:cmp_recording_service}
 \label{sec:cmp_auth_service}
@@ -230,33 +252,36 @@ The \texttt{Recording service} component constitutes the core engine for real-ti
 \section{Deployment View}
 \label{sec:deployment_view}
 
-In this section it will be shown the Deployment diagram of the BBP system, followed by a description of the components and their interactions:
-
+In this section, the Deployment diagram of the BBP system will be shown, followed by a description of the components and their interactions:
 \begin{figure}[H]
     \centering
-    % Inserisci qui il percorso della tua immagine
+    % Inserisci qui il percorso della tua immagine aggiornata
     \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/deploymentDiagrams/deploymentDiagram.png}
     \caption{Deployment Diagram.}
     \label{fig:deployment_diagram}
 \end{figure}
 
-\noindent \textbf{User Smartphone:} Users access the system using their personal mobile device (iOS or Android) through the dedicated BBP Mobile Application. The device also hosts the external Maps App (e.g., Google Maps) which is triggered by the Mobile App via OS Intents to handle turn-by-turn navigation. The Mobile App communicates with the backend infrastructure via internet connection.
+\noindent \textbf{User Smartphone:} Users access the system via their personal mobile device (iOS or Android). This node hosts two key artifacts:
+\begin{itemize}
+    \item \textbf{Mobile App:} The dedicated BBP application that serves as the user interface and data collector.
+    \item \textbf{External Navigation Service:} The pre-installed mapping application (e.g., Google Maps) invoked by the Mobile App via OS Intents for turn-by-turn navigation.
+\end{itemize}
+\textit{Note on Sensors:} While physical sensors (GPS, Accelerometer, Gyroscope) are critical for the application logic (as detailed in the Component View), they are not explicitly depicted as separate nodes in this diagram. Being integral hardware components embedded within the "User Smartphone" node, their presence is implied, and their interaction occurs internally via the OS hardware abstraction layer.
 
 \vspace{0.5em}
-\noindent \textbf{Firewall:} It provides a way to limit the attack surface of any potential intruder by providing strict access rules, allowing only secure traffic on port 443 (HTTPS) to reach the Web Server.
+\noindent \textbf{Firewall:} Provides a strict security boundary for the backend infrastructure. It filters incoming traffic, allowing only secure HTTPS connections on port 443 to reach the Web Server, thereby reducing the attack surface.
 
 \vspace{0.5em}
-\noindent \textbf{Web Server:} The Web Server provides access to the Application Server's service to all the Mobile Apps that reach the system. In particular, the Web Server does not execute any business logic, but it simply acts as a gateway and performs load balancing on the received requests, distributing them to the various Application Servers in order to handle large User traffic and terminate SSL connections.
+\noindent \textbf{Web Server:} Acts as the gateway to the application tier. It hosts an \textbf{Nginx} instance configured as a reverse proxy and Load Balancer. It terminates SSL connections and distributes incoming traffic across available Application Servers, ensuring scalability and resilience without executing business logic.
 
 \vspace{0.5em}
-\noindent \textbf{Application Server:} The Application Server contains the business logic of the entire system. Moreover, it communicates to the client through HTTPS protocol managed by the Web Server. The various requests coming from the Web Server are routed to the corresponding internal service (Auth, Path, Trip) thanks to the Controller Layer. Furthermore, it communicates to the Database Server through the Model component via JDBC. This node is replicated in order to handle large user traffic and ensure high availability.
+\noindent \textbf{Application Server:} This node hosts the core business logic of the BBP system. We have selected \textbf{Docker} as the execution environment over a bare-metal JVM. This choice ensures environment consistency across development, testing, and production, simplifies dependency management, and facilitates rapid scaling and deployment. The backend server communicates with the Web Server via HTTP and connects to the Data Tier via JDBC.
 
 \vspace{0.5em}
-\noindent \textbf{Database Server:} All the data about Users, Paths, Trips, Reports and the complex geospatial data (GPS tracks) are stored into the Database Server and managed by the PostgreSQL engine with PostGIS extension. The various Application Servers can retrieve and store information on this node through the Model component, which manages the connections. This node is strictly isolated from the public internet.
+\noindent \textbf{Database Server (Cluster 1..n):} The persistence layer is managed by a \textbf{PostgreSQL} engine extended with \textbf{PostGIS} for geospatial operations. To ensure high availability and read scalability (as required by the high volume of search queries), this node is deployed as a \textbf{Cluster (1..n)}. This configuration typically consists of a Primary node for write operations and multiple Read Replicas, all isolated from the public internet for security.
 
 \vspace{0.5em}
-\noindent \textbf{Weather Server:} During the "Save Trip" procedure, the Application Server needs to enrich the trip data with meteorological information. For this scope, the Application Server contacts the external Weather Server through a REST API over HTTPS to retrieve the specific weather conditions for the given time and location.
-
+\noindent \textbf{Weather Server:} An external third-party infrastructure. During the "Save Trip" procedure, the Application Server communicates with this node via a REST API over HTTPS to fetch historical weather data required to enrich the user's trip log.
 
 \newpage
 \subsubsection{Register Account}
@@ -587,18 +612,34 @@ This section specifies the Application Programming Interface (API) and the inter
     \item $getTripDetails$($Integer$ tripID, $Integer$ userID): $FullTripDTO$
 \end{itemize}
 
-\subsubsection*{Model (Persistence)}
+\subsubsection*{Model Components (Persistence Layer)}
+
+\paragraph*{User Repository}
 \begin{itemize}
     \item $findUserByEmail$($String$ email): $UserEntity$
     \item $createUser$($UserData$ data, $String$ passwordHash): $Integer$
+\end{itemize}
+
+\paragraph*{Path Repository}
+\begin{itemize}
     \item $findPathsByLocation$($GeoBox$ area): $List<PathEntity>$
-    \item $findAllPathDataInArea$($GeoBox$ area): $List<AggregatedData>$ 
+    \item $findAllPathDataInArea$($GeoBox$ area): $List<AggregatedData>$ \textit{// Optimized query for Searcher}
     \item $getPathDetails$($Integer$ pathID): $PathEntity$
-    \item $getGPSPoints$($Integer$ referenceID, $Type$ type): $List<GPSPoint>$
+    \item $getPathGeometry$($Integer$ pathID): $List<GPSPoint>$
     \item $savePath$($Geometry$ geometry, $String$ name, $Visibility$ visibility): $Integer$
+\end{itemize}
+
+\paragraph*{Trip Repository}
+\begin{itemize}
     \item $saveTrip$($TripStats$ stats, $WeatherData$ weather, $Integer$ pathID): $Integer$
-    \item $saveReport$($ReportData$ report): $Integer$
     \item $findTripsByOwner$($Integer$ userID): $List<TripEntity>$
+    \item $getTripGeometry$($Integer$ tripID): $List<GPSPoint>$
+\end{itemize}
+
+\paragraph*{Report Repository}
+\begin{itemize}
+    \item $saveReport$($ReportData$ report): $Integer$ \textit{// Handles both Status and Obstacle reports}
+    \item $getReportsForPath$($Integer$ pathID): $List<ReportEntity>$
 \end{itemize}
 
 \subsubsection*{Weather API Client}
@@ -659,6 +700,8 @@ This section specifies the Application Programming Interface (API) and the inter
     \item $startListening$(): $void$
     \item $stopListening$(): $void$
     \item $startGPSOnly$(): $void$
+    \item $onSensorChanged$($SensorData$ data): $void$
+    \item $onLocationChanged$($Location$ loc): $void$
 \end{itemize}
 
 \subsubsection*{Navigation Manager}
@@ -704,8 +747,9 @@ The communication between these two entities is stateless and occurs over a secu
 \subsubsection{Layered Architecture (Backend)}
 Within the Backend Server, we have adopted a \textbf{Layered Architecture} pattern to strictly enforce the separation of concerns. This ensures that each component has a specific responsibility and only interacts with the layers immediately adjacent to it, promoting maintainability and testability. The layers are organized as follows:
 \begin{enumerate}
-    \item \textbf{Controller Layer (Presentation):} The outermost layer that handles incoming HTTP requests, performs input validation, and routes them to the appropriate business logic. It acts as the interface to the outside world.
-    \item \textbf{Security Layer (Middleware):} An intercepting layer responsible for authentication and authorization (JWT validation) before any business logic is executed.
+    \item \textbf{Controller Layer (Presentation):} Controller Layer (Presentation \& Orchestration): The outermost layer that handles incoming HTTP requests and input validation. Design Decision: For complex workflows involving multiple independent domain services (e.g., saving a Trip and a Path simultaneously), the Controller also assumes the role of an Orchestrator. This choice was made to prevent tight coupling between domain services (e.g., preventing Trip Service from depending on Path Service), ensuring that each business service remains self-contained and reusable.
+    
+    \item \textbf{Auth Layer (Middleware):} An intercepting layer responsible for authentication and authorization (JWT validation) before any business logic is executed.
     \item \textbf{Service Layer (Business Logic):} The core of the application (e.g., \texttt{Path Service}, \texttt{Trip Service}). It implements the complex business rules, orchestrates workflows, and performs calculations like path scoring.
     \item \textbf{Data Access Layer (Persistence):} Encapsulated by the \texttt{Model} component, this layer abstracts the underlying database technology, providing a clean API for data storage and retrieval.
 \end{enumerate}
@@ -726,7 +770,7 @@ The \textbf{Facade Pattern} is utilized in multiple areas to simplify interactio
 \end{itemize}
 
 \subsubsection{Transaction Script / Orchestrator}
-For complex write operations, specifically the "Save Trip and Path" (UC9) and "Save Path" (UC12) scenarios, we adopted a \textbf{Transaction Script} or \textbf{Orchestrator} approach implemented within the Controller layer. Instead of distributing the logic of creating paths, saving reports, and linking trips across disparate components, the Controller acts as a central orchestrator. It executes these steps in a precise, sequential order (Create Path $\rightarrow$ Save Reports $\rightarrow$ Save Trip), ensuring transactional integrity. If any step fails, the entire logical operation can be rolled back or handled as an error, preventing inconsistent data states (e.g., a Trip linked to a non-existent Path).
+For complex write operations (UC9, UC12), we explicitly adopted an Orchestrator pattern implemented within the Controller layer. While traditional layered architectures often delegate this to a service, we placed this logic in the Controller to maintain zero coupling between the Path and Trip business domains. The Controller ensures the transactional sequence (Create Path -> Save Reports -> Save Trip), acting effectively as an Application Service or API Gateway for these specific composite use cases.
 
 \subsubsection{Lazy Loading (On-Read Aggregation)}
 While not a structural GoF pattern, the decision to calculate the "Path Status" and "Score" dynamically at the time of the request (UC4, UC5) implements a \textbf{Lazy Loading} strategy. This ensures that users always see the most up-to-date information based on the latest "freshness" of reports, avoiding the data consistency issues that would arise from storing a static, pre-calculated score in the database.
@@ -754,7 +798,7 @@ The BBP system is designed to handle varying loads, from daily commutes to peak 
 \subsection{Notification Handling and Asynchronous Processing}
 While BBP relies primarily on immediate user feedback, internal "system notifications" are handled asynchronously to improve perceived performance:
 \begin{itemize}
-    \item \textbf{Decoupling Aggregation:} As seen in the design of the \texttt{Trip Service}, the recalculation of path statistics (R9) is triggered via an \texttt{Aggregation Publisher}. This allows the critical "Save Trip" transaction to complete and return a success message to the user immediately, while the heavy computational task of updating the path's average statistics happens asynchronously in the background (On-Write strategy). This prevents user interface freezing during complex server-side calculations.
+    \item \textbf{Decoupling Aggregation:} To ensure users consistently access the most up-to-date information regarding path conditions and safety, the system adopts an On-Read Aggregation strategy. In contrast to pre-calculation methods that may yield stale data, the system computes the ``Path Status'' and ``Score'' dynamically at request time. This logic is encapsulated within the stateless \texttt{Path Merger} component, prioritizing data freshness over read latency. To mitigate the performance impact of on-the-fly calculations, the architecture employs optimized PostgreSQL aggregation functions and in-memory dataset processing to minimize database round-trips, potentially supplemented by short-lived caching policies for high-traffic paths.
 \end{itemize}
 
 \subsection{Ease of Deployment}

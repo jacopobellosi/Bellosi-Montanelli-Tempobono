@@ -166,14 +166,14 @@
 \begin{center}
     \begin{longtable}{@{}|p{0.19\linewidth}|p{0.81\linewidth}|@{}}
         \hline
-        \textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (Success, Auto-Pause GPS \& Detection) – Key Scenario} \\
+        \textbf{Scenario ID} & \textbf{3.\crc – Automatic Recording (Success) Key Scenario} \\
         \hline
         \textbf{Actor} & Carlo (registered user) \\
         \hline
         \textbf{Preconditions} & Accurate GPS data (\hyperref[da:2]{DA2}), reliable threshold (\hyperref[da:4]{DA4}), device fixed to bike (\hyperref[da:5]{DA5}). \\
         \hline
         % --- DESCRIZIONE MODIFICATA ---
-        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. While riding, Carlo stops for 5 minutes. The app detects low  speed and \textbf{automatically pauses the GPS coordinate recording (R25)}, but the \textbf{session timer (Elapsed Time) continues to run}. When Carlo restarts cycling, the app automatically resumes GPS tracking (R26). Later, a strong shock occurs due to a pothole. Sensors send data spikes to BBP (R24). Upon completion, BBP asks for confirmation (\hyperref[da:7]{DA7}); Carlo validates correct detections (R27) and saves the trip. The app displays summary (R29) before saving /publishng path and trip(\hyperref[da:13]{DA13}). \\
+        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. The rides go really smoothly, but later, a strong shock occurs due to a pothole. Sensors send data spikes to BBP (R24). Upon completion, BBP asks for confirmation (\hyperref[da:7]{DA7}); Carlo validates correct detections (R27) and saves the trip. The app displays summary (R29) before saving /publishng path and trip(\hyperref[da:13]{DA13}). \\
         % --- FINE MODIFICA ---
         \hline
         \textbf{Postconditions} & Trip data ('Elapsed Time' and confirmed detections) are stored in Carlo’s archive. 'Average Speed' is calculated using 'Elapsed Time'. \\
@@ -191,7 +191,7 @@
         \textbf{Preconditions} & Same as Scenario 3.2; false detection occurs. \\
         \hline
         % --- DESCRIZIONE MODIFICATA ---
-        \textbf{Description} & Carlo’s recording continues (including auto-pauses of the GPS while the timer runs), but the detected spike results from jumping off a curb. After terminating the recording, when asked to confirm detections (R26), Carlo (acting in good faith, (\hyperref[da:7]{DA7})) presses “No, ignore” for incorrect ones (R27). The BBP system cancels invalid detections, and Carlo completes the trip as in Scenario 3.2. \\
+        \textbf{Description} & Carlo’s recording continues uninterrupted, but the detected spike results from jumping off a curb. After terminating the recording, BBP presents the logged \texttt{sensor\_event}s for review (R28). Carlo (acting in good faith, (\hyperref[da:7]{DA7})) presses “No, ignore” for incorrect detections (R29), and then completes the trip as in Scenario 3.2.\\
         % --- FINE MODIFICA ---
         \hline
         \textbf{Postconditions} & False detections are removed; valid trip data saved. \\
@@ -209,7 +209,7 @@
         \textbf{Preconditions} & Flat and obstacle-free Path; no sensor spikes (\hyperref[da:4]{DA4}). \\
         \hline
         % --- DESCRIZIONE MODIFICATA ---
-        \textbf{Description} & Carlo rides on a smooth Path. The system correctly applies auto-pause/resume of the GPS during stops, while the timer continues. No anomalies are detected (R24). When pressing “End and Save,” BBP skips the “Review” step (R26) and directly shows the summary screen. \\
+        \textbf{Description} & Carlo rides on a smooth Path. No anomalies are detected (R24).When pressing “End and Save,” BBP skips the “Review” step (R28) and directly shows the summary screen. \\
         % --- FINE MODIFICA ---
         \hline
         \textbf{Postconditions} & Trip saved successfully without detected issues. \\
@@ -241,7 +241,7 @@ A core distinction is made between a \texttt{Path} (the "model" of a route) and 
 
 The \texttt{Path} class represents the route's definition. It is composed of \texttt{GPS\_points} that define its geometry (R36). A \texttt{Path} has a \texttt{pathVisibility} (Public/Private), which determines if it is discoverable via search (R39).
 
-A \texttt{Trip} represents a specific, private cycling session recorded by a \texttt{Registered\_user}. It is also fundamentally defined by its own sequence of \texttt{GPS\_points} (the "trace") recorded during the session (R21), as described in the requirements. Furthermore, each \texttt{Trip} is linked via composition to exactly one \texttt{Statistic} object. This object holds calculated data like \texttt{avg\_speed}, \texttt{distance}, and \texttt{duration} (which represents the total 'Elapsed Time', per R22). The \texttt{avg\_speed} is calculated using this total duration (R31), reflecting the "Opzione A" Auto-Pause logic. Each \texttt{Trip} is also associated with one \texttt{Weather\_info} object (R32).
+A \texttt{Trip} represents a specific, private cycling session recorded by a \texttt{Registered\_user}. It is also fundamentally defined by its own sequence of \texttt{GPS\_points} (the "trace") recorded during the session (R21), as described in the requirements. Furthermore, each \texttt{Trip} is linked via composition to exactly one \texttt{Statistic} object. This object holds calculated data like \texttt{avg\_speed}, \texttt{distance}, and \texttt{duration} (which represents the total 'Elapsed Time', per R22). The \texttt{avg\_speed} is calculated using this total duration ('Elapsed Time') and 'Total Distance'(R31). Each \texttt{Trip} is also associated with one \texttt{Weather\_info} object (R32).
 
 Crucially, the diagram models the core business logic: a \texttt{Path} is associated with all the \texttt{Trip}s performed on it (a 1-to-N "performances" or "Is connected to" relation). A \texttt{Trip} has its own \texttt{tripVisibility} (Public/Private), which dictates whether its statistics are used to update the aggregate average statistics of the parent \texttt{Path} (R9, R39).
 
@@ -263,7 +263,7 @@ Unlike Activity Diagrams, which model process flows, the following State Machine
 \paragraph{Trip State Diagram.}
 This diagram (Figure \ref{fig:sd_trip}) models the lifecycle of a \texttt{Trip} recording session (UC7). The object begins in the \texttt{Idle} (or Ready) state. When the \texttt{RCY} initiates the recording (R20, \texttt{tapsStartRecording()}), the object transitions to the \texttt{Recording} state. In this state, it actively records GPS (R21) and sensor (R23) data, and the 'Elapsed Time' (R22) runs continuously.
 
-Since all auto-pause logic has been removed, the object remains in the \texttt{Recording} state without interruption until the \texttt{RCY} explicitly triggers the \texttt{tapsStopRecording()} event (R27). At this point, the object transitions to the \texttt{Stopped (Pending Save)} state, where the collected data is passed to the \texttt{Save trip and path} (UC9) use case. Depending on the user's final choice, the object transitions to one of two final states: \texttt{Saved} (R33) or \texttt{Discarded}.
+ The object remains in the \texttt{Recording} state without interruption until the \texttt{RCY} explicitly triggers the \texttt{tapsStopRecording()} event (R27). At this point, the object transitions to the \texttt{Stopped (Pending Save)} state, where the collected data is passed to the \texttt{Save trip and path} (UC9) use case. Depending on the user's final choice, the object transitions to one of two final states: \texttt{Saved} (R33) or \texttt{Discarded}.
 
 \begin{figure}[H]
     \centering
@@ -377,7 +377,8 @@ Finally, the User initiates the save action, triggering a system validation chec
 
 \paragraph{Automatic Recording.} When the User presses "Start Recording" (R20), BBP initializes the session, updates the display (HUD), and activates the necessary device sensors (R23). Two key processes then run concurrently: the system listens to GPS data to construct the path's geometry (R21) and simultaneously monitors other sensors (accelerometer/gyroscope) to detect potential obstacles (R24).
 
-This tracking process includes the "Auto-Pause" logic based on user speed. If the speed drops below a set threshold ("Users speed below the treshold"), the system pauses only the GPS and sensor data logging. Crucially, the main session timer continues to run ("/ keep the timer") to track the total elapsed time. When the user's speed increases again ("Users speed back up the treshold"), the system automatically resumes listening to the sensors and recording the GPS track (R25, R26).
+During the recording session, two key processes run concurrently: the system listens to GPS data to construct the path’s geometry (R21) and simultaneously monitors IMU sensors (accelerometer/gyroscope) to detect potential obstacles (R23, R24).
+BBP continuously logs GPS and sensor data from the moment the user starts the session (R20) until the user explicitly ends it (R27). The session timer shown in the HUD represents the total 'Elapsed Time' between start and stop (R22) and is used for final statistics computation (R31).
 
 Once the User presses "End", both parallel data streams stop. The system first elaborates the recorded path geometry ("Elaborate path") and calculates the final statistics (R29), which will be based on the total Elapsed Time.
 
@@ -404,8 +405,8 @@ Here are listed a summary of the main functions of the BBP system:\\\\
 \textbf{Logout:} The User ends the current session; subsequent access requires logging in again.\\
 \textbf{Search Path:} The User specifies origin and destination; BBP computes scores and returns an ordered list of publishable Paths.\\
 \textbf{View Path details:} After selecting a Path, BBP displays the polyline, distance, elevation, the merged current status, reported obstacles, and the weather forecast associated with the Path .\\
-\textbf{Follow Path (Navigation):} The User taps “Follow Path”; BBP redirect to an External navigation service and use GPS to acquire travel data. At the end, BBP show the summary of the trip and offer registration to save the data.\\
-\textbf{Start Automatic Recording:} A registered User starts a session; BBP records the \textbf{Trip's geometry} (GPS) and live stats while acquiring motion-sensor data. The system automatically pauses GPS/sensor recording (but not the elapsed time) when the user stops (R25) and resumes when they restart (R26).\\
+\textbf{Follow Path (Navigation):} The User taps “Follow Path”; BBP redirect to an External navigation service and uses GPS to acquire travel data. At the end, BBP show the summary of the trip and offers registration to save the data.\\
+\textbf{Start Automatic Recording:} A registered User starts a session; BBP records the \textbf{Trip's geometry} (GPS) and live stats while acquiring motion-sensor data. The system, when the user terminates and decides to terminate the recording, will recreate the total Path.\\
 \textbf{Automatic Detection Review:} At the end of recording, BBP asks the User to confirm or reject sensor-detected anomalies (e.g., potholes); only confirmed detections are retained.\\
 \textbf{End \& Save Trip:} BBP computes trip statistics and attaches a weather snapshot; the trip (and any confirmed detections) is saved to the User’s archive.\\
 \textbf{Manual Path creation :} The User opens the editor, draws the Path, optionally adds maintenance pins or the path status, sets type and visibility, and presses “Save.”\\

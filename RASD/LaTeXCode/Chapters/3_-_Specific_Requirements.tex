@@ -12,7 +12,7 @@ The primary user interface for the BBP system will be a native mobile applicatio
     \centering
     \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/home mockup.png}
+    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/Home.png}
     \caption{View home}
     \label{fig:home}
     \end{figure}
@@ -22,9 +22,9 @@ The primary user interface for the BBP system will be a native mobile applicatio
     \centering
     \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/profile mockup.png}
-    \caption{View profile details}
-    \label{fig:profile_details}
+    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/Profile.png}
+    \caption{View profile}
+    \label{fig:profile}
     \end{figure}
     \end{minipage}
     \hspace{0.1\textwidth}
@@ -37,9 +37,9 @@ The primary user interface for the BBP system will be a native mobile applicatio
     \centering
     \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/create path mockup.png}
-    \caption{View create path}
-    \label{fig:create path}
+    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/Create new route.png}
+    \caption{View creation mode}
+    \label{fig:create new path}
     \end{figure}
     \end{minipage}
     \hspace{0.1\textwidth}
@@ -47,9 +47,9 @@ The primary user interface for the BBP system will be a native mobile applicatio
     \centering
     \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/search path mockup.png}
-    \caption{View search path}
-    \label{fig:search path}
+    \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/mockup/Search trips.png}
+    \caption{View search trip}
+    \label{fig:search trips}
     \end{figure}
     \end{minipage}
     \hspace{0.1\textwidth}
@@ -916,7 +916,7 @@ concurrent user load, data storage capacity, and data acquisition timing constra
     
     \item \textbf{(Time response: Start Recording):} The \texttt{Record trip (automatic)} session (R20) must initialize and begin active monitoring of sensors (R21, R23) within \textbf{1.5 seconds} of the user tapping "Start".
     
-    \item \textbf{(Time response: Sensor Frequency):} During an \textbf{active, non-paused} recording state (R20, R26):
+    \item \textbf{(Time response: Sensor Frequency):} During an \textbf{active} recording state (R20):
     \begin{itemize}[leftmargin=*, noitemsep, nolistsep]
         \item The GPS (R21) must be sampled at a minimum frequency of \textbf{1 Hz} (one sample per second) to ensure accurate geometry.
         \item The Accelerometer and Gyroscope (R23) must be sampled at a minimum frequency of \textbf{10 Hz} (ten samples per second) to reliably capture data for pothole detection (R24).
@@ -932,7 +932,7 @@ concurrent user load, data storage capacity, and data acquisition timing constra
     
     \item \textbf{(Data storage: Retention):} All user-generated \texttt{Trip} data (R31), \texttt{Path} data (R33), and \texttt{Report} data (R37, R38) shall be retained indefinitely.
 
-    \item \textbf{(Time response: Auto-Pause/Resume):} The system must detect and trigger an Auto-Pause (R25) or Auto-Resume (R26) state within \textbf{15 seconds} of the speed condition being continuously met (i.e., 15 seconds after the 2-minute stop, or 15 seconds after resuming movement).
+    \item \textbf{(Time response: Stop Recording):} After the user taps "Stop Recording" (R27), BBP shall stop sensor acquisition and display the post-recording screen (Review Detections if \texttt{sensor\_event}s were logged (R28), otherwise the Trip summary) within \textbf{3 seconds}.
 \end{enumerate}
 
 

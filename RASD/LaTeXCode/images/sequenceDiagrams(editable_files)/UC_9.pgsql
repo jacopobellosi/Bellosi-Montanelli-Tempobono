@@ -1,4 +1,3 @@
-sequenceDiagram
     actor "Registered User" as User
     participant "BBP Application" as App
     actor "External Weather Service" as Weather
@@ -24,11 +23,11 @@ sequenceDiagram
     alt User Saves [Event Flow Step 6]
         User->App: tapsSave()
 
-        note right of App: System saves the private Trip (R33).
-        note right of App: System saves the Path with selected visibility (R25).
+        note right of App: System create the Path and save the trip(R33).
+        note right of App: System saves the Path and Trip with selected visibility (R25).
 
-        alt visibility is "Public"
-            note right of App: System updates Path average stats (R26).
+        alt trip visibility is "Public"
+            note right of App: System will load the paths with the updated stats (R26).
         end
 
         App-->User: showMessage("Save successful!")
