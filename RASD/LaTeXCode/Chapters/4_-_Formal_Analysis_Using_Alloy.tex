@@ -1,5 +1,14 @@
 \section{Objectives of the analysis}
-Here is an alloy specification of the system described in the RASD:
+The goal of this Alloy-based analysis is to complement the informal requirements and UML models with a precise, machine-checkable specification. We use Alloy to model a core subset of the BBP domain where inconsistencies are both likely and costly: (i) the structural relationships among users, paths, trips, sensor-detected events, and reports, and (ii) the rules that constrain visibility/privacy and the creation of validated obstacle reports.
+
+In particular, the analysis focuses on two categories of properties.
+
+First, we verify static consistency properties of the domain model: bidirectional associations (e.g., a trip belongs to exactly one path and a path collects its recorded performances), cardinalities, and key integrity constraints (e.g., the relationship between an \texttt{Obstacle\_report} and the \texttt{sensor\_event}s that may have triggered it). This is important because the BBP data model combines multiple entities (Path, Trip, Report, \texttt{sensor\_event}s) with non-trivial constraints that can easily become contradictory when the system evolves.
+
+Second, we validate privacy and lifecycle properties. We model visibility choices (Public/Private) and check that they enforce the intended privacy invariants, and we formalize the lifecycle of sensor events (Logged → AwaitingConfirmation → Confirmed/Ignored). This allows us to verify that only confirmed detections can become official obstacle reports, and that review states eventually lead to a decision.
+
+To keep the model analyzable, we intentionally abstract away continuous or implementation-dependent aspects (e.g., geometric computations, exact GPS coordinates, numerical statistics, and external API details). These elements are represented as uninterpreted atoms, while the analysis concentrates on the logical constraints and state transitions that are central to correctness.
+
 
 \section{Alloy Code}
 \lstinputlisting[language=alloy]{Alloy/Alloy.als}
@@ -16,62 +25,98 @@ Here is an alloy specification of the system described in the RASD:
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=0.3\linewidth]{RASD/LaTeXCode/Alloy/Alloy Sequence of states.png}
+        \includegraphics[width=0.15\linewidth]{RASD/LaTeXCode/Alloy/Alloy Sequence of states.png}
         \caption{Sequence of states.}
         \label{fig:Alloy Sequence of states}%
     \end{center}
 \end{figure}
 
 \subsection{States 0}
+Figures 4.3 and 4.4 show State 0 of the execution trace produced by the run command used to visualize a complete \texttt{sensor\_event} lifecycle. At this initial state, sensor events are still in the Logged phase: they represent raw detections collected during the recording session, before any user validation occurs. Consequently, no validated obstacle report is required at this point for the selected event, since the review process has not started yet.
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[angle=90,width=0.25\linewidth]{RASD/LaTeXCode/Alloy/State 0 Relational Graph.png}
-        \caption{State 0 Relational Graph.}
-        \label{fig:State 0 Relational Graph}%
-    \end{center}
-\end{figure}
+This state is useful to highlight the separation between “data acquisition” and “data validation” in the model: the system may collect multiple detections while recording, but these detections remain tentative until the user explicitly reviews them. In addition, the instance already includes different visibility configurations (Public/Private) for paths and trips, allowing us to observe that privacy constraints are enforced structurally, independently from the later review process.
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/Alloy/State 0 Projected View.png}
-        \caption{State 0 Projected View}
-        \label{fig:State 0 Projected View}%
-    \end{center}
-\end{figure}
+% Inizio delle due colonne centrate
+\begin{center}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[angle=90,width=0.50\linewidth]{RASD/LaTeXCode/Alloy/State 0 Relational Graph.png}
+    \caption{State 0 Relational Graph.}
+    \label{fig:State 0 Relational Graph}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[angle=90,width=0.88\linewidth]{RASD/LaTeXCode/Alloy/State 0 Projected View.png}
+    \caption{State 0 Projected View}
+    \label{fig:State 0 Projected View}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+\end{center}
+% Fine delle due colonne centrate
 
 \subsection{States 1}
+Figures 4.5 and 4.6 show State 1, where the model enters the review phase. After the recording is stopped, the selected \texttt{sensor\_event} moves from Logged to AwaitingConfirmation, reflecting the moment in which the application presents the user with pending detections to validate.
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[angle=90,width=0.25\linewidth]{RASD/LaTeXCode/Alloy/State 1 Relational Graph.png}
-        \caption{State 1 Relational Graph.}
-        \label{fig:State 1 Relational Graph}%
-    \end{center}
-\end{figure}
+A key aspect to notice is that, even though the event is now under review, the model still does not associate it with a validated obstacle report: the transition to AwaitingConfirmation alone does not “publish” information. This explicitly captures the intended semantics that user interaction is needed to turn a raw detection into a confirmed report. Moreover, the rest of the domain structure (users, paths, trips, and other events) remains stable across the transition, which is consistent with the frame conditions used in the dynamic model.
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/Alloy/State 1 Projected View.png}
-        \caption{State 1 Projected View}
-        \label{fig:State 1 Projected View}%
-    \end{center}
-\end{figure}
+% Inizio delle due colonne centrate
+\begin{center}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[angle=90,width=0.50\linewidth]{RASD/LaTeXCode/Alloy/State 1 Relational Graph.png}
+    \caption{State 1 Relational Graph.}
+    \label{fig:State 1 Relational Graph}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[angle=90,width=0.91\linewidth]{RASD/LaTeXCode/Alloy/State 1 Projected View.png}
+    \caption{State 1 Projected View}
+    \label{fig:State 1 Projected View}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+\end{center}
+% Fine delle due colonne centrate
 
 \subsection{States 2}
+Figures 4.7 and 4.8 show State 2, which completes the lifecycle for the selected event. In this state, the user has confirmed the detection: the \texttt{sensor\_event} reaches the Confirmed state and the model introduces (or activates) the link to an \texttt{Obstacle\_report} through the triggeredBy relation.
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[angle=90,width=0.25\linewidth]{RASD/LaTeXCode/Alloy/State 2 Relational Graph.png}
-        \caption{State 2 Relational Graph.}
-        \label{fig:State 2 Relational Graph}%
-    \end{center}
-\end{figure}
+This state visually demonstrates the central safety property of the dynamic model: whenever an event is Confirmed, there must exist a corresponding obstacle report connected to it. In other words, only user-confirmed detections become official reports, while rejected detections never produce reports. The instance also illustrates the consistency constraints between the report and the trip/path context in which the event occurred, ensuring that validated information remains coherent with the recorded session.
 
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/Alloy/State 2 Projected View.png}
-        \caption{State 2 Projected View}
-        \label{fig:State 2 Projected View}%
-    \end{center}
-\end{figure}
+% Inizio delle due colonne centrate
+\begin{center}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[angle=90,width=0.50\linewidth]{RASD/LaTeXCode/Alloy/State 2 Relational Graph.png}
+    \caption{State 2 Relational Graph.}
+    \label{fig:State 2 Relational Graph}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+    \begin{minipage}{0.4\textwidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+    \includegraphics[angle=90,width=0.98\linewidth]{RASD/LaTeXCode/Alloy/State 2 Projected View.png}
+    \caption{State 2 Projected View}
+    \label{fig:State 2 Projected View}
+    \end{figure}
+    \end{minipage}
+    \hspace{0.1\textwidth}
+\end{center}
+% Fine delle due colonne centrate

@@ -367,8 +367,8 @@ This section lists the specific functional requirements that the Best Bike Paths
                             & \textbf{a. Identifying all relevant public \texttt{Path}s (checking Visibility R25).} \\
                             & \textbf{b. Retrieving all associated \texttt{Status\_report} and \texttt{Obstacle\_report} instances (R8).} \\
                             & \textbf{c. Applying the merging (R9) and scoring (R10) logic to calculate the `derivedStatus` and `derivedScore` for each path.} \\
-                            & \textbf{d. Querying the \texttt{External Weather Service} for forecast data for the relevant locations.} \\
-                            & 4 - BBP displays the ordered list of paths to the User, including their status and weather info (R11). \\
+                            & \textbf{d. Querying the \texttt{External Weather Service} for forecast data for the relevant locations (R14).} \\
+                            & 4 - BBP displays the ordered list of path to the User (R11), including their status and weather info (R14). \\
     \hline
     \textbf{Exit condition}   & The user is presented with a list of matching paths ordered by score, or a "No results" message. \\
     \hline
@@ -401,7 +401,7 @@ This section lists the specific functional requirements that the Best Bike Paths
                             & \textbf{a. Retrieving its complete list of \texttt{GPS\_points}, all associated \texttt{Status\_report}s, and all \texttt{Obstacle\_report}s (R8).} \\
                             & \textbf{b. Applying the merging logic (R9) using the reports to calculate the definitive \texttt{derivedStatus}.} \\
                             & \textbf{c. Querying the \texttt{External Weather Service} for an updated forecast (R14).} \\
-                            & 3 - \textbf{BBP Application displays the \texttt{Path Details} screen to the User}, showing all path details (geometry, inclination, merged status, obstacles, weather) (R13). \\
+                            & 3 - \textbf{BBP Application displays the \texttt{Path Details} screen to the User}, showing all path details (geometry, inclination, merged status, obstacles, weather) (R13)and the weather forecast for the path location (R14). \\
     \hline
     \textbf{Exit condition}   & The user is viewing the detailed information for the selected path. \\
     \hline
@@ -922,7 +922,7 @@ concurrent user load, data storage capacity, and data acquisition timing constra
         \item The Accelerometer and Gyroscope (R23) must be sampled at a minimum frequency of \textbf{10 Hz} (ten samples per second) to reliably capture data for pothole detection (R24).
     \end{itemize}
     
-    \item \textbf{(Time response: Save):} The system shall complete the server-side save operation for a \texttt{Trip} (R31) or \texttt{Path} (R39) and return a confirmation message (R40) within \textbf{4.0 seconds} of the user tapping "Save".
+    \item \textbf{(Time response: Save):} The system shall complete the server-side save operation for a \texttt{Trip} (R33) and/or \texttt{Path} (R25), including persisting the selected visibility options (R39) and the stored visibility settings (R25, R26), and return a confirmation message (R40) within \textbf{4.0 seconds} of the user tapping "Save".
     
     \item \textbf{(Number of concurrent users: General):} The BBP backend shall support a minimum of \textbf{1,000 concurrent users} (ACY and RCY) performing searches (R7) or navigation (R15) without degrading the response times defined in PR-2 and PR-3.
     
@@ -930,7 +930,7 @@ concurrent user load, data storage capacity, and data acquisition timing constra
     
     \item \textbf{(Data storage: Scalability):} The system architecture must be scalable to support the storage and processing (R8, R9) of an average of \textbf{10,000 new \texttt{Trip}s} and \textbf{50,000 new \texttt{Report}s} per day.
     
-    \item \textbf{(Data storage: Retention):} All user-generated \texttt{Trip} data (R31), \texttt{Path} data (R33), and \texttt{Report} data (R37, R38) shall be retained indefinitely.
+    \item \textbf{(Data storage: Retention):} All user-generated \texttt{Trip} data (R33),including final statistics (R31) and associated weather information (R32), \texttt{Path} data (R25), and \texttt{Report} data (R37, R38) shall be retained indefinitely.
 
     \item \textbf{(Time response: Stop Recording):} After the user taps "Stop Recording" (R27), BBP shall stop sensor acquisition and display the post-recording screen (Review Detections if \texttt{sensor\_event}s were logged (R28), otherwise the Trip summary) within \textbf{3 seconds}.
 \end{enumerate}
@@ -947,22 +947,22 @@ This section outlines specific constraints that restrict the design and implemen
 \begin{itemize}[leftmargin=*, itemsep=2pt]
     \item \textbf{Web Communication:} All communication between the BBP mobile application and the BBP backend server must use secure, standard protocols, specifically \textbf{HTTPS}.
     \item \textbf{Data Interchange:} Data interchange with all external services, particularly the \texttt{External Weather Service}, must adhere to standard data formats, primarily \textbf{JSON}.
-    \item \textbf{Data Privacy:} As the system collects and stores sensitive user data, including personal information (R1, R2) and precise location history (R21, R31), the design must comply with relevant data protection regulations, such as the \textbf{GDPR}.
+    \item \textbf{Data Privacy:} As the system collects and stores sensitive user data, including personal information (R1, R2) and precise location history (R21, R33), the design must comply with relevant data protection regulations, such as the \textbf{GDPR}.
 \end{itemize}
 
 \subsection{Hardware limitations}
 \label{subsec:hardware_limitations}%
 \begin{itemize}[leftmargin=*, itemsep=2pt]
     \item \textbf{Device Type:} The system is constrained to run on consumer smartphones (e.g., iOS and Android) .
-    \item \textbf{Required Sensors:} All core functionalities for automatic recording (R20, R23) are strictly dependent on the availability and user-granted permission for specific hardware sensors: \textbf{GPS}, \textbf{Accelerometer}, and \textbf{Gyroscope}. Devices lacking these sensors will be limited to manual mode (R34) and search/navigation (R7, R15).
-    \item \textbf{Connectivity:} The system is not designed for full offline operation. An active internet connection (Wi-Fi or cellular data) is a constraint for most core functions, including login (R3), search (R7), and saving/publishing (R31, R37).
+    \item \textbf{Required Sensors:} All core functionalities for automatic recording (R20, R23) are strictly dependent on the availability and user-granted permission for specific hardware sensors: \textbf{GPS}, \textbf{Accelerometer}, and \textbf{Gyroscope}. Devices lacking these sensors will be limited to manual path creation (R36) and search/navigation (R7, R15).
+    \item \textbf{Connectivity:} The system is not designed for full offline operation. An active internet connection (Wi-Fi or cellular data) is a constraint for most core functions, including login (R3), search (R7), submitting Reports (R31, R38)and saving/publishing Trips and Paths (R33, R25, R39) with stored visibility rules (R25, R26).
 \end{itemize}
 
 \subsubsection{Any other constraint}
 \label{subsec:Any other constraint}%
 \begin{itemize}[leftmargin=*, itemsep=2pt]
     \item \textbf{Platform Type:} The user interface must be implemented as a \textbf{native mobile application} to ensure reliable access to background processes and hardware sensors (GPS, IMU) . A web-based application is not sufficient to meet the core functional requirements (R20, R23).
-    \item \textbf{External API Dependency:} The system is constrained by its dependency on third-party services. The \texttt{External Weather Service} (R14, R30)  and any underlying map provider (e.g., Google Maps, OpenStreetMap) are external dependencies. The design must be resilient to their potential downtime or API changes.
+    \item \textbf{External API Dependency:} The system is constrained by its dependency on third-party services. The \texttt{External Weather Service} (R14, R32)  and any underlying map provider (e.g., Google Maps, OpenStreetMap) are external dependencies. The design must be resilient to their potential downtime or API changes.
     \item \textbf{Architecture:} The requirement for server-side aggregation (R8, R9) and scoring (R10) constrains the system to a \textbf{Client-Server architecture}. A purely peer-to-peer or standalone application is not feasible.
 \end{itemize}
 
@@ -976,7 +976,7 @@ The system must demonstrate high reliability during its core operations.
 \begin{itemize}[leftmargin=*, itemsep=2pt]
     \item \textbf{Recording Stability:} The \texttt{Record trip (automatic)} session (R20) must be robust. The application must be able to handle continuous background data streams from GPS (R21) and IMU sensors (R23) for extended periods (e.g., up to 3 hours) without crashing or corrupting data.
     \item \textbf{Data Integrity (Sensors):} The system must reliably process sensor data (R23) to ensure that \texttt{sensor\_event} logs (R24) are correctly generated based on the defined thresholds (DA4) and are not lost, even if the application is temporarily suspended.
-    \item \textbf{Data Integrity (Save):} The system must ensure that a "Save" operation (R31, R39) is atomic. A failure during saving (e.g., network loss) must not result in partially saved or corrupted \texttt{Trip} or \texttt{Path} data.
+    \item \textbf{Data Integrity (Save):} The system must ensure that a "Save" operation (Trip save: R33; Path save: R25; visibility selection: R39; stored visibility settings: R25, R26) is atomic. A failure during saving (e.g., network loss) must not result in partially saved or corrupted \texttt{Trip} or \texttt{Path} data.
 \end{itemize}
 
 \subsection{Availability}
@@ -993,7 +993,7 @@ The system must protect the integrity and confidentiality of user data.
 \begin{itemize}[leftmargin=*, itemsep=2pt]
     \item \textbf{Data in Transit:} All communication between the BBP Application and the BBP Server must be encrypted using \textbf{HTTPS}.
     \item \textbf{Authentication:} User passwords must be stored on the server using a strong, salted, one-way hashing algorithm.
-    \item \textbf{Authorization:} The system must enforce strict data access controls. A \texttt{RegisteredUser} must only be able to view their own private \texttt{Trip} data (R32, R33). Data associated with other users must not be accessible.
+    \item \textbf{Authorization:} The system must enforce strict data access controls. A \texttt{RegisteredUser} must only be able to view their own private \texttt{Trip} data (R33), enforced by the trip visibility rules (R26), via the saved trips list/details features (R34, R35). Data associated with other users must not be accessible.
     \item \textbf{Data Privacy (Location):} User GPS data (R21), both in transit and at rest, must be treated as sensitive personal information and protected against unauthorized access.
 \end{itemize}
 
