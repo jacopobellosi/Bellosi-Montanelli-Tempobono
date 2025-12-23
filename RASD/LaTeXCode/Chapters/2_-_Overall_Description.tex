@@ -173,7 +173,8 @@
         \textbf{Preconditions} & Accurate GPS data (\hyperref[da:2]{DA2}), reliable threshold (\hyperref[da:4]{DA4}), device fixed to bike (\hyperref[da:5]{DA5}). \\
         \hline
         % --- DESCRIZIONE MODIFICATA ---
-        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. The rides go really smoothly, but later, a strong shock occurs due to a pothole. Sensors send data spikes to BBP (R24). Upon completion, BBP asks for confirmation (\hyperref[da:7]{DA7}); Carlo validates correct detections (R27) and saves the trip. The app displays summary (R29) before saving /publishng path and trip(\hyperref[da:13]{DA13}). \\
+        \textbf{Description} & Carlo presses “Start Recording.” The app tracks his movement, displaying real-time data. The rides go really smoothly, but later, a strong shock occurs due to a pothole. Sensors send data spikes to BBP (R24).
+        Upon completion, BBP presents the logged \texttt{sensor\_event}s for review (R28); Carlo, acting in good faith (\hyperref[da:7]{DA7}), confirms the correct detections (R29).The app displays the final summary and statistics (R31). During saving, Carlo selects the visibility for both Trip and Path (R39, R26, R25) and the Trip is stored in his archive (R33) (\hyperref[da:13]{DA13}). \\
         % --- FINE MODIFICA ---
         \hline
         \textbf{Postconditions} & Trip data ('Elapsed Time' and confirmed detections) are stored in Carlo’s archive. 'Average Speed' is calculated using 'Elapsed Time'. \\
@@ -239,11 +240,11 @@ The system's structure revolves around the base \textbf{User} entity. The \textt
 
 A core distinction is made between a \texttt{Path} (the "model" of a route) and a \texttt{Trip} (a user's "performance" on that route).
 
-The \texttt{Path} class represents the route's definition. It is composed of \texttt{GPS\_points} that define its geometry (R36). A \texttt{Path} has a \texttt{pathVisibility} (Public/Private), which determines if it is discoverable via search (R39).
+The \texttt{Path} class represents the route's definition. It is composed of \texttt{GPS\_points} that define its geometry (R36). A \texttt{Path} has a \texttt{pathVisibility} (Public/Private), which determines if it is discoverable via search (R7, R25) (visibility chosen during saving, R39).
 
 A \texttt{Trip} represents a specific, private cycling session recorded by a \texttt{Registered\_user}. It is also fundamentally defined by its own sequence of \texttt{GPS\_points} (the "trace") recorded during the session (R21), as described in the requirements. Furthermore, each \texttt{Trip} is linked via composition to exactly one \texttt{Statistic} object. This object holds calculated data like \texttt{avg\_speed}, \texttt{distance}, and \texttt{duration} (which represents the total 'Elapsed Time', per R22). The \texttt{avg\_speed} is calculated using this total duration ('Elapsed Time') and 'Total Distance'(R31). Each \texttt{Trip} is also associated with one \texttt{Weather\_info} object (R32).
 
-Crucially, the diagram models the core business logic: a \texttt{Path} is associated with all the \texttt{Trip}s performed on it (a 1-to-N "performances" or "Is connected to" relation). A \texttt{Trip} has its own \texttt{tripVisibility} (Public/Private), which dictates whether its statistics are used to update the aggregate average statistics of the parent \texttt{Path} (R9, R39).
+Crucially, the diagram models the core business logic: a \texttt{Path} is associated with all the \texttt{Trip}s performed on it (a 1-to-N "performances" or "Is connected to" relation). A \texttt{Trip} has its own \texttt{tripVisibility} (Public/Private), which dictates whether its statistics are used in community aggregation and scoring (R9, R10, R26) (visibility chosen during saving, R39).
 
 A \texttt{Path} also serves as an aggregation point for community feedback, being associated with multiple \texttt{Report} instances. The \texttt{<<Abstract>> Report} class acts as the base for all user-submitted information regarding a \texttt{Path}, containing a vital \texttt{timestamp} attribute used for the merging algorithm's "freshness" logic (R9). It has two concrete specializations:
 \begin{itemize}[noitemsep, topsep=0pt]
@@ -380,7 +381,7 @@ Finally, the User initiates the save action, triggering a system validation chec
 During the recording session, two key processes run concurrently: the system listens to GPS data to construct the path’s geometry (R21) and simultaneously monitors IMU sensors (accelerometer/gyroscope) to detect potential obstacles (R23, R24).
 BBP continuously logs GPS and sensor data from the moment the user starts the session (R20) until the user explicitly ends it (R27). The session timer shown in the HUD represents the total 'Elapsed Time' between start and stop (R22) and is used for final statistics computation (R31).
 
-Once the User presses "End", both parallel data streams stop. The system first elaborates the recorded path geometry ("Elaborate path") and calculates the final statistics (R29), which will be based on the total Elapsed Time.
+Once the User presses "End", both parallel data streams stop. The system first elaborates the recorded path geometry ("Elaborate path") and calculates the final statistics (R31), which will be based on the total Elapsed Time.
 
 The system then performs a crucial check: is a review required? ("Review required? (PendingDetections > 0)") (R28). If a review is necessary ("Yes"), BBP presents an interface showing the locations of the potential detections ("Show where are the detection"), prompting the user to confirm or reject each detection individually (R29, R30).
 
