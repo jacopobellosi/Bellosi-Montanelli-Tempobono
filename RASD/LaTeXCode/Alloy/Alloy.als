@@ -25,7 +25,7 @@ sig Registered_user extends User {
 
 sig Path {
     geometry: set GPS_point,       // The GPS points defining the path
-    pathVisibility: one Visibility,// Visibility for search (R39)
+    pathVisibility: one Visibility,// Visibility for search (R25, R7) (choice in save flow: R39)
     creator: one Registered_user,  // The user who created it
     reports: set Report,           // All reports for this path
     performances: set Trip         // All trips recorded on this path
@@ -38,7 +38,7 @@ sig Trip {
     weather: lone Weather_info,      // Weather at the time of the trip (R32)
     owner: one Registered_user,      // The user who recorded it
     path: one Path,                  // The path this trip was on
-    tripVisibility: one Visibility,  // Visibility for stats (R39)
+    tripVisibility: one Visibility,  // Visibility for stats aggregation (R26) (choice in save flow: R39)
     detections: set sensor_event     // Sensor events logged on this trip (R23)
 }
 
@@ -97,14 +97,14 @@ fact ObstacleSensorConsistency {
     )
 }
 
-// Privacy rule: A 'Public' Trip must be on a 'Public' Path. (R39)
+// Privacy rule: A 'Public' Trip must be on a 'Public' Path. (R25, R26, R39)
 fact PublicTripOnPublicPath {
     all t: Trip |
         t.tripVisibility = Public implies t.path.pathVisibility = Public
 }
 
 // Privacy rule: A 'Private' Path can only have performances (Trips)
-// recorded by the path's creator. (R39)
+// recorded by the path's creator. (R25, R26, R39)
 fact PrivatePathOwnedTrips {
     all p: Path |
         p.pathVisibility = Private implies
@@ -112,28 +112,28 @@ fact PrivatePathOwnedTrips {
 }
 
 // ----- 5. Dynamic Model for sensor_event & Obstacle_report -----
-// Usa campi mutabili (var) + operatori temporali di Alloy 6.
-// Modella lo state diagram di Figura 2.3 del RASD:
+// Uses mutable fields (var) and Alloy 6 temporal operators.
+// Models the state diagram from Figure 2.3 of the RASD:
 // Logged -> AwaitingConfirmation -> Confirmed / Ignored.
 
 // --- 5.1 Transition predicates ---
 
-// Il trip è finito e l’evento entra nella schermata di review.
+// The trip has ended and the event enters the review screen.
 pred startReview[e: sensor_event] {
     e.state = Logged
     e.state' = AwaitingConfirmation
-    // Frame condition: tutti gli altri eventi mantengono lo stato.
+    // Frame condition: all other events keep their state.
     all e2: sensor_event - e | e2.state' = e2.state
-    // Nessun report viene creato/modificato in questo passo.
+    // No report is created/modified in this step.
     triggeredBy' = triggeredBy
 }
 
-// L’utente conferma una detection; si crea/lega un Obstacle_report.
+// The user confirms a detection; an Obstacle_report is created/linked.
 pred confirmDetection[e: sensor_event, r: Obstacle_report] {
     e.state = AwaitingConfirmation
     e.state' = Confirmed
 
-    // Il report scelto non era già associato.
+    // The chosen report was not already associated.
     no r.triggeredBy
     r.triggeredBy' = e
 
@@ -142,7 +142,7 @@ pred confirmDetection[e: sensor_event, r: Obstacle_report] {
     all r2: Obstacle_report - r | r2.triggeredBy' = r2.triggeredBy
 }
 
-// L’utente rifiuta una detection.
+// The user rejects a detection.
 pred rejectDetection[e: sensor_event] {
     e.state = AwaitingConfirmation
     e.state' = Ignored
@@ -161,11 +161,11 @@ pred doNothing {
 // --- 5.2 Global behaviour & liveness ---
 
 fact DetectionLifecycle {
-    // Stato iniziale: tutti gli eventi sono appena Logged e nessun report è collegato.
+    // Initial state: all events are Logged and no report is associated.
     all e: sensor_event | e.state = Logged
     no triggeredBy
 
-    // Ad ogni passo avviene una delle operazioni base.
+    // At each step, one of the basic operations occurs.
     always (
         doNothing
         or some e: sensor_event | startReview[e]
@@ -174,8 +174,8 @@ fact DetectionLifecycle {
     )
 }
 
-// Fairness: un evento che è in AwaitingConfirmation viene
-// prima o poi confermato o ignorato (non resta "pending" per sempre).
+// Fairness: an event in AwaitingConfirmation will eventually 
+// be either confirmed or ignored (it cannot remain pending forever).
 fact Fairness {
     always (all e: sensor_event |
         e.state = AwaitingConfirmation implies
@@ -229,8 +229,8 @@ check PrivatePathPrivacy for 5
 
 // ----- 7. Dynamic Model Verification -----
 
-// Safety: ogni volta che un evento è Confirmed
-// esiste qualche Obstacle_report collegato ad esso.
+// Safety: whenever an event is Confirmed,
+// there exists an Obstacle_report linked to it.
 assert ConfirmedImpliesReport {
     always (all e: sensor_event |
         e.state = Confirmed implies
@@ -238,8 +238,8 @@ assert ConfirmedImpliesReport {
     )
 }
 
-// Liveness: ogni evento che arriva in AwaitingConfirmation
-// viene prima o poi deciso (Confirmed o Ignored).
+// Liveness: every event that reaches AwaitingConfirmation
+// is eventually decided (Confirmed or Ignored).
 assert AwaitingEventuallyDecided {
     always (all e: sensor_event |
         e.state = AwaitingConfirmation implies
@@ -251,8 +251,8 @@ assert AwaitingEventuallyDecided {
 check ConfirmedImpliesReport for 3 but 10 steps
 check AwaitingEventuallyDecided for 3 but 10 steps
 
-// Example predicate to visualise a full lifecycle:
-// un evento che parte Logged ed è poi Confermato.
+// Example predicate to visualize a full lifecycle:
+// an event that starts Logged and is eventually Confirmed.
 pred showEventLifecycle {
     some e: sensor_event |
         e.state = Logged and
