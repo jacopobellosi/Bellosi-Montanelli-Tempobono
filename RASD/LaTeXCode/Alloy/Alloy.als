@@ -152,7 +152,7 @@ pred rejectDetection[e: sensor_event] {
     triggeredBy' = triggeredBy
 }
 
-// Nessun cambiamento nello stato mutabile.
+// No change in any mutable state.
 pred doNothing {
     state' = state
     triggeredBy' = triggeredBy
