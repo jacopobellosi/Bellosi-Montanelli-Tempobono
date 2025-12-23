@@ -211,7 +211,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/useCaseDiagrams/Use_Case_1.drawio.png}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/useCaseDiagrams/UC1_Users.png}
         \caption{Use Cases Diagram for  Users.} 
         \label{fig:}%
     \end{center}
@@ -221,7 +221,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/useCaseDiagrams/Use_Case_2.drawio.png}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/useCaseDiagrams/UC2_ACY_RCY.png}
         \caption{Use Cases Diagram for both ACY and RCY (general user).}
         \label{fig:}%
     \end{center}
@@ -231,7 +231,7 @@ This section lists the specific functional requirements that the Best Bike Paths
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/useCaseDiagrams/Use_Case_3.drawio.png}
+        \includegraphics[width=1\linewidth]{RASD/LaTeXCode/images/useCaseDiagrams/UC3_RCY.png}
         \caption{Use Cases Diagram for RCY}
         \label{fig:}%
     \end{center}
@@ -793,11 +793,11 @@ R7: BBP shall allow users to search for public bike paths by origin/destination.
 R8: BBP shall retrieve all relevant reports for found paths. & DA2: GPS accuracy sufficient to reconstruct the path. \\ \hline
 R9: BBP shall calculate merged status using freshness and majority rules. & DA3: Sensor data correlate with real-world events. \\ \hline
 R10: BBP shall calculate a score for each path. & DA4: Threshold distinguishes potholes from normal vibrations. \\ \hline
-R11: BBP shall display search results ordered by score. & DA5: Device physically attached to user or bike. \\ \hline
-R12: BBP shall display path details (geometry, distance, elevation, status, obstacles). & DA6: Device has enough resources (battery, CPU). \\ \hline
-R13: BBP shall retrieve and display weather for the selected path. & DA7: Users act in good faith when providing data. \\ \hline
-R15: BBP shall allow navigation for selected paths. & DA8: Recent data are considered more relevant. \\ \hline
-R16: BBP shall show navigation summary. & DA9: Users provide rational path evaluations. \\ \hline
+R11: BBP shall display search results as a list of paths ordered by the calculated score. & DA5: Device physically attached to user or bike. \\ \hline
+R12: BBP shall allow any user to select a path from the search results to view its details. & DA6: Device has enough resources (battery, CPU). \\ \hline
+R13: BBP shall display the details of a selected path, including its geometry (map), distance, elevation, calculated merged status, and reported obstacles. & DA7: Users act in good faith when providing data. \\ \hline
+R15: BBP shall allow any user to initiate a navigation mode ("Follow Path") for a selected path. & DA8: Recent data are considered more relevant. \\ \hline
+R16: Upon completion of navigation by a user, BBP shall show the summary of the trip. & DA9: Users provide rational path evaluations. \\ \hline
 R19: BBP shall allow registered users to save trips. & DA11: External weather API stable and accurate. \\ \hline
 R20: BBP shall allow recording sessions. & DA12: User will not change the path. \\ \hline
 R21: BBP shall record GPS coordinates. & DA13: Active internet connection when searching/saving. \\ \hline
@@ -830,7 +830,7 @@ R33: BBP shall allow the user to save the completed Trip. & \\ \hline
 \subsection*{[G5] Establish a community-based path evaluation system}
 \begin{longtable}{|L{0.47\textwidth}|L{0.47\textwidth}|}
 \hline
-\textbf{Requisiti} & \textbf{Assunzioni} \\ \hline
+\textbf{Requirements} & \textbf{Domain Assumptions} \\ \hline
 R25: BBP shall store the visibility setting of a saved Path as specified by the Registered User, ensuring that Public paths are retrievable via the search function (R7), while Private paths remain strictly accessible only within the creator’s personal archive. & DA1: Users must have a mobile device with sensors (GPS, accelerometer, gyroscope). \\ \hline
 R26: BBP shall store the visibility setting of a saved Trip as specified by the Registered User, ensuring that data from Public trips are included in the aggregated Path statistics and scoring algorithms (R9, R10), while data from Private trips are excluded from all community calculations. & DA2: GPS accuracy sufficient to reconstruct the path. \\ \hline
 R36: BBP shall provide a map editor for RCY to create paths. & DA9: Users provide correct and rational evaluations. \\ \hline
