@@ -362,11 +362,20 @@ The flow highlights the verification logic:
 
 \subsubsection{Follow Path}
 
+% --- UC6 Part 1: Setup & Background Tracking ---
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC6.png}
-    \caption{Sequence Diagram for Follow Path}
-    \label{fig:seq_uc6}
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/Split/UC6_1.png}
+    \caption{Sequence Diagram for Follow Path (Part 1: Setup \& Tracking)}
+    \label{fig:seq_uc6_part1}
+\end{figure}
+
+% --- UC6 Part 2: Stop & Save ---
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/Split/UC6_2.png}
+    \caption{Sequence Diagram for Follow Path (Part 2: Stop \& Save)}
+    \label{fig:seq_uc6_part2}
 \end{figure}
 
 \noindent This diagram depicts the hybrid navigation process, which involves interaction with external applications and background processing. The flow begins with a preparatory phase where the \textbf{navigation manager} retrieves the path's geometry via the network to launch the \textbf{External navigation service} (e.g., via OS Intent). Concurrently, the \textbf{recording service} initiates a lightweight background session to track the user's performance statistics (time and distance) using the \textbf{sensor manager}, but without recording a new geospatial track.
@@ -376,11 +385,20 @@ The flow highlights the verification logic:
 
 \subsubsection{Record Path (Automatic)}
 
+% --- UC7 Part 1: Start & Background Loop ---
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC7.png}
-    \caption{Sequence Diagram for Record Path}
-    \label{fig:seq_uc7}
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/Split/UC7_1.png}
+    \caption{Sequence Diagram for Record Path (Part 1: Start \& Loop)}
+    \label{fig:seq_uc7_part1}
+\end{figure}
+
+% --- UC7 Part 2: Stop & Finalize ---
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/Split/UC7_2.png}
+    \caption{Sequence Diagram for Record Path (Part 2: Stop \& Finalize)}
+    \label{fig:seq_uc7_part2}
 \end{figure}
 
 \noindent This diagram illustrates the core client-side recording loop. The entire process is orchestrated by the \textbf{Recording state manager}, which acts as the central controller for the background service. Upon initialization, it activates the \textbf{sensor manager} to begin receiving raw data streams from the hardware \textbf{Device sensors}.
@@ -402,11 +420,20 @@ The flow highlights the verification logic:
 
 \subsubsection{Save Trip and Path}
 
+% --- UC9 Part 1: Preparation & Review ---
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC9.png}
-    \caption{Sequence Diagram for Save Trip and Path}
-    \label{fig:seq_uc9}
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/Split/UC9_1.png}
+    \caption{Sequence Diagram for Save Trip and Path (Part 1: Prep \& Review)}
+    \label{fig:seq_uc9_part1}
+\end{figure}
+
+% --- UC9 Part 2: Controller Orchestration ---
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/Split/UC9_2.png}
+    \caption{Sequence Diagram for Save Trip and Path (Part 2: Orchestration)}
+    \label{fig:seq_uc9_part2}
 \end{figure}
 
 \noindent This diagram depicts the complex "Save" workflow orchestrated by the backend. The process ensures transactional integrity across multiple entities.
@@ -449,13 +476,21 @@ The flow highlights the verification logic:
 
 \subsubsection{Save Path}
 
+% --- UC12 Part 1: Draft Retrieval & Decision ---
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC12.png}
-    \caption{Sequence Diagram for Save Path}
-    \label{fig:seq_uc12}
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/Split/UC12_1.png}
+    \caption{Sequence Diagram for Save Path (Part 1: Draft \& Decision)}
+    \label{fig:seq_uc12_part1}
 \end{figure}
 
+% --- UC12 Part 2: Persistence Orchestration ---
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/Split/UC12_2.png}
+    \caption{Sequence Diagram for Save Path (Part 2: Orchestration)}
+    \label{fig:seq_uc12_part2}
+\end{figure}
 \noindent This diagram details the persistence workflow for a manually created path (from UC11). Unlike the automatic recording flow, this process deals exclusively with the Path entity and its manually associated reports.
 
 \begin{itemize}
@@ -474,11 +509,20 @@ The flow highlights the verification logic:
 
 \subsubsection{View "My Trips"}
 
+% --- UC13 Part 1: Retrieve List ---
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/UC13.png}
-    \caption{Sequence Diagram for View "My Trips"}
-    \label{fig:seq_uc13}
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/Split/UC13_1.png}
+    \caption{Sequence Diagram for View My Trips (Part 1: Retrieve List)}
+    \label{fig:seq_uc13_part1}
+\end{figure}
+
+% --- UC13 Part 2: View Details ---
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{DD/LaTeXCode/images/sequenceDiagrams/Split/UC13_2.png}
+    \caption{Sequence Diagram for View My Trips (Part 2: View Details)}
+    \label{fig:seq_uc13_part2}
 \end{figure}
 
 \noindent This diagram illustrates the retrieval of a user's personal trip history. It follows a standard read-only pattern where the backend orchestrates the secure fetching of private data.
