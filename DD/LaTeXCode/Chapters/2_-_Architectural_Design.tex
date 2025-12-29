@@ -20,7 +20,7 @@ Here we present an overview of how the entire BBP architecture is composed:
     
     \item \textbf{BBP Database (PostgreSQL + PostGIS):} Stores all data related to users, paths, trips, and reports. It utilizes PostgreSQL for relational data and the \textbf{PostGIS} extension to efficiently store and query all geospatial data (e.g., path geometries, obstacle locations), enabling the core path-searching functionality.
     
-    \item \textbf{Device Sensors (GPS, Accelerometer, Gyroscope):} Provides the raw hardware-level data streams to the Mobile Client. The GPS is used to build the trip's geometry, while the \textbf{Accelerometer} and \textbf{Gyroscope} provide motion data used to automatically detect potential obstacles (e.g., potholes).
+    \item \textbf{Device Sensors (GPS, Accelerometer, Gyroscope):} Provide the raw hardware-level data streams to the Mobile Client. The GPS is used to build the trip's geometry, while the \textbf{Accelerometer} and \textbf{Gyroscope} provide motion data used to automatically detect potential obstacles (e.g., potholes).
     
     \item \textbf{External Weather Service:} Utilized by the Backend Server to fetch meteorological data. When a trip is saved, the server queries this API to retrieve weather conditions (e.g., temperature, wind speed) for the trip's time and location, adding valuable context to the user's log.
     
@@ -525,7 +525,7 @@ The flow highlights the verification logic:
     \label{fig:seq_uc13_part2}
 \end{figure}
 
-\noindent This diagram illustrates the retrieval of a user's personal trip history. It follows a standard read-only pattern where the backend orchestrates the secure fetching of private data.
+\noindent This diagram illustrates the retrieval of a user's personal trip history. It follows a standard read-only pattern, where the backend orchestrates the secure fetching of private data.
 
 \begin{itemize}
     \item \textbf{List Retrieval:} The process begins with an authenticated request to the \textbf{Controller layer}. After validating the session via the \textbf{Token manager}, the request is routed to the \textbf{trip searcher} module. This module queries the \textbf{Model} to fetch the summary list of all trips owned by the requesting user.
