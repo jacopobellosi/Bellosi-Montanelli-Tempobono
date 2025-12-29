@@ -1,0 +1,100 @@
+@startuml
+title Design Sequence Diagram: UC12 Save Path (Part 2: Orchestration)
+
+actor User
+participant "UI layer"
+participant "Network layer"
+participant "Local storage"
+participant "Controller layer"
+participant "Token manager"
+participant "Path adding"
+participant "Add obstacle to path"
+participant "Add status to path"
+participant "Model"
+database "BBP Database"
+
+activate User
+activate "UI layer"
+
+note right of User: Flow continues from Part 1 (User Tapped Save)
+
+"UI layer"->"Local storage": getToken()
+activate "Local storage"
+"Local storage"-->"UI layer": token
+deactivate "Local storage"
+
+# Invio solo dati del Path e dei Report (No Trip, No Meteo)
+"UI layer"->"Network layer": saveManualPath(draftData, name, visibility, token)
+activate "Network layer"
+"Network layer"->"Controller layer": POST /api/paths
+activate "Controller layer"
+
+# A. Sicurezza
+"Controller layer"->"Token manager": validateToken(token)
+activate "Token manager"
+"Token manager"-->"Controller layer": tokenValid (userId)
+deactivate "Token manager"
+
+# B. Orchestrazione Salvataggio PATH (Transaction Script)
+"Controller layer"->"Path adding": createManualPath(geometry, name, visibility, reports, userId)
+activate "Path adding"
+
+    # B1. Salva Geometria Path
+    "Path adding"->"Model": savePath(geometry, name, visibility, userId)
+    activate "Model"
+    "Model"->"BBP Database": INSERT INTO paths...
+    activate "BBP Database"
+    "BBP Database"-->"Model": newPathId
+    deactivate "BBP Database"
+    "Model"-->"Path adding": pathId
+    deactivate "Model"
+    "Path adding"-->"Controller layer": PathId
+    deactivate "Path adding"
+
+    # B2. Salva Ostacoli Manuali (se presenti nella bozza)
+    loop For each manual obstacle
+        "Controller layer"->"Add obstacle to path": saveObstacle(pathId, type, location)
+        activate "Add obstacle to path"
+        "Add obstacle to path"->"Model": createObstacleReport(data)
+        activate "Model"
+        "Model"->"BBP Database": INSERT INTO reports...
+        activate "BBP Database"
+        "BBP Database"-->"Model": success
+        deactivate "BBP Database"
+        "Model"-->"Add obstacle to path": reportId
+        deactivate "Model"
+        "Add obstacle to path"-->"Controller layer": ok
+        deactivate "Add obstacle to path"
+    end
+
+    # B3. Salva Status Manuale (se presente nella bozza)
+    opt Status Report exists
+        "Controller layer"->"Add status to path": saveStatus(pathId, statusValue)
+        activate "Add status to path"
+        "Add status to path"->"Model": createStatusReport(data)
+        activate "Model"
+        "Model"->"BBP Database": INSERT INTO reports...
+        activate "BBP Database"
+        "BBP Database"-->"Model": success
+        deactivate "BBP Database"
+        "Model"-->"Add status to path": reportId
+        deactivate "Model"
+        "Add status to path"-->"Controller layer": ok
+        deactivate "Add status to path"
+    end
+
+# C. Risposta Finale
+"Controller layer"-->"Network layer": 201 Created
+deactivate "Controller layer"
+
+"Network layer"->"Local storage": clearDraftPath()
+activate "Local storage"
+"Local storage"-->"Network layer": cleared
+deactivate "Local storage"
+
+"Network layer"-->"UI layer": Success
+deactivate "Network layer"
+"UI layer"-->User: Redirect to My Paths
+deactivate User
+deactivate "UI layer"
+@enduml

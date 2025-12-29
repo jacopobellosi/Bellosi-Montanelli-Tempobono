@@ -1,0 +1,60 @@
+@startuml
+title Design Sequence Diagram: UC13 View My Trips (Part 1: Retrieve List)
+
+actor User
+participant "UI layer"
+participant "Network layer"
+participant "Local storage"
+participant "Controller layer"
+participant "Token manager"
+participant "trip searcher"
+participant "Model"
+database "BBP Database"
+
+# --- Inizio Flusso ---
+User->>"UI layer": Navigates to Profile -> Taps "My Trips"
+activate "UI layer"
+
+"UI layer"->"Local storage": getToken()
+activate "Local storage"
+"Local storage"-->"UI layer": jwtToken
+deactivate "Local storage"
+
+"UI layer"->"Network layer": getMyTrips(token)
+activate "Network layer"
+
+# 1. Chiamata API
+"Network layer"->"Controller layer": GET /api/trips/mine
+activate "Controller layer"
+
+# 2. Sicurezza
+"Controller layer"->"Token manager": validateToken(token)
+activate "Token manager"
+"Token manager"-->"Controller layer": valid (userId)
+deactivate "Token manager"
+
+# 3. Routing al Trip Searcher
+"Controller layer"->"trip searcher": getTripsByUser(userId)
+activate "trip searcher"
+
+# 4. Recupero Lista Viaggi
+"trip searcher"->"Model": findTripsByOwner(userId)
+activate "Model"
+"Model"->"BBP Database": SELECT * FROM trips WHERE owner_id = ?
+activate "BBP Database"
+"BBP Database"-->"Model": tripsList (summary info)
+deactivate "BBP Database"
+"Model"-->"trip searcher": tripsList
+deactivate "Model"
+
+"trip searcher"-->"Controller layer": tripsListDTO
+deactivate "trip searcher"
+
+"Controller layer"-->"Network layer": 200 OK (JSON List)
+deactivate "Controller layer"
+"Network layer"-->"UI layer": Show List
+deactivate "Network layer"
+
+note right of User: User views the list.\nFlow continues in Part 2 (Select Specific Trip).
+deactivate "UI layer"
+@enduml

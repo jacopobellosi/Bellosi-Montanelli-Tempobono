@@ -1,0 +1,103 @@
+@startuml
+title Design Sequence Diagram: UC6 Follow Path (Part 2: Stop & Save)
+
+actor User
+participant "UI layer"
+participant "recording service"
+participant "sensor manager"
+participant "Device sensor"
+participant "Local storage"
+participant "Network layer"
+participant "Controller layer"
+participant "Token manager"
+participant "Trip adding"
+participant "Model"
+database "BBP Database"
+actor "Weather API client"
+
+activate User
+activate "UI layer"
+activate "recording service"
+activate "sensor manager"
+activate "Device sensor"
+
+note right of User: Flow continues from Part 1 (Background Tracking Active)
+
+# 4. Fine Navigazione
+User->"UI layer": Returns to App & Taps "Stop"
+"UI layer"->"recording service": stopTracking()
+"recording service"->>"sensor manager": stopListening()
+"sensor manager"->>"Device sensor": stopListening()
+deactivate "Device sensor"
+deactivate "sensor manager"
+
+"recording service"-->"UI layer": sessionStats (time, dist, avgSpeed)
+deactivate "recording service"
+
+"UI layer"-->User: Show Summary (Stats Only)
+deactivate User
+
+# --- Gestione Salvataggio Unificata ---
+User->"UI layer": Taps "Save" (Selects Visibility)
+activate User
+
+# A. Blocco Opzionale: Registrazione (Solo se anonimo)
+opt User is Anonymous
+    User->"UI layer": Completes Registration Form
+    note right of "UI layer": Executes UC1: Register Account\n(Returns new Token & UserId)
+    "UI layer"->"Local storage": saveToken(newToken)
+    activate "Local storage"
+    "Local storage"-->"UI layer": Confirmation
+    deactivate "Local storage"
+end
+
+# B. Flusso di Salvataggio Comune
+"UI layer"->"Local storage": getToken()
+activate "Local storage"
+"Local storage"-->"UI layer": token
+deactivate "Local storage"
+
+"UI layer"->"Network layer": saveTrip(tripData, visibility, token, relatedPath)
+activate "Network layer"
+"Network layer"->"Controller layer": POST /api/trips
+activate "Controller layer"
+
+# Validazione Sicurezza
+"Controller layer"->"Token manager": validateToken(token)
+activate "Token manager"
+"Token manager"-->"Controller layer": tokenValid (userId)
+deactivate "Token manager"
+
+# Orchestrazione Salvataggio (Trip Adding)
+"Controller layer"->"Trip adding": saveTrip(tripData, userId, relatedPath)
+activate "Trip adding"
+
+# Arricchimento Meteo
+"Trip adding"->"Weather API client": getWeatherSnapshot()
+activate "Weather API client"
+"Weather API client"-->"Trip adding": weather
+deactivate "Weather API client"
+
+# Transazione DB Atomica
+"Trip adding"->"Model": saveFullTripTransaction(trip, weather, relatedPath)
+activate "Model"
+"Model"->"BBP Database": INSERT INTO trips...
+activate "BBP Database"
+"BBP Database"-->"Model": ok
+deactivate "BBP Database"
+"Model"-->"Trip adding": success
+deactivate "Model"
+
+"Trip adding"-->"Controller layer": tripSavedDTO
+deactivate "Trip adding"
+
+"Controller layer"-->"Network layer": 201 Created
+deactivate "Controller layer"
+
+"Network layer"-->"UI layer": Success
+deactivate "Network layer"
+
+"UI layer"-->User: Return to main page
+deactivate "UI layer"
+deactivate User
+@enduml

@@ -1,0 +1,51 @@
+@startuml
+title Design Sequence Diagram: UC13 View My Trips (Part 2: View Details)
+
+actor User
+participant "UI layer"
+participant "Network layer"
+participant "Controller layer"
+participant "Token manager"
+participant "trip searcher"
+participant "Model"
+database "BBP Database"
+
+activate User
+activate "UI layer"
+note right of User: Flow continues from Part 1 (List Displayed)
+
+# --- Loop Dettaglio ---
+User->"UI layer": Taps on specific Trip
+"UI layer"->"Network layer": getTripDetails(tripId, token)
+activate "Network layer"
+"Network layer"->"Controller layer": GET /api/trips/{id}
+activate "Controller layer"
+
+"Controller layer"->"Token manager": validateToken(token)
+activate "Token manager"
+"Token manager"-->"Controller layer": valid (userId)
+deactivate "Token manager"
+"Controller layer"->"trip searcher": getTripDetails(tripId, userId)
+activate "trip searcher"
+
+# Recupero Dettagli Completi
+"trip searcher"->"Model": getFullTripData(tripId)
+activate "Model"
+"Model"->"BBP Database": JOIN paths, weather, reports...
+activate "BBP Database"
+"BBP Database"-->"Model": fullTripData
+deactivate "BBP Database"
+"Model"-->"trip searcher": fullTripData
+deactivate "Model"
+
+"trip searcher"-->"Controller layer": tripDetailsDTO
+deactivate "trip searcher"
+
+"Controller layer"-->"Network layer": 200 OK
+deactivate "Controller layer"
+"Network layer"-->"UI layer": Display Details
+deactivate "Network layer"
+"UI layer"-->User: Shows Map, Stats, Weather, Reports
+deactivate User
+deactivate "UI layer"
+@enduml

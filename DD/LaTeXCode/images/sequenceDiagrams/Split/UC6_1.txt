@@ -1,0 +1,69 @@
+@startuml
+title Design Sequence Diagram: UC6 Follow Path (Part 1: Setup & Tracking)
+
+actor User
+participant "UI layer"
+participant "navigation manager"
+participant "Network layer"
+participant "Controller layer"
+participant "Detailed path view"
+participant "Model"
+participant "recording service"
+participant "sensor manager"
+participant "Device sensor"
+actor "External navigation service"
+
+# --- Inizio Flusso ---
+User->>"UI layer": Taps "Follow Path"
+activate User
+activate "UI layer"
+
+# 1. Recupero Geometria Path (Pre-Navigazione)
+"UI layer"->"navigation manager": prepareNavigation(pathId)
+activate "navigation manager"
+"navigation manager"->"Network layer": fetchPathGeometry(pathId)
+activate "Network layer"
+"Network layer"->"Controller layer": GET /api/paths/{id}/geometry
+activate "Controller layer"
+
+"Controller layer"->"Detailed path view": getGeometry(pathId)
+activate "Detailed path view"
+"Detailed path view"->"Model": getGPSPoints(pathId)
+activate "Model"
+"Model"-->"Detailed path view": gpsPointsList
+deactivate "Model"
+"Detailed path view"-->"Controller layer": geometryDTO
+deactivate "Detailed path view"
+"Controller layer"-->"Network layer": geometryJSON
+deactivate "Controller layer"
+"Network layer"-->"navigation manager": pathGeometry
+deactivate "Network layer"
+
+# 2. Avvio Navigazione Esterna
+"navigation manager"->"External navigation service": openWithRoute(pathGeometry)
+activate "External navigation service"
+note right of "External navigation service": OS Intent / URL Scheme
+"External navigation service"-->"navigation manager": appLaunched
+deactivate "External navigation service"
+"navigation manager"-->"UI layer": success
+deactivate "navigation manager"
+
+# 3. Avvio Tracking in Background (Stats Only)
+"UI layer"->>"recording service": startBackgroundTracking()
+activate "recording service"
+"recording service"->>"sensor manager": startGPSOnly()
+activate "sensor manager"
+"sensor manager"->>"Device sensor": Request GPS Updates
+activate "Device sensor"
+
+# --- Loop di Navigazione (Asincrono) ---
+loop Background Updates
+    "Device sensor"->>"sensor manager": Location Update (Event)
+    "sensor manager"->>"recording service": onLocationChanged(loc)
+    "recording service"->>"recording service": updateSessionStats(time, dist)
+end
+
+note right of "UI layer": Flow continues in Part 2 (Stop & Save)
+deactivate "UI layer"
+deactivate User
+@enduml

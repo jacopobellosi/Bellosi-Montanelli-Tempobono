@@ -1,0 +1,54 @@
+@startuml
+title Design Sequence Diagram: UC7 Record Path (Part 2: Stop & Finalize)
+
+actor User
+participant "UI layer"
+participant "sensor manager"
+participant "Recording state manager"
+participant "GPS tracker"
+participant "Sensor processor"
+participant "Local storage"
+actor "Device sensor"
+
+activate User
+activate "UI layer"
+activate "sensor manager"
+activate "Device sensor"
+activate "Recording state manager"
+
+note right of User: Flow continues from Part 1 (Recording Loop Active)
+
+# --- Fine Flusso ---
+User->>"UI layer": Taps "Stop Recording"
+"UI layer"->"Recording state manager": stopRecording()
+
+# 3. Stop Sensori
+"Recording state manager"->"sensor manager": stopListening()
+"sensor manager"->>"Device sensor": Stop Updates
+deactivate "Device sensor"
+deactivate "sensor manager"
+
+# 4. Finalizzazione Dati
+"Recording state manager"->"GPS tracker": getFullTrack()
+activate "GPS tracker"
+"GPS tracker"-->"Recording state manager": trackPoints
+deactivate "GPS tracker"
+
+"Recording state manager"->"Sensor processor": getDetectedEvents()
+activate "Sensor processor"
+"Sensor processor"->"Local storage": retrieveTempEvents()
+activate "Local storage"
+"Local storage"-->"Sensor processor": eventsList
+deactivate "Local storage"
+"Sensor processor"-->"Recording state manager": eventsList
+deactivate "Sensor processor"
+
+# 5. Salvataggio Temporaneo & Trigger UC9
+"Recording state manager"-->"UI layer": recordingFinished(tripData)
+deactivate "Recording state manager"
+
+"UI layer"-->User: Show "Save Path" Screen (Triggers UC9)
+deactivate "UI layer"
+note right of User: UC9: Save Path and Trip
+deactivate User
+@enduml

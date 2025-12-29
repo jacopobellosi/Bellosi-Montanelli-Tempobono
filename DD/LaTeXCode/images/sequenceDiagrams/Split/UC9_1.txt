@@ -1,0 +1,61 @@
+@startuml
+title Design Sequence Diagram: UC9 Save Trip (Part 1: Prep & Review)
+
+actor User
+participant "UI layer"
+participant "Network layer"
+participant "Local storage"
+participant "Controller layer"
+participant "Token manager"
+participant "Weather API client"
+actor "External weather service"
+
+# --- Fase 1: Pre-Fetch Meteo (Autenticato) ---
+"UI layer"->"Local storage": getToken()
+activate "Local storage"
+"Local storage"-->"UI layer": jwtToken
+deactivate "Local storage"
+
+"UI layer"->"Network layer": fetchWeather(lat, long, token)
+activate "Network layer"
+"Network layer"->"Controller layer": GET /api/weather
+activate "Controller layer"
+"Controller layer"->"Token manager": validateToken(token)
+activate "Token manager"
+"Token manager"-->"Controller layer": Confirm
+deactivate "Token manager"
+"Controller layer"->"Weather API client": getWeather(lat, long)
+activate "Weather API client"
+
+"Weather API client"->"External weather service": getWeather(lat, long)
+activate "External weather service"
+"External weather service"-->"Weather API client": weatherData
+deactivate "External weather service"
+
+"Weather API client"-->"Controller layer": weatherData
+deactivate "Weather API client"
+
+"Controller layer"-->"Network layer": weatherJSON
+deactivate "Controller layer"
+"Network layer"-->"UI layer": weatherInfo
+deactivate "Network layer"
+
+# --- Fase 2: Interazione Utente ---
+"UI layer"-->User: Show Summary (Map, Stats, Weather)
+note right of User: User reviews data.\nTriggers UC10 (Visibility) & UC8 (Review Obstacles)
+
+# --- Fase 3: Decisione (Salva o Scarta) ---
+alt User Discards
+    User->"UI layer": Taps "Discard"
+    activate User
+    "UI layer"->"Local storage": clearTempTrip()
+    activate "Local storage"
+    "Local storage"-->"UI layer": cleared
+    deactivate "Local storage"
+    "UI layer"-->User: Redirect to Home
+    deactivate User
+else User Saves
+    User->"UI layer": Taps "Save"
+    note right of "UI layer": Flow continues in Part 2 (Persistence Orchestration)
+end
+@enduml

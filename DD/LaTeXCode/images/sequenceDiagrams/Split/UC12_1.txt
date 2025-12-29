@@ -1,0 +1,42 @@
+@startuml
+title Design Sequence Diagram: UC12 Save Path (Part 1: Draft & Input)
+
+actor User
+participant "UI layer"
+participant "Local storage"
+
+# --- Precondizione: UC11 Terminato ---
+# La bozza (Geometria + Report manuali) è in Local Storage
+
+# --- Fase 1: Preparazione UI ---
+"UI layer"->"Local storage": retrieveDraftPath()
+activate "UI layer"
+activate "Local storage"
+"Local storage"-->"UI layer": draftData
+deactivate "Local storage"
+
+"UI layer"-->User: Show "Save Path" Screen
+deactivate "UI layer"
+
+# --- Fase 2: Interazione Utente ---
+User->>"UI layer": Enters Name
+note right of User: UC10: Set Visibility (Path only)
+
+# --- Fase 3: Decisione (Scarta o Salva) ---
+alt User Discards
+    User->"UI layer": Taps "Discard"
+    activate User
+    activate "UI layer"
+    "UI layer"->"Local storage": deleteDraftPath()
+    activate "Local storage"
+    "Local storage"-->"UI layer": confirm
+    deactivate "Local storage"
+    "UI layer"-->User: Redirect to Home
+    deactivate "UI layer"
+    deactivate User
+
+else User Saves
+    User->"UI layer": Taps "Save"
+    note right of "UI layer": Flow continues in Part 2 (Persistence Orchestration)
+end
+@enduml
