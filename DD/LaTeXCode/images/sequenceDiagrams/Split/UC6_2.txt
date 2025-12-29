@@ -34,6 +34,12 @@ deactivate "sensor manager"
 "recording service"-->"UI layer": sessionStats (time, dist, avgSpeed)
 deactivate "recording service"
 
+# --- CORREZIONE: Salvataggio Temporaneo ---
+"UI layer"->"Local storage": saveTempTripStats(sessionStats)
+activate "Local storage"
+"Local storage"-->"UI layer": saved
+deactivate "Local storage"
+
 "UI layer"-->User: Show Summary (Stats Only)
 deactivate User
 
@@ -57,6 +63,12 @@ activate "Local storage"
 "Local storage"-->"UI layer": token
 deactivate "Local storage"
 
+# --- Recupero Dati dal Local Storage ---
+"UI layer"->"Local storage": getTempTripStats()
+activate "Local storage"
+"Local storage"-->"UI layer": tripData
+deactivate "Local storage"
+
 "UI layer"->"Network layer": saveTrip(tripData, visibility, token, relatedPath)
 activate "Network layer"
 "Network layer"->"Controller layer": POST /api/trips
@@ -68,7 +80,7 @@ activate "Token manager"
 "Token manager"-->"Controller layer": tokenValid (userId)
 deactivate "Token manager"
 
-# Orchestrazione Salvataggio (Trip Adding)
+# Orchestrazione Salvataggio
 "Controller layer"->"Trip adding": saveTrip(tripData, userId, relatedPath)
 activate "Trip adding"
 
@@ -93,6 +105,12 @@ deactivate "Trip adding"
 
 "Controller layer"-->"Network layer": 201 Created
 deactivate "Controller layer"
+
+# Pulizia Local Storage
+"Network layer"->"Local storage": clearTempTrip()
+activate "Local storage"
+"Local storage"-->"Network layer": cleared
+deactivate "Local storage"
 
 "Network layer"-->"UI layer": Success
 deactivate "Network layer"

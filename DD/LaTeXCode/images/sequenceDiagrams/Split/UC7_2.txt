@@ -43,12 +43,19 @@ deactivate "Local storage"
 "Sensor processor"-->"Recording state manager": eventsList
 deactivate "Sensor processor"
 
-# 5. Salvataggio Temporaneo & Trigger UC9
-"Recording state manager"-->"UI layer": recordingFinished(tripData)
+# Ritorno Dati alla UI
+"Recording state manager"-->"UI layer": fullTripData (Track + Events + Stats)
 deactivate "Recording state manager"
 
+# --- CORREZIONE: Persistenza Temporanea (Draft) ---
+"UI layer"->"Local storage": saveTempTripDraft(fullTripData)
+activate "Local storage"
+"Local storage"-->"UI layer": draftSaved
+deactivate "Local storage"
+
+# 5. Passaggio alla schermata di Salvataggio
 "UI layer"-->User: Show "Save Path" Screen (Triggers UC9)
 deactivate "UI layer"
-note right of User: UC9: Save Path and Trip
+note right of User: UC9 will now retrieve data from Local Storage Draft
 deactivate User
 @enduml
