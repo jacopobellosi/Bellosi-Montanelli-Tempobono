@@ -1,3 +1,4 @@
+@startuml
 title Design Sequence Diagram: UC14 Submit Status Report
 
 actor User
@@ -7,7 +8,10 @@ participant "Local storage"
 participant "Controller layer"
 participant "Token manager"
 participant "Add status to path"
-participant "Model"
+
+' --- DEFINIZIONE REPORT REPOSITORY CON ALIAS ---
+participant "Report Repository\n(Model)" as ReportRepo
+
 database "BBP Database"
 
 # --- Precondizione ---
@@ -56,15 +60,15 @@ else Context: Called from UC5 (Live Mode)
     "Controller layer"->"Add status to path": saveStatus(pathId, userId, statusValue)
     activate "Add status to path"
 
-    # 4. Persistenza
-    "Add status to path"->"Model": createStatusReport(data)
-    activate "Model"
-    "Model"->"BBP Database": INSERT INTO reports...
+    # 4. Persistenza (Usa ReportRepo)
+    "Add status to path"->ReportRepo: createStatusReport(data)
+    activate ReportRepo
+    ReportRepo->"BBP Database": INSERT INTO reports...
     activate "BBP Database"
-    "BBP Database"-->"Model": success
+    "BBP Database"-->ReportRepo: success
     deactivate "BBP Database"
-    "Model"-->"Add status to path": reportId
-    deactivate "Model"
+    ReportRepo-->"Add status to path": reportId
+    deactivate ReportRepo
 
     "Add status to path"-->"Controller layer": reportId
     deactivate "Add status to path"
@@ -78,3 +82,4 @@ else Context: Called from UC5 (Live Mode)
     deactivate "Network layer"
 end
 deactivate "UI layer"
+@enduml

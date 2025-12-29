@@ -1,21 +1,23 @@
+@startuml
 title Design Sequence Diagram: UC4 Search Paths
 
 actor User
 participant "UI layer"
 participant "Network layer"
-
 participant "Controller layer"
-
 participant "Path searcher"
 participant "Path merger"
-participant "Model"
+
+' --- DEFINIZIONE CORRETTA ---
+' Definiamo il box con il nome su due righe e l'alias PathRepo
+participant "Path Repository\n(Model)" as PathRepo
+
 database "BBP Database"
 
 # --- Inizio Flusso ---
 User->"UI layer": Enters Criteria (Origin, Dest) & Search
 activate User
 activate "UI layer"
-
 
 "UI layer"->"Network layer": searchPaths(criteria, token)
 activate "Network layer"
@@ -24,37 +26,31 @@ activate "Network layer"
 "Network layer"->"Controller layer": GET /api/paths/search
 activate "Controller layer"
 
-
-
-
-
 # 3. Routing
 "Controller layer"->"Path searcher": findPaths(criteria)
 activate "Path searcher"
 
-# 4. Recupero Dati (SINGLE BIG QUERY OPTIMIZATION)
-"Path searcher"->"Model": findAllPathDataInArea(geoBox)
-activate "Model"
-note right of "Model": Executes optimized Query:\nSelect Paths JOIN Reports JOIN PublicTrips\nWHERE ST_Intersects(...)
-"Model"->"BBP Database": SQL (Complex Join / Eager Load)
-activate "BBP Database"
-"BBP Database"-->"Model": fullDataSet (Paths + Reports + Trips)
-deactivate "BBP Database"
-"Model"-->"Path searcher": fullPathList
-deactivate "Model"
+# 4. Recupero Dati
+' --- USO CORRETTO DELL'ALIAS (SENZA VIRGOLETTE) ---
+"Path searcher"->PathRepo: findAllPathDataInArea(geoBox)
+activate PathRepo
+note right of PathRepo: Executes optimized Query:\nSelect Paths JOIN Reports JOIN PublicTrips\nWHERE ST_Intersects(...)
 
-# --- Loop di Calcolo in Memoria (No DB calls inside) ---
+PathRepo->"BBP Database": SQL (Complex Join / Eager Load)
+activate "BBP Database"
+"BBP Database"-->PathRepo: fullDataSet (Paths + Reports + Trips)
+deactivate "BBP Database"
+
+PathRepo-->"Path searcher": fullPathList
+deactivate PathRepo
+
+# --- Loop di Calcolo in Memoria ---
 loop For each PathData in fullPathList
-    
-    # Il Searcher ha già i dati, li passa solo al Merger per il calcolo
     "Path searcher"->"Path merger": calculateMetrics(PathData.reports, PathData.trips)
     activate "Path merger"
-    
     note right of "Path merger": Pure calculation in RAM:\n1. Filter fresh reports\n2. Apply majority\n3. Average trip stats
-    
     "Path merger"-->"Path searcher": computedMetrics (status, score, avgStats)
     deactivate "Path merger"
-    
     "Path searcher"->"Path searcher": attachMetricsToPath(path, computedMetrics)
 end
 
@@ -72,3 +68,4 @@ deactivate "Network layer"
 "UI layer"-->User: Shows List of Paths
 deactivate "UI layer"
 deactivate User
+@enduml

@@ -1,3 +1,4 @@
+@startuml
 title Design Sequence Diagram: UC2 Log In
 
 actor User
@@ -8,7 +9,10 @@ participant "Controller layer"
 participant "User service"
 participant "Hash password"
 participant "Token manager"
-participant "Model"
+
+' --- FIX: Alias per User Repository ---
+participant "User Repository\n(Model)" as UserRepo
+
 database "BBP Database"
 
 # --- Inizio Flusso ---
@@ -27,15 +31,15 @@ activate "Controller layer"
 "Controller layer"->"User service": loginUser(email, password)
 activate "User service"
 
-# 3. Recupero Utente (Auth Service chiama Model)
-"User service"->"Model": findUserByEmail(email)
-activate "Model"
-"Model"->"BBP Database": SELECT * FROM users WHERE email = ?
+# 3. Recupero Utente (User Service chiama User Repository)
+"User service"->"UserRepo": findUserByEmail(email)
+activate "UserRepo"
+"UserRepo"->"BBP Database": SELECT * FROM users WHERE email = ?
 activate "BBP Database"
-"BBP Database"-->"Model": userEntity (with storedHash)
+"BBP Database"-->"UserRepo": userEntity (with storedHash)
 deactivate "BBP Database"
-"Model"-->"User service": userEntity
-deactivate "Model"
+"UserRepo"-->"User service": userEntity
+deactivate "UserRepo"
 
 # --- Blocco Alternativo (Alt) ---
 alt Invalid Credentials (User not found OR Password mismatch)
@@ -44,13 +48,13 @@ alt Invalid Credentials (User not found OR Password mismatch)
     "Network layer"-->"UI layer": Show Error "Invalid username or password"
 else Valid Credentials (Success Flow)
     
-    # 4. Verifica Password (Auth Service chiama Hash)
+    # 4. Verifica Password
     "User service"->"Hash password": verify(password, storedHash)
     activate "Hash password"
     "Hash password"-->"User service": true
     deactivate "Hash password"
 
-    # 5. Generazione Token (Auth Service chiama Token Mgr)
+    # 5. Generazione Token
     "User service"->"Token manager": generateToken(userId)
     activate "Token manager"
     "Token manager"-->"User service": jwtToken
@@ -77,3 +81,4 @@ else Valid Credentials (Success Flow)
     deactivate "UI layer"
     deactivate User
 end
+@enduml

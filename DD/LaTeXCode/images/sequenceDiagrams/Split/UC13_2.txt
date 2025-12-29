@@ -7,7 +7,10 @@ participant "Network layer"
 participant "Controller layer"
 participant "Token manager"
 participant "trip searcher"
-participant "Model"
+
+' --- DEFINIZIONE TRIP REPOSITORY CON ALIAS ---
+participant "Trip Repository\n(Model)" as TripRepo
+
 database "BBP Database"
 
 activate User
@@ -28,15 +31,15 @@ deactivate "Token manager"
 "Controller layer"->"trip searcher": getTripDetails(tripId, userId)
 activate "trip searcher"
 
-# Recupero Dettagli Completi
-"trip searcher"->"Model": getFullTripData(tripId)
-activate "Model"
-"Model"->"BBP Database": JOIN paths, weather, reports...
+# Recupero Dettagli Completi (Usa TripRepo)
+"trip searcher"->TripRepo: getFullTripData(tripId)
+activate TripRepo
+TripRepo->"BBP Database": JOIN paths, weather, reports...
 activate "BBP Database"
-"BBP Database"-->"Model": fullTripData
+"BBP Database"-->TripRepo: fullTripData
 deactivate "BBP Database"
-"Model"-->"trip searcher": fullTripData
-deactivate "Model"
+TripRepo-->"trip searcher": fullTripData
+deactivate TripRepo
 
 "trip searcher"-->"Controller layer": tripDetailsDTO
 deactivate "trip searcher"

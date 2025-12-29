@@ -1,3 +1,4 @@
+@startuml
 title Design Sequence Diagram: UC15 Submit Obstacle Report
 
 actor User
@@ -7,7 +8,10 @@ participant "Local storage"
 participant "Controller layer"
 participant "Token manager"
 participant "Add obstacle to path"
-participant "Model"
+
+' --- DEFINIZIONE REPORT REPOSITORY CON ALIAS ---
+participant "Report Repository\n(Model)" as ReportRepo
+
 database "BBP Database"
 
 # --- Precondizione ---
@@ -57,15 +61,15 @@ else Context: Called from UC5 (Live Mode)
     "Controller layer"->"Add obstacle to path": saveObstacle(pathId, userId, type, location)
     activate "Add obstacle to path"
 
-    # 4. Persistenza (Geospaziale)
-    "Add obstacle to path"->"Model": createObstacleReport(data)
-    activate "Model"
-    "Model"->"BBP Database": INSERT INTO reports (type='OBSTACLE', geom=Point(...))
+    # 4. Persistenza (Geospaziale - Usa ReportRepo)
+    "Add obstacle to path"->ReportRepo: createObstacleReport(data)
+    activate ReportRepo
+    ReportRepo->"BBP Database": INSERT INTO reports (type='OBSTACLE', geom=Point(...))
     activate "BBP Database"
-    "BBP Database"-->"Model": success
+    "BBP Database"-->ReportRepo: success
     deactivate "BBP Database"
-    "Model"-->"Add obstacle to path": reportId
-    deactivate "Model"
+    ReportRepo-->"Add obstacle to path": reportId
+    deactivate ReportRepo
 
     "Add obstacle to path"-->"Controller layer": reportId
     deactivate "Add obstacle to path"
@@ -78,3 +82,4 @@ else Context: Called from UC5 (Live Mode)
     deactivate "Network layer"
 end
 deactivate "UI layer"
+@enduml

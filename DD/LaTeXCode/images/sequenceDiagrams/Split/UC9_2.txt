@@ -11,7 +11,12 @@ participant "Path adding"
 participant "Add obstacle to path"
 participant "Add status to path"
 participant "Trip adding"
-participant "Model"
+
+' --- DEFINIZIONE REPOSITORY SPECIFICI (CON ALIAS) ---
+participant "Path Repository\n(Model)" as PathRepo
+participant "Report Repository\n(Model)" as ReportRepo
+participant "Trip Repository\n(Model)" as TripRepo
+
 database "BBP Database"
 
 activate User
@@ -41,59 +46,60 @@ deactivate "Token manager"
 "Controller layer"->"Path adding": createPath(geometry, name, visibility)
 activate "Path adding"
 
-    # B1. Salva Geometria Path
-    "Path adding"->"Model": savePath(geometry, name, visibility)
-    activate "Model"
-    "Model"->"BBP Database": INSERT INTO paths...
+    # B1. Salva Geometria Path (Usa PathRepo)
+    "Path adding"->PathRepo: savePath(geometry, name, visibility)
+    activate PathRepo
+    PathRepo->"BBP Database": INSERT INTO paths...
     activate "BBP Database"
-    "BBP Database"-->"Model": newPathId
+    "BBP Database"-->PathRepo: newPathId
     deactivate "BBP Database"
-    "Model"-->"Path adding": pathId
-    deactivate "Model"
+    PathRepo-->"Path adding": pathId
+    deactivate PathRepo
     "Path adding"-->"Controller layer": pathId
     deactivate "Path adding"
 
-    # B2. Salva Ostacoli (UC8 results)
+    # B2. Salva Ostacoli (Usa ReportRepo)
     loop For each confirmed obstacle
         "Controller layer"->"Add obstacle to path": saveObstacle(pathId, type, location)
         activate "Add obstacle to path"
-        "Add obstacle to path"->"Model": createReport(obstacleData)
-        activate "Model"
-        "Model"->"BBP Database": INSERT INTO reports...
+        "Add obstacle to path"->ReportRepo: createReport(obstacleData)
+        activate ReportRepo
+        ReportRepo->"BBP Database": INSERT INTO reports...
         activate "BBP Database"
-        "BBP Database"-->"Model": Confirm
+        "BBP Database"-->ReportRepo: Confirm
         deactivate "BBP Database"
-        "Model"-->"Add obstacle to path": Success
-        deactivate "Model"
+        ReportRepo-->"Add obstacle to path": Success
+        deactivate ReportRepo
         "Add obstacle to path"-->"Controller layer": ok
         deactivate "Add obstacle to path"
     end
 
-    # B3. Salva Status
+    # B3. Salva Status (Usa ReportRepo)
     "Controller layer"->"Add status to path": saveStatus(pathId, statusValue)
     activate "Add status to path"
-    "Add status to path"->"Model": createReport(statusData)
-    activate "Model"
-    "Model"->"BBP Database": INSERT INTO reports...
+    "Add status to path"->ReportRepo: createReport(statusData)
+    activate ReportRepo
+    ReportRepo->"BBP Database": INSERT INTO reports...
     activate "BBP Database"
-    "BBP Database"-->"Model": Confirm
+    "BBP Database"-->ReportRepo: Confirm
     deactivate "BBP Database"
-    "Model"-->"Add status to path": Success
-    deactivate "Model"
+    ReportRepo-->"Add status to path": Success
+    deactivate ReportRepo
     "Add status to path"-->"Controller layer": ok
     deactivate "Add status to path"
 
 # C. Orchestrazione: Salvataggio TRIP (Step 2)
 "Controller layer"->"Trip adding": createTrip(stats, weather, pathId, userId, visibility)
 activate "Trip adding"
-"Trip adding"->"Model": saveTrip(stats, weather, pathId, visibility)
-activate "Model"
-"Model"->"BBP Database": INSERT INTO trips...
+# Usa TripRepo
+"Trip adding"->TripRepo: saveTrip(stats, weather, pathId, visibility)
+activate TripRepo
+TripRepo->"BBP Database": INSERT INTO trips...
 activate "BBP Database"
-"BBP Database"-->"Model": newTripId
+"BBP Database"-->TripRepo: newTripId
 deactivate "BBP Database"
-"Model"-->"Trip adding": tripId
-deactivate "Model"
+TripRepo-->"Trip adding": tripId
+deactivate TripRepo
 "Trip adding"-->"Controller layer": tripId
 deactivate "Trip adding"
 

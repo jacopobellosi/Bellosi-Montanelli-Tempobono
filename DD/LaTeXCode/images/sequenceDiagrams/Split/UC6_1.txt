@@ -7,7 +7,10 @@ participant "navigation manager"
 participant "Network layer"
 participant "Controller layer"
 participant "Detailed path view"
-participant "Model"
+
+' --- MODIFICA: Path Repository ---
+participant "Path Repository\n(Model)" as PathRepo
+
 participant "recording service"
 participant "sensor manager"
 participant "Device sensor"
@@ -28,10 +31,13 @@ activate "Controller layer"
 
 "Controller layer"->"Detailed path view": getGeometry(pathId)
 activate "Detailed path view"
-"Detailed path view"->"Model": getGPSPoints(pathId)
-activate "Model"
-"Model"-->"Detailed path view": gpsPointsList
-deactivate "Model"
+
+' --- USO DELL'ALIAS ---
+"Detailed path view"->PathRepo: getGPSPoints(pathId)
+activate PathRepo
+PathRepo-->"Detailed path view": gpsPointsList
+deactivate PathRepo
+
 "Detailed path view"-->"Controller layer": geometryDTO
 deactivate "Detailed path view"
 "Controller layer"-->"Network layer": geometryJSON

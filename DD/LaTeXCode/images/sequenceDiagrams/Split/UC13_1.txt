@@ -8,7 +8,10 @@ participant "Local storage"
 participant "Controller layer"
 participant "Token manager"
 participant "trip searcher"
-participant "Model"
+
+' --- DEFINIZIONE TRIP REPOSITORY CON ALIAS ---
+participant "Trip Repository\n(Model)" as TripRepo
+
 database "BBP Database"
 
 # --- Inizio Flusso ---
@@ -37,15 +40,15 @@ deactivate "Token manager"
 "Controller layer"->"trip searcher": getTripsByUser(userId)
 activate "trip searcher"
 
-# 4. Recupero Lista Viaggi
-"trip searcher"->"Model": findTripsByOwner(userId)
-activate "Model"
-"Model"->"BBP Database": SELECT * FROM trips WHERE owner_id = ?
+# 4. Recupero Lista Viaggi (Usa TripRepo)
+"trip searcher"->TripRepo: findTripsByOwner(userId)
+activate TripRepo
+TripRepo->"BBP Database": SELECT * FROM trips WHERE owner_id = ?
 activate "BBP Database"
-"BBP Database"-->"Model": tripsList (summary info)
+"BBP Database"-->TripRepo: tripsList (summary info)
 deactivate "BBP Database"
-"Model"-->"trip searcher": tripsList
-deactivate "Model"
+TripRepo-->"trip searcher": tripsList
+deactivate TripRepo
 
 "trip searcher"-->"Controller layer": tripsListDTO
 deactivate "trip searcher"

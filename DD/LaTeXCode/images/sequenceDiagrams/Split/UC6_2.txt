@@ -11,7 +11,10 @@ participant "Network layer"
 participant "Controller layer"
 participant "Token manager"
 participant "Trip adding"
-participant "Model"
+
+' --- MODIFICA: Trip Repository ---
+participant "Trip Repository\n(Model)" as TripRepo
+
 database "BBP Database"
 actor "Weather API client"
 
@@ -91,14 +94,15 @@ activate "Weather API client"
 deactivate "Weather API client"
 
 # Transazione DB Atomica
-"Trip adding"->"Model": saveFullTripTransaction(trip, weather, relatedPath)
-activate "Model"
-"Model"->"BBP Database": INSERT INTO trips...
+' --- USO DELL'ALIAS ---
+"Trip adding"->TripRepo: saveFullTripTransaction(trip, weather, relatedPath)
+activate TripRepo
+TripRepo->"BBP Database": INSERT INTO trips...
 activate "BBP Database"
-"BBP Database"-->"Model": ok
+"BBP Database"-->TripRepo: ok
 deactivate "BBP Database"
-"Model"-->"Trip adding": success
-deactivate "Model"
+TripRepo-->"Trip adding": success
+deactivate TripRepo
 
 "Trip adding"-->"Controller layer": tripSavedDTO
 deactivate "Trip adding"

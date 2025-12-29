@@ -1,3 +1,4 @@
+@startuml
 title Design Sequence Diagram: UC1 Register Account
 
 actor User
@@ -8,7 +9,10 @@ participant "Controller layer"
 participant "user service"
 participant "Hash password"
 participant "Token manager"
-participant "Model"
+
+' --- FIX: Use an alias 'UserRepo' to handle the multi-line name correctly ---
+participant "User Repository\n(Model)" as UserRepo
+
 database "BBP Database"
 
 # --- Inizio Flusso ---
@@ -28,15 +32,15 @@ activate "Controller layer"
 "Controller layer"->"user service": registerUser(userData)
 activate "user service"
 
-# 3. Verifica Unicità (Auth Service chiama Model)
-"user service"->"Model": findUserByEmail(email)
-activate "Model"
-"Model"->"BBP Database": SELECT id FROM users WHERE email = ?
+# 3. Verifica Unicità
+"user service"->"UserRepo": findUserByEmail(email)
+activate "UserRepo"
+"UserRepo"->"BBP Database": SELECT id FROM users WHERE email = ?
 activate "BBP Database"
-"BBP Database"-->"Model": result (empty if new)
+"BBP Database"-->"UserRepo": result (empty if new)
 deactivate "BBP Database"
-"Model"-->"user service": userNotFound (null)
-deactivate "Model"
+"UserRepo"-->"user service": userNotFound (null)
+deactivate "UserRepo"
 
 # --- Blocco Alternativo (Alt) ---
 alt User already exists
@@ -44,7 +48,7 @@ alt User already exists
     "Controller layer"-->"Network layer": 409 Conflict
     "Network layer"-->"UI layer": Show Error "Email already taken"
 else New User (Success Flow)
-    
+
     # 4. Hashing Password
     "user service"->"Hash password": hash(password)
     activate "Hash password"
@@ -52,14 +56,14 @@ else New User (Success Flow)
     deactivate "Hash password"
 
     # 5. Salvataggio
-    "user service"->"Model": createUser(userData, passwordHash)
-    activate "Model"
-    "Model"->"BBP Database": INSERT INTO users (...) VALUES (...)
+    "user service"->"UserRepo": saveUser(userData, passwordHash)
+    activate "UserRepo"
+    "UserRepo"->"BBP Database": INSERT INTO users (...) VALUES (...)
     activate "BBP Database"
-    "BBP Database"-->"Model": success (userId)
+    "BBP Database"-->"UserRepo": success (userId)
     deactivate "BBP Database"
-    "Model"-->"user service": userEntity (userId)
-    deactivate "Model"
+    "UserRepo"-->"user service": userEntity (userId)
+    deactivate "UserRepo"
 
     # 6. Generazione Token
     "user service"->"Token manager": generateToken(userId, role)
@@ -88,3 +92,4 @@ else New User (Success Flow)
     deactivate "UI layer"
     deactivate User
 end
+@enduml

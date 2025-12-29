@@ -1,3 +1,4 @@
+@startuml
 title Design Sequence Diagram: UC5 View Path Details
 
 actor User
@@ -10,15 +11,16 @@ participant "Detailed path view"
 participant "Path merger"
 participant "Weather API client"
 actor "External weather service"
-participant "Model"
+
+' --- DEFINIZIONE CORRETTA CON ALIAS ---
+participant "Path Repository\n(Model)" as PathRepo
+
 database "BBP Database"
 
 # --- Inizio Flusso ---
 User->"UI layer": Taps on a specific Path
 activate User
 activate "UI layer"
-
-
 
 "UI layer"->"Network layer": getPathDetails(pathId, token)
 activate "Network layer"
@@ -27,21 +29,20 @@ activate "Network layer"
 "Network layer"->"Controller layer": GET /api/paths/{id}
 activate "Controller layer"
 
-
-
 # 3. Routing
 "Controller layer"->"Detailed path view": getPathDetails(pathId)
 activate "Detailed path view"
 
 # 4. Recupero Dati Completi dal DB
-"Detailed path view"->"Model": getFullPathData(pathId)
-activate "Model"
-"Model"->"BBP Database": SELECT * FROM paths JOIN gps_points JOIN reports...
+' --- USO DELL'ALIAS (SENZA VIRGOLETTE) ---
+"Detailed path view"->PathRepo: getFullPathData(pathId)
+activate PathRepo
+PathRepo->"BBP Database": SELECT * FROM paths JOIN gps_points JOIN reports...
 activate "BBP Database"
-"BBP Database"-->"Model": fullPathData (geometry, reports, etc.)
+"BBP Database"-->PathRepo: fullPathData (geometry, reports, etc.)
 deactivate "BBP Database"
-"Model"-->"Detailed path view": fullPathData
-deactivate "Model"
+PathRepo-->"Detailed path view": fullPathData
+deactivate PathRepo
 
 # 5. Calcolo Stato (On-Read)
 "Detailed path view"->"Path merger": calculateMetrics(reports)
@@ -72,3 +73,4 @@ deactivate "Network layer"
 "UI layer"-->User: Shows Map, Stats, Status, Weather
 deactivate User
 deactivate "UI layer"
+@enduml
