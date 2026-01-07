@@ -300,7 +300,8 @@ The process follows these key steps:
     \item \textbf{Session Creation:} Upon successful saving to the \textbf{BBP Database}, the \textbf{user service} invokes the \textbf{Token manager} to generate a JWT immediately.
     \item \textbf{Client Handling:} The \textbf{Network layer} receives the token and persists it in \textbf{Local storage}, logging the user in automatically.
 \end{itemize}
-
+\noindent \textbf{Note on Persistence Layer Representation:}
+In the following Sequence Diagrams, the participant labeled \texttt{Model} represents the abstract interface of the Persistence Layer acting as a \textbf{Facade}. While the internal architecture is split into specific Repositories (User, Path, Trip, etc.) as detailed in Section \ref{sec:cmp_model}, the diagrams depict interactions at the component boundary level to maintain visual clarity and focus on the inter-layer orchestration logic.
 \subsubsection{Log In}
 
 \begin{figure}[H]

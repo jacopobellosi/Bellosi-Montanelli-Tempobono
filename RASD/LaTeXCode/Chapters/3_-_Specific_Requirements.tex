@@ -787,7 +787,6 @@ R40: BBP shall display feedback messages (confirmations, errors). & \\ \hline
 
 \subsection*{[G2] Gather and provide actionable data on cycle path conditions}
 \begin{longtable}{|L{0.47\textwidth}|L{0.47\textwidth}|}
-\hline
 \textbf{Requirements} & \textbf{Domain Assumptions} \\ \hline
 R7: BBP shall allow users to search for public bike paths by origin/destination. & DA1: Users must have a mobile device with GPS, accelerometer, and gyroscope. \\ \hline
 R8: BBP shall retrieve all relevant reports for found paths. & DA2: GPS accuracy sufficient to reconstruct the path. \\ \hline
@@ -796,15 +795,17 @@ R10: BBP shall calculate a score for each path. & DA4: Threshold distinguishes p
 R11: BBP shall display search results as a list of paths ordered by the calculated score. & DA5: Device physically attached to user or bike. \\ \hline
 R12: BBP shall allow any user to select a path from the search results to view its details. & DA6: Device has enough resources (battery, CPU). \\ \hline
 R13: BBP shall display the details of a selected path, including its geometry (map), distance, elevation, calculated merged status, and reported obstacles. & DA7: Users act in good faith when providing data. \\ \hline
-R15: BBP shall allow any user to initiate a navigation mode ("Follow Path") for a selected path. & DA8: Recent data are considered more relevant. \\ \hline
-R16: Upon completion of navigation by a user, BBP shall show the summary of the trip. & DA9: Users provide rational path evaluations. \\ \hline
-R19: BBP shall allow anonymous users who accept registration to save the navigated session as a Trip. & DA11: External weather API stable and accurate. \\ \hline
-R20: BBP shall allow an RCY to start an automatic path recording session. & DA12: User will not change the path. \\ \hline
-R21: BBP shall record GPS coordinates. & DA13: Active internet connection when searching/saving. \\ \hline
-R22: BBP shall display real-time statistics. & DA14: Paths correspond to safe cycling paths. \\ \hline
-R34:BBP shall allow an RCY to view their list of saved trips.& \\ \hline
-R35: BBP shall allow an RCY to view the details of a saved trip.& \\ \hline
+R14: BBP shall retrieve and display current weather forecast information for the path location(s). & DA8: Recent data are considered more relevant. \\ \hline
+R16: BBP shall allow any user to initiate a navigation mode ("Follow Path") for a selected path. & DA9: Users provide rational path evaluations. \\ \hline
+R17: Upon completion of navigation by a user, BBP shall show the summary of the trip. & DA11: External weather API stable and accurate. \\ \hline
+R20: BBP shall allow anonymous users who accept registration to save the navigated session as a Trip. & DA12: User will not change the path. \\ \hline
+R21: BBP shall allow an RCY to start an automatic path recording session. & DA13: Active internet connection when searching/saving. \\ \hline
+R22: BBP shall record GPS coordinates. & DA14: Paths correspond to safe cycling paths. \\ \hline
+R23: BBP shall display real-time statistics. &  \\ \hline
+R35: BBP shall allow an RCY to view their list of saved trips. &  \\ \hline
+R36: BBP shall allow an RCY to view the details of a saved trip. &  \\ \hline
 \end{longtable}
+
 
 \subsection*{[G3] Facilitate the discovery and navigation of suitable cycling paths}
 \begin{longtable}{|L{0.47\textwidth}|L{0.47\textwidth}|}
